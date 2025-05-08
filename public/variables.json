@@ -1,0 +1,160 @@
+{
+    "product": [
+        {
+            "name": "id",
+            "description": "The ID of the product.",
+            "example": "{{ product.id }}"
+        },
+        {
+            "name": "slug",
+            "description": "URL-friendly identifier for the product.",
+            "example": "{{ product.slug }}"
+        },
+        {
+            "name": "title",
+            "description": "Name of the product.",
+            "example": "{{ product.title }}"
+        },
+        {
+            "name": "description",
+            "description": "Detailed information about the product.",
+            "example": "{{ product.description }}"
+        },
+        {
+            "name": "page_title",
+            "description": "Custom title for the product page. Used as the HTML <title> tag, helpful for SEO.",
+            "example": "{{ product.page_title }}"
+        },
+        {
+            "name": "meta_description",
+            "description": "SEO description of the product.",
+            "example": "{{ product.meta_description }}"
+        },
+        {
+            "name": "is_digital",
+            "description": "Whether the product is digital or physical.",
+            "example": "{% if product.is_digital %}Digital{% endif %}"
+        },
+        {
+            "name": "images",
+            "description": "All images associated with the product.",
+            "example": "{% for image in product.images %}{{ image.url }}{% endfor %}"
+        },
+        {
+            "name": "url",
+            "description": "The primary/featured image object for the product. Can be null.",
+            "example": "{{ product.image.url }}"
+        },
+        {
+            "name": "variants",
+            "description": "Array of all product variants.",
+            "example": "{% for variant in product.variants %}{{ variant.price }}{% endfor %}"
+        },
+        {
+            "name": "default.price",
+            "description": "Default product variant (or first variant). Can be null.",
+            "example": "{{ product.default.price }}"
+        },
+        {
+            "name": "options",
+            "description": "Array of product options (e.g., Size, Color).",
+            "example": "{% for option in product.options %}{{ option.name }}{% endfor %}"
+        },
+        {
+            "name": "status",
+            "description": "The publication status of the product (e.g., ACTIVE/INACTIVE).",
+            "example": "{{ product.status }}"
+        },
+        {
+            "name": "created_at",
+            "description": "Timestamp when the product was created. Use the `date` filter to format.",
+            "example": "{{ product.created_at | date: \"%Y-%m-%d\" }}"
+        }
+    ],
+    "image": [
+        {
+            "name": "id",
+            "description": "The unique ID of the image file.",
+            "example": "{{ image.id }}"
+        },
+        {
+            "name": "order",
+            "description": "The display order of the image within a gallery.",
+            "example": "{{ image.order }}"
+        },
+        {
+            "name": "url",
+            "description": "The public URL to display the image.",
+            "example": "<img src=\"{{ image.url }}\">"
+        }
+    ],
+    "option": [
+        {
+            "name": "id",
+            "description": "The unique ID of the product option.",
+            "example": "{{ option.id }}"
+        },
+        {
+            "name": "name",
+            "description": "The name of the option (e.g., \"Color\").",
+            "example": "{{ option.name }}"
+        },
+        {
+            "name": "order",
+            "description": "The display order of the option.",
+            "example": "{{ option.order }}"
+        },
+        {
+            "name": "values",
+            "description": "An array of the possible values for this option. Each value object has `id`, `value`, `order`.",
+            "example": "{{ option.values | map: \"value\" | join: \", \" }}"
+        }
+    ],
+    "variant": [
+        {
+            "name": "id",
+            "description": "The unique ID of the variant.",
+            "example": "{{ variant.id }}"
+        },
+        {
+            "name": "sku",
+            "description": "The Stock Keeping Unit (SKU) of the variant.",
+            "example": "{{ variant.sku }}"
+        },
+        {
+            "name": "price",
+            "description": "The price of the variant. Use the `money` filter.",
+            "example": "{{ variant.price | money }}"
+        },
+        {
+            "name": "compare_price",
+            "description": "The compare-at price. Use the `money` filter.",
+            "example": "{{ variant.compare_price | money }}"
+        },
+        {
+            "name": "quantity",
+            "description": "The inventory quantity. May be null if not tracked.",
+            "example": "{{ variant.quantity }}"
+        },
+        {
+            "name": "name",
+            "description": "A concatenation of the variant's option values (e.g., \"Color:Red\").",
+            "example": "{{ variant.name }}"
+        },
+        {
+            "name": "image.url",
+            "description": "The specific image associated with this variant, if any.",
+            "example": "{% if variant.image %}<img src=\"{{ variant.image.url }}\">{% endif %}"
+        },
+        {
+            "name": "values",
+            "description": "The specific option values that define this variant.",
+            "example": "{% for value_obj in variant.values %}{{ value_obj.value }} {% endfor %}"
+        },
+        {
+            "name": "file.url",
+            "description": "Details of a digital file attached to this variant (if applicable).",
+            "example": "{{ variant.file.url }}"
+        }
+    ]
+}

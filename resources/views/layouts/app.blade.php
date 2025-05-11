@@ -68,7 +68,7 @@
     <main class="flex-1 overflow-auto">
         @yield('content')
     </main>
-    <div id="toast-container" aria-live="assertive" aria-atomic="true" class="fixed bottom-0 right-0 z-50 p-4 space-y-2 w-full max-w-xs sm:max-w-sm">
+    <div id="toast-container" aria-live="assertive" aria-atomic="true" class="fixed bottom-0 right-0 z-90 p-4 space-y-2 w-full max-w-xs sm:max-w-sm" style="z-index: 90;">
         {{-- Toasts will be added here dynamically by JavaScript --}}
     </div>
 </div>
@@ -83,7 +83,7 @@
      * @param {string} type 'success' or 'error'.
      * @param {number} duration Milliseconds before the toast auto-dismisses (default: 5000).
      */
-    function showToast(message, type = 'success', duration = 5000) {
+    function showToast(message, type = 'success', duration = 3000) {
         const container = document.getElementById('toast-container');
         if (!container || !message) return;
 
@@ -93,7 +93,7 @@
         toastElement.className = `
             relative w-full p-4 rounded-lg shadow-lg text-white text-sm
             transition-all duration-300 ease-in-out transform text-bold
-            opacity-0 translate-y-2
+            opacity-0 translate-y-2 z-90
             ${type === 'success' ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300'}
         `;
         toastElement.textContent = message;

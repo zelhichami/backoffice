@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 if (!function_exists('generateUniqueUuid')) {
     function generateUniqueUuid(string $modelClass, string $column = 'uuid'): string

@@ -129,231 +129,33 @@
                     {{-- Read-only overlay --}}
                     <div id="editor-readonly-overlay" class="editor-readonly-overlay hidden absolute inset-0 bg-gray-200 bg-opacity-30 z-10 cursor-not-allowed"></div>
                 </div>
-                {{-- Variables Sidebar Removed --}}
             </div>
-
-            {{-- Modals (Keep as is) --}}
-            <div id="product-select-modal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full z-50 flex items-center justify-center hidden p-4"> <div class="modal-content relative mx-auto p-6 border w-full max-w-3xl shadow-lg rounded-md bg-white"> <div class="flex justify-between items-center border-b pb-3 mb-4"> <h3 class="text-md font-semibold">Select Product for Preview</h3> <button type="button" class="modal-close-btn text-gray-400 hover:text-gray-600 text-2xl">&times;</button> </div> <div id="product-list-container" class="max-h-[60vh] overflow-y-auto mb-4"> <p class="text-center text-gray-500 py-8 product-list-state">Loading products...</p> </div> <div class="border-t flex justify-between items-center mt-4 pt-4"> <div id="product-pagination-container" class=" flex justify-center items-center space-x-1"> {{-- Pagination buttons --}} </div> <button type="button" class="modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit bg-gray-100 text-grey-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm"> Cancel </button> </div> </div> </div>
-{{--
-            <div id="preview-display-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-90 overflow-hidden h-full w-full z-[60] flex items-center justify-center hidden "> <div class="modal-content relative w-full h-full max-w-full max-h-full bg-white rounded-lg shadow-xl flex flex-col"> <div class="flex justify-between items-center p-3 sm:p-4 border-b flex-shrink-0 bg-black"> <h3 class="text-sm font-semibold text-white">Section Preview</h3> <div class="flex items-center space-x-8"> <button id="clear-default-product-btn" type="button" class="text-xs text-gray-400 hover:text-white underline"> Clear Default Product </button> <button type="button" class="modal-close-btn text-gray-400 hover:text-white text-3xl leading-none">&times;</button> </div> </div> <div class="flex-grow overflow-auto relative"> <div id="preview-loading-state" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center hidden z-10"> <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"> <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle> <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path> </svg> <p class="text-gray-600 text-lg ml-3">Generating preview...</p> </div> <div id="preview-error-state" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center hidden z-10 p-8"> <p class="text-red-600 text-lg text-center"></p> </div> <iframe id="preview-iframe" src="about:blank" class="w-full h-full border-0"></iframe> </div> </div> </div>
---}}
-
-
-            {{-- Preview Modals --}}
-
-            <div id="preview-display-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-90 overflow-hidden h-full w-full z-[60] flex items-center justify-center hidden">
-                <div class="modal-content relative w-full h-full max-w-full max-h-full bg-white rounded-lg shadow-xl flex flex-col">
-
-                    <!-- Modal Header -->
-                    <div class="flex justify-between items-center p-3 sm:p-4 border-b flex-shrink-0 bg-black relative">
-                        <h3 class="text-sm font-semibold text-white">Section Preview</h3>
-
-                        <!-- Centered Device Buttons -->
-                        <div class="absolute left-1/2 -translate-x-1/2 flex items-center space-x-2">
-                            <button data-width="100%" class="device-btn flex items-center justify-center gap-1 text-white text-xs px-3 py-1 bg-gray-700 rounded hover:bg-gray-600 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"  viewBox="0 0 24 24" id="monitor"><path fill="currentColor" d="M19,3H5A3,3,0,0,0,2,6v8a3,3,0,0,0,3,3h6v2H7a1,1,0,0,0,0,2H17a1,1,0,0,0,0-2H13V17h6a3,3,0,0,0,3-3V6A3,3,0,0,0,19,3Zm1,11a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V6A1,1,0,0,1,5,5H19a1,1,0,0,1,1,1Z"></path></svg>
-                            </button>
-                            <button data-width="768" class="device-btn flex items-center justify-center gap-1 text-white text-xs px-3 py-1 bg-gray-700 rounded hover:bg-gray-600 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"   viewBox="0 0 64 64" id="tablet"><path fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="4" d="M58.23,53.89,5.85,54a3.77,3.77,0,0,1-3.78-3.76L2,13.89a3.77,3.77,0,0,1,3.76-3.78L58.14,10a3.77,3.77,0,0,1,3.78,3.76L62,50.11A3.78,3.78,0,0,1,58.23,53.89Z"></path><line x1="28.01" x2="35.98" y1="45.96" y2="45.96" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="4"></line></svg>
-                            </button>
-                            <button data-width="375" class="device-btn flex items-center justify-center gap-1 text-white text-xs px-3 py-1 bg-gray-700 rounded hover:bg-gray-600 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"  viewBox="0 0 24 24" id="mobile"><path fill="currentColor" d="M12.71,16.29l-.15-.12a.76.76,0,0,0-.18-.09L12.2,16a1,1,0,0,0-.91.27,1.15,1.15,0,0,0-.21.33,1,1,0,0,0,1.3,1.31,1.46,1.46,0,0,0,.33-.22,1,1,0,0,0,.21-1.09A1,1,0,0,0,12.71,16.29ZM16,2H8A3,3,0,0,0,5,5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V5A3,3,0,0,0,16,2Zm1,17a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V5A1,1,0,0,1,8,4h8a1,1,0,0,1,1,1Z"></path></svg>
-                            </button>
-                        </div>
+            {{-- Modals --}}
+            @include('modals.section-edit._modal_product_select')
+            @include('modals.section-edit._modal_preview_display')
+            @include('modals.section-edit._modal_variables')
+            @include('modals.section-edit._modal_status_confirm')
+            @include('modals.section-edit._modal_style_settings')
 
 
-                        <!-- Right-side Actions -->
-                        <div class="flex items-center space-x-4">
-                            {{-- NEW Style Settings Button --}}
-                            <button id="style-settings-btn" type="button" class="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700" title="Style Settings">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"> <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /> <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /> </svg>
-                            </button>
-                            {{-- NEW: Reload Button --}}
-                            <button id="reload-preview-btn" type="button" class="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700" title="Reload Preview">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                            </button>
-                            <button id="clear-default-product-btn" type="button" class="text-xs text-gray-400 hover:text-white underline">
-                                Change Product
-                            </button>
-
-                            <button type="button" class="modal-close-btn text-gray-400 hover:text-white text-3xl leading-none">&times;</button>
-                        </div>
-                    </div>
-
-                    <!-- Modal Body -->
-                    <div class="flex-grow overflow-auto relative">
-                        <!-- Loading State -->
-                        <div id="preview-loading-state" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center hidden z-10">
-                            <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014
-            12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <p class="text-gray-600 text-lg ml-3">Generating preview...</p>
-                        </div>
-
-                        <!-- Error State -->
-                        <div id="preview-error-state" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center hidden z-10 p-8">
-                            <p class="text-red-600 text-lg text-center"></p>
-                        </div>
-
-                        <!-- Preview Iframe Wrapper -->
-                        <div id="preview-wrapper" class="mx-auto h-full transition-all duration-300">
-                            <iframe id="preview-iframe" src="about:blank" class="w-full h-full border-0"></iframe>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Variables Modals --}}
-
-            <div id="variables-modal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full z-50 flex items-center justify-center hidden p-4"> <div class="modal-content relative mx-auto p-6 border w-full max-w-3xl shadow-lg rounded-md bg-white"> <div class="flex justify-between items-center border-b pb-3 mb-4"> <h3 class="text-xl font-semibold text-gray-700">
-                            Object Properties
-                            <a href="/variables" target="_blank" class="inline-flex items-center gap-1 bg-white text-xs  border-gray-300 p-1  underline text-blue-700 hover:text-blue-500">
-                                More Details
-                                <svg fill="none" class="iconify iconify--solar w-4 h-4 rounded-md text-blue-700 hover:text-blue-500" width="1em" height="1em"  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6H6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20H16C17.1046 20 18 19.1046 18 18V14M14 4H20M20 4V10M20 4L10 14" stroke="#4A5568" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                            </a>
-                        </h3> <button type="button" class="modal-close-btn text-gray-400 hover:text-gray-600 text-2xl">&times;</button> </div> <div id="variable-list-container" class="overflow-y-auto pr-2"> <p class="text-center text-gray-500 py-8 variable-list-state">Loading variables...</p> </div> <div class="flex justify-end mt-4 pt-4 border-t flex-shrink-0"> <button type="button" class="modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit bg-gray-100 text-grey-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm"> Close </button>
-                    </div>
-                </div>
-            </div>
-
-            {{-- *** NEW: Status Confirmation Modal *** --}}
-            <div id="status-confirm-modal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full z-[70] flex items-center justify-center hidden p-4">
-                <div class="modal-content relative mx-auto p-6 border w-full max-w-md shadow-lg rounded-md bg-white">
-                    {{-- Header --}}
-                    <div class="flex justify-between items-center border-b pb-3 mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Confirm Status Change to 'Ready'</h3>
-                        <button type="button" class="modal-close-btn text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-                    </div>
-                    {{-- Body --}}
-                    <div class="mb-4">
-                        <p class="text-sm text-gray-600 mb-3">Setting the status to 'Ready' will make the editor read-only. To confirm this change, please type the section ID below:</p>
-                        <p class="text-center font-mono text-lg font-bold text-indigo-600 bg-indigo-50 p-2 rounded" id="status-confirm-required-id"></p>
-                    </div>
-                    <div class="mb-4">
-                        <label for="status-confirm-input" class="block text-sm font-medium text-gray-700 mb-1">Enter Section ID</label>
-                        <input type="text" id="status-confirm-input" name="status_confirm_input" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="off">
-                        <p id="status-confirm-error" class="text-red-600 text-xs mt-1 hidden">IDs do not match.</p>
-                    </div>
-                    {{-- Footer --}}
-                    <div class="flex justify-end items-center mt-4 pt-4 border-t space-x-3">
-                        <button type="button" class="modal-cancel-btn px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                        {{-- Confirm button initially disabled --}}
-                        <button id="status-confirm-button" type="button" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            Confirm & Set Ready
-                        </button>
-                    </div>
-                </div>
-            </div>
-            {{-- *** END: Status Confirmation Modal *** --}}
-
-            {{-- *** NEW: Style Settings Modal *** --}}
-            <div id="style-settings-modal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full z-[70] flex items-center justify-center hidden p-4">
-                <div class="modal-content relative mx-auto p-0 border shadow-lg rounded-md bg-white overflow-hidden w-full max-w-sm"> {{-- Adjusted size --}}
-                    {{-- Header --}}
-                    <div class="flex justify-between items-center border-b p-4 flex-shrink-0">
-                        <h3 class="text-lg font-semibold text-gray-800">Live Style Settings</h3>
-                        <button type="button" class="modal-close-btn text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-                    </div>
-                    {{-- Tab Bar for Style Settings --}}
-                    <div id="style-settings-tab-bar" class="flex border-b px-4 bg-gray-50 flex-shrink-0">
-                        <button type="button" data-target="style-colors-pane" class="style-tab-button active px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700 focus:outline-none">Colors</button>
-                        <button type="button" data-target="style-fontsize-pane" class="style-tab-button px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700 focus:outline-none">Font Size</button>
-                        <button type="button" data-target="style-fontfamily-pane" class="style-tab-button px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700 focus:outline-none">Font Family</button>
-                    </div>
-                    {{-- Tab Content --}}
-                    <div class="p-6 overflow-y-auto flex-grow">
-                        {{-- Colors Pane --}}
-                        <div id="style-colors-pane" class="style-tab-pane active">
-                            <div class="grid grid-cols-2 gap-6"> {{-- Increased gap --}}
-                                <div class="space-y-1">
-                                    <label for="primary-color-input" class="block text-xs font-medium text-gray-600">Primary</label>
-                                    <input type="color" id="primary-color-input" data-css-var="--primary-color" data-storage-key="style-primary-color" value="#3b82f6" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                                </div>
-                                <div class="space-y-1">
-                                    <label for="secondary-color-input" class="block text-xs font-medium text-gray-600">Secondary</label>
-                                    <input type="color" id="secondary-color-input" data-css-var="--secondary-color" data-storage-key="style-secondary-color" value="#6b7280" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                                </div>
-                                <div class="space-y-1">
-                                    <label for="text-color-input" class="block text-xs font-medium text-gray-600">Text</label>
-                                    <input type="color" id="text-color-input" data-css-var="--text-color" data-storage-key="style-text-color" value="#1f2937" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                                </div>
-                                <div class="space-y-1">
-                                    <label for="bg-color-input" class="block text-xs font-medium text-gray-600">Background</label>
-                                    <input type="color" id="bg-color-input" data-css-var="--bg-color" data-storage-key="style-bg-color" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                                </div>
-                            </div>
-                        </div>
-                        {{-- Font Size Pane --}}
-                        <div id="style-fontsize-pane" class="style-tab-pane hidden space-y-4">
-                            <div class="space-y-1">
-                                <label for="heading-font-size-input" class="block text-xs font-medium text-gray-600">Headings (rem)</label>
-                                <input type="number" id="heading-font-size-input" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="e.g., 1.5" min="0.5" max="5" step="0.1" data-css-var="--heading-font-size" data-storage-key="style-heading-font-size">
-                            </div>
-                            <div class="space-y-1">
-                                <label for="body-font-size-input" class="block text-xs font-medium text-gray-600">Body Text (rem)</label>
-                                <input type="number" id="body-font-size-input" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="e.g., 1" min="0.5" max="2" step="0.05" data-css-var="--body-font-size" data-storage-key="style-body-font-size">
-                            </div>
-                            <div class="space-y-1">
-                                <label for="button-font-size-input" class="block text-xs font-medium text-gray-600">Buttons (rem)</label>
-                                <input type="number" id="button-font-size-input" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="e.g., 0.875" min="0.5" max="2" step="0.05" data-css-var="--button-font-size" data-storage-key="style-button-font-size">
-                            </div>
-                        </div>
-                        {{-- Font Family Pane --}}
-                        <div id="style-fontfamily-pane" class="style-tab-pane hidden space-y-4">
-                            <div class="space-y-1">
-                                <label for="body-font-select" class="block text-xs font-medium text-gray-600">Body Font</label>
-                                <select id="body-font-select" data-css-var="--body-font-family" data-storage-key="style-body-font" class="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                    <option value="Inter, sans-serif">Inter (Default)</option>
-                                    <option value="Arial, Helvetica, sans-serif">Arial</option>
-                                    <option value="Verdana, Geneva, sans-serif">Verdana</option>
-                                    <option value="'Times New Roman', Times, serif">Times New Roman</option>
-                                    <option value="Georgia, serif">Georgia</option>
-                                    <option value="'Courier New', Courier, monospace">Courier New</option>
-                                    <option value="'Lucida Console', Monaco, monospace">Lucida Console</option>
-                                </select>
-                            </div>
-                            <div class="space-y-1">
-                                <label for="heading-font-select" class="block text-xs font-medium text-gray-600">Heading Font</label>
-                                <select id="heading-font-select" data-css-var="--heading-font-family" data-storage-key="style-heading-font" class="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                    <option value="Inter, sans-serif">Inter (Default)</option>
-                                    <option value="Arial, Helvetica, sans-serif">Arial</option>
-                                    <option value="Verdana, Geneva, sans-serif">Verdana</option>
-                                    <option value="'Times New Roman', Times, serif">Times New Roman</option>
-                                    <option value="Georgia, serif">Georgia</option>
-                                    <option value="'Courier New', Courier, monospace">Courier New</option>
-                                    <option value="'Lucida Console', Monaco, monospace">Lucida Console</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- Footer --}}
-                    <div class="flex justify-end p-4 border-t flex-shrink-0 bg-gray-50">
-                        <button type="button" class="modal-cancel-btn px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 text-sm">Close</button>
-                    </div>
-                </div>
-            </div>
-            {{-- *** END: Style Settings Modal *** --}}
-        </div> {{-- End p-4 --}}
+        </div>
         @endsection
 
         @push('scripts')
-            {{-- All JavaScript remains the same --}}
             <script>
                 // --- Monaco Editor Initialization ---
                 let htmlEditor, cssEditor, jsEditor;
                 require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs' }});
-                require(['vs/editor/editor.main'], function() { /* ... Monaco Init ... */
-                    const commonEditorOptions = { theme: 'vs-dark', automaticLayout: true, minimap: { enabled: true }, wordWrap: 'on', fontSize: 14, scrollBeyondLastLine: false, padding: { top: 20, bottom: 10 } }; htmlEditor = monaco.editor.create(document.getElementById('html-editor-container'), { ...commonEditorOptions, value: {!! json_encode(old('html_code', $htmlContent ?? '')) !!}, language: 'html' }); cssEditor = monaco.editor.create(document.getElementById('css-editor-container'), { ...commonEditorOptions, value:{!! json_encode(old('css_code', $cssContent ?? '')) !!}, language: 'css' }); jsEditor = monaco.editor.create(document.getElementById('js-editor-container'), { ...commonEditorOptions, value: {!! json_encode(old('js_code', $jsContent ?? '')) !!}, language: 'javascript' }); setTimeout(() => { htmlEditor?.layout(); }, 100);
+                require(['vs/editor/editor.main'], function() {
+                    const commonEditorOptions = { theme: 'vs-dark', automaticLayout: true, minimap: { enabled: true }, wordWrap: 'on', fontSize: 14, scrollBeyondLastLine: false, padding: { top: 20, bottom: 10 } };
+                    htmlEditor = monaco.editor.create(document.getElementById('html-editor-container'), { ...commonEditorOptions, value: {!! json_encode(old('html_code', $htmlContent ?? '')) !!}, language: 'html' });
+                    cssEditor = monaco.editor.create(document.getElementById('css-editor-container'), { ...commonEditorOptions, value:{!! json_encode(old('css_code', $cssContent ?? '')) !!}, language: 'css' });
+                    jsEditor = monaco.editor.create(document.getElementById('js-editor-container'), { ...commonEditorOptions, value: {!! json_encode(old('js_code', $jsContent ?? '')) !!}, language: 'javascript' });
+                    setTimeout(() => { htmlEditor?.layout(); cssEditor?.layout(); jsEditor?.layout(); }, 100); // Ensure all editors layout
                 });
 
-                // --- Vanilla JS for Status Dropdown and Tabs ---
                 document.addEventListener('DOMContentLoaded', () => {
-                    // --- Element References ---
+                    // --- Element References (Consolidated) ---
                     const statusBadgeButton = document.getElementById('status-badge-button');
                     const statusDropdown = document.getElementById('status-dropdown');
                     const statusBadgeText = document.getElementById('status-badge-text');
@@ -361,8 +163,8 @@
                     const tabContainer = document.getElementById('editor-tab-bar');
                     const editorPanes = document.querySelectorAll('.editor-pane');
                     const tabButtons = document.querySelectorAll('.tab-btn');
-                    const submitButton = document.getElementById('submit-button'); // Save Button
-                    const previewBtn = document.getElementById('preview-section-btn'); // Save & Preview Button
+                    const submitButton = document.getElementById('submit-button');
+                    const previewBtn = document.getElementById('preview-section-btn');
                     const productModal = document.getElementById('product-select-modal');
                     const productListContainer = document.getElementById('product-list-container');
                     const productPaginationContainer = document.getElementById('product-pagination-container');
@@ -370,763 +172,746 @@
                     const previewIframe = document.getElementById('preview-iframe');
                     const previewLoading = document.getElementById('preview-loading-state');
                     const previewError = document.getElementById('preview-error-state');
-                    const previewErrorText = previewError ? previewError.querySelector('p') : null;
+                    const previewErrorText = previewError?.querySelector('p');
                     const clearDefaultBtn = document.getElementById('clear-default-product-btn');
                     const showVariablesBtn = document.getElementById('show-variables-btn');
                     const variablesModal = document.getElementById('variables-modal');
                     const variableListContainer = document.getElementById('variable-list-container');
-                    const editorReadOnlyOverlay = document.getElementById('editor-readonly-overlay'); // <<< Ref for overlay
-
-                    // <<< Refs for Status Confirm Modal >>>
+                    const editorReadOnlyOverlay = document.getElementById('editor-readonly-overlay');
                     const statusConfirmModal = document.getElementById('status-confirm-modal');
                     const statusConfirmRequiredIdEl = document.getElementById('status-confirm-required-id');
                     const statusConfirmInput = document.getElementById('status-confirm-input');
                     const statusConfirmButton = document.getElementById('status-confirm-button');
                     const statusConfirmError = document.getElementById('status-confirm-error');
-
-                    // *** NEW Asset Elements ***
-                    const assetsContainer = document.getElementById('assets-container'); // The new pane
                     const assetDropZone = document.getElementById('asset-drop-zone');
                     const assetFileInput = document.getElementById('asset-file-input');
                     const assetUploadPreview = document.getElementById('asset-upload-preview');
                     const uploadAssetsBtn = document.getElementById('upload-assets-btn');
                     const currentAssetsList = document.getElementById('current-assets-list');
-
                     const reloadPreviewBtn = document.getElementById('reload-preview-btn');
                     const styleSettingsBtn = document.getElementById('style-settings-btn');
                     const styleSettingsModal = document.getElementById('style-settings-modal');
                     const styleSettingsTabBar = document.getElementById('style-settings-tab-bar');
                     const styleSettingsTabButtons = styleSettingsTabBar?.querySelectorAll('.style-tab-button');
                     const styleSettingsTabPanes = styleSettingsModal?.querySelectorAll('.style-tab-pane');
-
+                    const previewHeaderProductImage = document.getElementById('preview-header-product-image');
+                    const paletteGrid = document.getElementById('ssp-palette-grid');
 
                     // --- Initial State & Data ---
                     const initialStatus = '{{ $section->status }}';
-                    const sectionId = '{{ $section->id }}'; // Get ID directly from Blade
+                    const sectionId = '{{ $section->id }}';
                     let currentStatus = initialStatus;
                     let isStatusLoading = false;
                     let currentlyOpenDropdown = null;
                     const editors = { 'html-editor-container': () => htmlEditor, 'css-editor-container': () => cssEditor, 'js-editor-container': () => jsEditor };
                     const PREVIEW_PRODUCT_STORAGE_KEY = `preview_default_product_${sectionId}`;
+                    const PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY = `preview_default_product_image_url_${sectionId}`;
+                    const placeholderProductImageUrl = 'https://placehold.co/200x200/e2e8f0/475569?text=No+Image';
                     const availableVariables = @json($variables ?? []);
+
+                    const predefinedPalettes = {
+                        "user_default_theme": { // Based on your originally provided CSS variables
+                            'style-color-primary': '#0b4e24',        'style-color-primary-foreground': '#f1f1f1',
+                            'style-color-secondary': '#17833e',      'style-color-secondary-foreground': '#FFFFFF',
+                            'style-color-accent': '#1bb353',         'style-color-accent-foreground': '#262729', // Dark text on light green
+                            'style-color-muted': '#FAF8F2',          'style-color-muted-foreground': '#7f8083',
+                            'style-color-active-link': '#5c5c5c',    'style-color-active-link-foreground': '#FFFFFF',
+                            'style-color-background': '#ffffff',     'style-color-foreground': '#000000', // Black text on white bg
+                            'style-color-border': '#E5E7EB',         'style-color-input': '#F9FAFB'
+                        },
+                        "arctic_white": { // Clean, minimalist, high-contrast
+                            'style-color-primary': '#007AFF',        'style-color-primary-foreground': '#FFFFFF', // Apple Blue
+                            'style-color-secondary': '#5AC8FA',      'style-color-secondary-foreground': '#000000', // Lighter Blue
+                            'style-color-accent': '#FF2D55',         'style-color-accent-foreground': '#FFFFFF', // Bright Pink/Red
+                            'style-color-muted': '#F2F2F7',          'style-color-muted-foreground': '#6C6C70',   // Light Gray
+                            'style-color-active-link': '#007AFF',    'style-color-active-link-foreground': '#FFFFFF',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#1D1D1F', // Near Black for text
+                            'style-color-border': '#D1D1D6',         'style-color-input': '#F2F2F7'
+                        },
+                        "midnight_bloom": { // Dark theme with vibrant floral accents
+                            'style-color-primary': '#8A3FFC',        'style-color-primary-foreground': '#FFFFFF', // Vibrant Purple (IBM)
+                            'style-color-secondary': '#00A78F',      'style-color-secondary-foreground': '#FFFFFF', // Teal
+                            'style-color-accent': '#FF66A8',         'style-color-accent-foreground': '#161616', // Hot Pink
+                            'style-color-muted': '#2C2C2E',          'style-color-muted-foreground': '#A0A0A5',   // Darker Gray
+                            'style-color-active-link': '#FF66A8',    'style-color-active-link-foreground': '#161616',
+                            'style-color-background': '#161616',     'style-color-foreground': '#F4F4F4', // Light Gray text
+                            'style-color-border': '#3A3A3C',         'style-color-input': '#2C2C2E'
+                        },
+                        "forest_canopy": { // Earthy, natural greens and browns
+                            'style-color-primary': '#2E7D32',        'style-color-primary-foreground': '#FFFFFF', // Forest Green
+                            'style-color-secondary': '#689F38',      'style-color-secondary-foreground': '#FFFFFF', // Lighter Green
+                            'style-color-accent': '#FF8F00',         'style-color-accent-foreground': '#FFFFFF', // Amber/Orange
+                            'style-color-muted': '#F1F8E9',          'style-color-muted-foreground': '#556B2F',   // Light Olive Green
+                            'style-color-active-link': '#689F38',    'style-color-active-link-foreground': '#FFFFFF',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#3E2723', // Dark Brown text
+                            'style-color-border': '#DCEDC8',         'style-color-input': '#F1F8E9'
+                        },
+                        "oceanic_depth": { // Deep blues and teals
+                            'style-color-primary': '#0D47A1',        'style-color-primary-foreground': '#FFFFFF', // Deep Blue
+                            'style-color-secondary': '#00ACC1',      'style-color-secondary-foreground': '#FFFFFF', // Cyan/Teal
+                            'style-color-accent': '#FFD600',         'style-color-accent-foreground': '#000000', // Yellow accent
+                            'style-color-muted': '#E1F5FE',          'style-color-muted-foreground': '#0277BD',   // Lightest Blue
+                            'style-color-active-link': '#00ACC1',    'style-color-active-link-foreground': '#FFFFFF',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#1A237E', // Navy text
+                            'style-color-border': '#B3E5FC',         'style-color-input': '#E1F5FE'
+                        },
+                        "sunrise_citrus": { // Vibrant oranges and yellows
+                            'style-color-primary': '#FF6F00',        'style-color-primary-foreground': '#FFFFFF', // Bright Orange
+                            'style-color-secondary': '#FFC107',      'style-color-secondary-foreground': '#000000', // Amber
+                            'style-color-accent': '#F44336',         'style-color-accent-foreground': '#FFFFFF', // Red
+                            'style-color-muted': '#FFF8E1',          'style-color-muted-foreground': '#E65100',   // Light Orange/Yellow
+                            'style-color-active-link': '#FFC107',    'style-color-active-link-foreground': '#000000',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#BF360C', // Deep Orange text
+                            'style-color-border': '#FFECB3',         'style-color-input': '#FFF8E1'
+                        },
+                        "lavender_haze": { // Soft purples and pinks
+                            'style-color-primary': '#9575CD',        'style-color-primary-foreground': '#FFFFFF', // Lavender
+                            'style-color-secondary': '#CE93D8',      'style-color-secondary-foreground': '#000000', // Light Purple/Pink
+                            'style-color-accent': '#F48FB1',         'style-color-accent-foreground': '#000000', // Soft Pink
+                            'style-color-muted': '#F3E5F5',          'style-color-muted-foreground': '#6A1B9A',   // Very Light Purple
+                            'style-color-active-link': '#CE93D8',    'style-color-active-link-foreground': '#000000',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#4A148C', // Deep Purple text
+                            'style-color-border': '#E1BEE7',         'style-color-input': '#F3E5F5'
+                        },
+                        "charcoal_slate": { // Modern, sophisticated dark gray theme
+                            'style-color-primary': '#455A64',        'style-color-primary-foreground': '#FFFFFF', // Blue Grey
+                            'style-color-secondary': '#78909C',      'style-color-secondary-foreground': '#FFFFFF', // Lighter Blue Grey
+                            'style-color-accent': '#00ACC1',         'style-color-accent-foreground': '#FFFFFF', // Cyan accent
+                            'style-color-muted': '#37474F',          'style-color-muted-foreground': '#CFD8DC',   // Darker Shade
+                            'style-color-active-link': '#00ACC1',    'style-color-active-link-foreground': '#FFFFFF',
+                            'style-color-background': '#263238',     'style-color-foreground': '#ECEFF1', // Light Grey text
+                            'style-color-border': '#546E7A',         'style-color-input': '#37474F'
+                        },
+                        "sandstone_beige": { // Warm, neutral, and calm
+                            'style-color-primary': '#A1887F',        'style-color-primary-foreground': '#FFFFFF', // Brownish Grey
+                            'style-color-secondary': '#D7CCC8',      'style-color-secondary-foreground': '#3E2723', // Lightest Brown/Beige
+                            'style-color-accent': '#8D6E63',         'style-color-accent-foreground': '#FFFFFF', // Brown
+                            'style-color-muted': '#F5F5F0',          'style-color-muted-foreground': '#6D4C41',   // Off-white/Beige
+                            'style-color-active-link': '#A1887F',    'style-color-active-link-foreground': '#FFFFFF',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#4E342E', // Dark Brown text
+                            'style-color-border': '#EFEBE9',         'style-color-input': '#F5F5F0'
+                        },
+                        "crimson_gold": { // Luxurious, bold
+                            'style-color-primary': '#C62828',        'style-color-primary-foreground': '#FFFFFF', // Deep Red
+                            'style-color-secondary': '#FBC02D',      'style-color-secondary-foreground': '#000000', // Gold/Yellow
+                            'style-color-accent': '#D81B60',         'style-color-accent-foreground': '#FFFFFF', // Magenta/Pink
+                            'style-color-muted': '#3E2723',          'style-color-muted-foreground': '#FFEBEE',   // Dark Brown
+                            'style-color-active-link': '#FBC02D',    'style-color-active-link-foreground': '#000000',
+                            'style-color-background': '#1B0000',     'style-color-foreground': '#FFCDD2', // Light Red text
+                            'style-color-border': '#5D4037',         'style-color-input': '#3E2723'
+                        },
+                        "aqua_spark": { // Fresh, modern, energetic
+                            'style-color-primary': '#00BCD4',        'style-color-primary-foreground': '#FFFFFF', // Cyan
+                            'style-color-secondary': '#00E676',      'style-color-secondary-foreground': '#000000', // Bright Green
+                            'style-color-accent': '#FFEB3B',         'style-color-accent-foreground': '#000000', // Yellow
+                            'style-color-muted': '#E0F7FA',          'style-color-muted-foreground': '#006064',   // Light Cyan
+                            'style-color-active-link': '#00E676',    'style-color-active-link-foreground': '#000000',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#004D40', // Dark Teal text
+                            'style-color-border': '#B2EBF2',         'style-color-input': '#E0F7FA'
+                        },
+                        "graphite_lime": { // Dark industrial with a pop of color
+                            'style-color-primary': '#343A40',        'style-color-primary-foreground': '#F8F9FA', // Dark Gray
+                            'style-color-secondary': '#6C757D',      'style-color-secondary-foreground': '#FFFFFF', // Medium Gray
+                            'style-color-accent': '#AFFF33',         'style-color-accent-foreground': '#1B2B00', // Electric Lime
+                            'style-color-muted': '#212529',          'style-color-muted-foreground': '#ADB5BD',   // Near Black
+                            'style-color-active-link': '#AFFF33',    'style-color-active-link-foreground': '#1B2B00',
+                            'style-color-background': '#121212',     'style-color-foreground': '#E9ECEF', // Light Gray text
+                            'style-color-border': '#495057',         'style-color-input': '#212529'
+                        },
+                        "peach_serenity": { // Soft, warm, inviting
+                            'style-color-primary': '#FFB3A7',        'style-color-primary-foreground': '#5D4037', // Peach
+                            'style-color-secondary': '#FFDAC1',      'style-color-secondary-foreground': '#5D4037', // Lighter Peach
+                            'style-color-accent': '#B0E0E6',         'style-color-accent-foreground': '#3A5F6A', // Powder Blue
+                            'style-color-muted': '#FFF5F3',          'style-color-muted-foreground': '#A1887F',   // Very Light Peach
+                            'style-color-active-link': '#FFB3A7',    'style-color-active-link-foreground': '#5D4037',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#6D4C41', // Brown text
+                            'style-color-border': '#FFEAE6',         'style-color-input': '#FFF5F3'
+                        },
+                        "vintage_wine": { // Rich, classic, sophisticated
+                            'style-color-primary': '#722F37',        'style-color-primary-foreground': '#F5EBE0', // Wine Red
+                            'style-color-secondary': '#8C5040',      'style-color-secondary-foreground': '#F5EBE0', // Muted Brown
+                            'style-color-accent': '#D4AF37',         'style-color-accent-foreground': '#4A3B0C', // Old Gold
+                            'style-color-muted': '#F5F5DC',          'style-color-muted-foreground': '#5E503F',   // Beige
+                            'style-color-active-link': '#D4AF37',    'style-color-active-link-foreground': '#4A3B0C',
+                            'style-color-background': '#FDF6E3',     'style-color-foreground': '#402F2B', // Dark Brown text
+                            'style-color-border': '#EADDCA',         'style-color-input': '#F5F5DC'
+                        },
+                        "steel_blue_tech": { // Clean, modern, tech-focused
+                            'style-color-primary': '#4682B4',        'style-color-primary-foreground': '#FFFFFF', // Steel Blue
+                            'style-color-secondary': '#B0C4DE',      'style-color-secondary-foreground': '#000000', // Light Steel Blue
+                            'style-color-accent': '#32CD32',         'style-color-accent-foreground': '#FFFFFF', // Lime Green
+                            'style-color-muted': '#F0F8FF',          'style-color-muted-foreground': '#4682B4',   // Alice Blue
+                            'style-color-active-link': '#32CD32',    'style-color-active-link-foreground': '#FFFFFF',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#2F4F4F', // Dark Slate Gray text
+                            'style-color-border': '#D8E2EB',         'style-color-input': '#F0F8FF'
+                        },
+                        "muted_rose_gold": { // Elegant, trendy, soft
+                            'style-color-primary': '#B76E79',        'style-color-primary-foreground': '#FFFFFF', // Muted Rose
+                            'style-color-secondary': '#D9A9A9',      'style-color-secondary-foreground': '#4A2C2E', // Dusty Pink
+                            'style-color-accent': '#E6B8A2',         'style-color-accent-foreground': '#5E3A27', // Rose Gold/Copper
+                            'style-color-muted': '#FAF0E6',          'style-color-muted-foreground': '#7D5A5A',   // Linen
+                            'style-color-active-link': '#E6B8A2',    'style-color-active-link-foreground': '#5E3A27',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#5C3E40', // Dark Rose Brown text
+                            'style-color-border': '#F2E4E4',         'style-color-input': '#FAF0E6'
+                        },
+                        "terracotta_earth": { // Warm, grounded, natural clay
+                            'style-color-primary': '#E2725B',        'style-color-primary-foreground': '#FFFFFF', // Terracotta
+                            'style-color-secondary': '#FFA07A',      'style-color-secondary-foreground': '#5D2A18', // Light Salmon
+                            'style-color-accent': '#8FBC8F',         'style-color-accent-foreground': '#2E452E', // Dark Sea Green
+                            'style-color-muted': '#FAEBD7',          'style-color-muted-foreground': '#8B4513',   // Antique White
+                            'style-color-active-link': '#FFA07A',    'style-color-active-link-foreground': '#5D2A18',
+                            'style-color-background': '#FFF8DC',     'style-color-foreground': '#7A3B2E', // Sienna text
+                            'style-color-border': '#F5DEB3',         'style-color-input': '#FAEBD7'
+                        },
+                        "vibrant_candy": { // Playful, bright, energetic
+                            'style-color-primary': '#FF69B4',        'style-color-primary-foreground': '#FFFFFF', // Hot Pink
+                            'style-color-secondary': '#00FFFF',      'style-color-secondary-foreground': '#000000', // Aqua
+                            'style-color-accent': '#FFFF00',         'style-color-accent-foreground': '#000000', // Yellow
+                            'style-color-muted': '#F0FFFF',          'style-color-muted-foreground': '#FF1493',   // Azure (for muted fg, deep pink on light)
+                            'style-color-active-link': '#00FFFF',    'style-color-active-link-foreground': '#000000',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#4B0082', // Indigo text
+                            'style-color-border': '#E0FEFE',         'style-color-input': '#F0FFFF'
+                        },
+                        "classic_cream_black": { // High contrast, timeless
+                            'style-color-primary': '#2F2F2F',        'style-color-primary-foreground': '#FFFDD0', // Near Black
+                            'style-color-secondary': '#555555',      'style-color-secondary-foreground': '#FFFDD0', // Dark Gray
+                            'style-color-accent': '#E0A800',         'style-color-accent-foreground': '#2F2F2F', // Muted Gold
+                            'style-color-muted': '#F5F5F5',          'style-color-muted-foreground': '#4A4A4A',   // Light Gray
+                            'style-color-active-link': '#E0A800',    'style-color-active-link-foreground': '#2F2F2F',
+                            'style-color-background': '#FFFDD0',     'style-color-foreground': '#1C1C1C', // Cream background, very dark text
+                            'style-color-border': '#EAEAEA',         'style-color-input': '#F5F5F5'
+                        },
+                        "nordic_blue_gray": { // Calm, cool, Scandinavian inspired
+                            'style-color-primary': '#607D8B',        'style-color-primary-foreground': '#FFFFFF', // Blue Gray
+                            'style-color-secondary': '#90A4AE',      'style-color-secondary-foreground': '#263238', // Lighter Blue Gray
+                            'style-color-accent': '#FFCC80',         'style-color-accent-foreground': '#5D4037', // Light Orange accent
+                            'style-color-muted': '#ECEFF1',          'style-color-muted-foreground': '#546E7A',   // Very Light Blue Gray
+                            'style-color-active-link': '#FFCC80',    'style-color-active-link-foreground': '#5D4037',
+                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#37474F', // Dark Slate text
+                            'style-color-border': '#CFD8DC',         'style-color-input': '#ECEFF1'
+                        }
+                    };
+
+
+                    // Single source of truth for style control definitions
+                    const stylesToLoad = [
+                        { key: 'style-color-primary',               inputId: 'ssp-color-primary',              cssVar: '--color-primary',              default: '#0b4e24' },
+                        { key: 'style-color-primary-foreground',    inputId: 'ssp-color-primary-foreground',   cssVar: '--color-primary-foreground',   default: '#f1f1f1' },
+                        { key: 'style-color-secondary',             inputId: 'ssp-color-secondary',            cssVar: '--color-secondary',            default: '#17833e' },
+                        { key: 'style-color-secondary-foreground',  inputId: 'ssp-color-secondary-foreground', cssVar: '--color-secondary-foreground', default: '#FFFFFF' },
+                        { key: 'style-color-accent',                inputId: 'ssp-color-accent',               cssVar: '--color-accent',               default: '#1bb353' },
+                        { key: 'style-color-accent-foreground',     inputId: 'ssp-color-accent-foreground',    cssVar: '--color-accent-foreground',    default: '#262729' },
+                        { key: 'style-color-muted',                 inputId: 'ssp-color-muted',                cssVar: '--color-muted',                default: '#FAF8F2' },
+                        { key: 'style-color-muted-foreground',      inputId: 'ssp-color-muted-foreground',     cssVar: '--color-muted-foreground',     default: '#7f8083' },
+                        { key: 'style-color-active-link',           inputId: 'ssp-color-active-link',          cssVar: '--color-active-link',          default: '#5c5c5c' },
+                        { key: 'style-color-active-link-foreground',inputId: 'ssp-color-active-link-foreground',cssVar: '--color-active-link-foreground', default: '#FFFFFF' },
+                        { key: 'style-color-background',            inputId: 'ssp-color-background',           cssVar: '--color-background',           default: '#ffffff' },
+                        { key: 'style-color-foreground',            inputId: 'ssp-color-foreground',           cssVar: '--color-foreground',           default: '#000000' },
+                        { key: 'style-color-border',                inputId: 'ssp-color-border',               cssVar: '--color-border',               default: '#E5E7EB' },
+                        { key: 'style-color-input',                 inputId: 'ssp-color-input',                cssVar: '--color-input',                default: '#F9FAFB' },
+                        /*
+                        { key: 'style-heading-font-size',           inputId: 'heading-font-size-input',        cssVar: '--heading-font-size',        default: '1.5', unit: 'rem' },
+                        { key: 'style-body-font-size',              inputId: 'body-font-size-input',           cssVar: '--body-font-size',           default: '1',   unit: 'rem' },
+                        { key: 'style-button-font-size',            inputId: 'button-font-size-input',         cssVar: '--button-font-size',         default: '0.875', unit: 'rem' },
+                        */
+                        { key: 'style-body-font',                   inputId: 'body-font-select',               cssVar: '--font-primary',         default: 'Inter, sans-serif' }, // Changed key from font-primary
+                        { key: 'style-heading-font',                inputId: 'heading-font-select',            cssVar: '--font-secondary',      default: 'Inter, sans-serif' }  // Changed key from font-secondary
+                    ];
 
                     // --- Helper: Show/Hide Modal ---
                     const showModal = (modal) => modal?.classList.remove('hidden');
                     const hideModal = (modal) => modal?.classList.add('hidden');
 
-                    // --- NEW: Toggle Editor/Button Interactivity ---
-                    const toggleEditorInteractivity = (isReady) => {
-                        const readOnly = isReady;
-                        // Update Monaco Editors
-                        htmlEditor?.updateOptions({ readOnly: readOnly });
-                        cssEditor?.updateOptions({ readOnly: readOnly });
-                        jsEditor?.updateOptions({ readOnly: readOnly });
-
-                        // Toggle Overlay visibility
-                        if(editorReadOnlyOverlay) {
-                            editorReadOnlyOverlay.classList.toggle('hidden', !readOnly);
+                    const updatePreviewHeaderProductImage = () => { /* ... existing code ... */
+                        const imageUrl = localStorage.getItem(PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY);
+                        if (previewHeaderProductImage) {
+                            if (imageUrl && imageUrl !== placeholderProductImageUrl) {
+                                previewHeaderProductImage.src = imageUrl;
+                                previewHeaderProductImage.classList.remove('hidden');
+                            } else {
+                                previewHeaderProductImage.src = 'https://placehold.co/200x200/e2e8f0/475569?text=No+Image';
+                                //previewHeaderProductImage.classList.add('hidden');
+                            }
                         }
-
-                        // Disable/Enable Save buttons
-                        if(submitButton) submitButton.disabled = readOnly;
-                        //if(previewBtn) previewBtn.disabled = readOnly; // Disable Save & Preview too
                     };
 
 
-                    // --- Status Badge Styling ---
-                    const updateBadgeStyle = (status) => {
+                    const toggleEditorInteractivity = (isReady) => { /* ... existing code ... */
+                        const readOnly = isReady;
+                        htmlEditor?.updateOptions({ readOnly: readOnly });
+                        cssEditor?.updateOptions({ readOnly: readOnly });
+                        jsEditor?.updateOptions({ readOnly: readOnly });
+                        if(editorReadOnlyOverlay) editorReadOnlyOverlay.classList.toggle('hidden', !readOnly);
+                        if(submitButton) submitButton.disabled = readOnly;
+                    };
+
+                    const updateBadgeStyle = (status) => { /* ... existing code ... */
                         if (!statusBadgeButton || !statusBadgeText || !statusBadgeIndicator) return;
                         statusBadgeText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
                         const baseButtonClasses = ['py-2 px-4 :opacity-50 modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit rounded-lg border border-border shadow-sm inline-flex items-center'];
                         const statusButtonClasses = { 'draft': 'bg-gray-100 text-gray-800', 'ready': 'bg-sky-100 text-sky-800 hover:bg-sky-200' };
-                        const statusIndicatorClasses = { 'draft': 'bg-gray-400 hover:bg-gray-200', 'ready': 'bg-sky-500 hover:bg-sky-200' };
-                        statusBadgeButton.className = baseButtonClasses.join(' ') + ' ' + (statusButtonClasses[status] || 'bg-gray-100 text-gray-800 hover:bg-sky-200');
+                        const statusIndicatorClasses = { 'draft': 'bg-gray-400 hover:bg-gray-200', 'ready': 'bg-sky-500 hover:bg-sky-200' }; // Corrected hover for draft
+                        statusBadgeButton.className = baseButtonClasses.join(' ') + ' ' + (statusButtonClasses[status] || 'bg-gray-100 text-gray-800'); // Removed hover:bg-sky-200 from default
                         statusBadgeIndicator.className = 'inline-block w-2 h-2 rounded-full mr-1.5 ' + (statusIndicatorClasses[status] || 'bg-gray-400');
-
-                        // <<< Enable/Disable editor based on status >>>
                         toggleEditorInteractivity(status === 'ready');
                     };
+
                     if(statusBadgeButton) { updateBadgeStyle(initialStatus); }
 
-                    // --- Status Dropdown Logic ---
+                    const closeAllDropdowns = (exceptButton = null) => {
+                        if (currentlyOpenDropdown && (!exceptButton || exceptButton !== currentlyOpenDropdown.previousElementSibling)) {
+                            currentlyOpenDropdown.classList.add('hidden');
+                            currentlyOpenDropdown = null;
+                        }
+                    };
+
                     if (statusBadgeButton && statusDropdown) {
                         statusBadgeButton.addEventListener('click', (event) => {
                             event.stopPropagation();
                             const isHidden = statusDropdown.classList.contains('hidden');
-                            closeAllDropdowns(statusBadgeButton);
-                            if (isHidden) { statusDropdown.classList.remove('hidden'); currentlyOpenDropdown = statusDropdown; }
-                            else { currentlyOpenDropdown = null; }
+                            closeAllDropdowns(statusBadgeButton); // Pass button to avoid self-closing
+                            if (isHidden) {
+                                statusDropdown.classList.remove('hidden');
+                                currentlyOpenDropdown = statusDropdown;
+                            } else {
+                                // already handled by closeAllDropdowns if it was this one
+                                currentlyOpenDropdown = null;
+                            }
                         });
-                        // *** UPDATED Status Option Click Listener ***
-                        statusDropdown.addEventListener('click', (event) => {
+                        statusDropdown.addEventListener('click', (event) => { /* ... existing status option logic ... */
                             const targetButton = event.target.closest('.status-option');
                             if (targetButton && !isStatusLoading) {
                                 const newStatus = targetButton.dataset.status;
-                                statusDropdown.classList.add('hidden'); // Close dropdown immediately
+                                statusDropdown.classList.add('hidden');
                                 currentlyOpenDropdown = null;
-
                                 if (newStatus && newStatus !== currentStatus) {
                                     if (newStatus === 'ready' && currentStatus === 'draft') {
-                                        // Show confirmation modal
                                         if (statusConfirmModal && statusConfirmRequiredIdEl && statusConfirmInput && statusConfirmButton) {
-                                            statusConfirmRequiredIdEl.textContent = sectionId; // Display required ID
-                                            statusConfirmInput.value = ''; // Clear input
-                                            statusConfirmError?.classList.add('hidden'); // Hide error
-                                            statusConfirmButton.disabled = true; // Disable confirm initially
+                                            statusConfirmRequiredIdEl.textContent = sectionId;
+                                            statusConfirmInput.value = '';
+                                            statusConfirmError?.classList.add('hidden');
+                                            statusConfirmButton.disabled = true;
                                             showModal(statusConfirmModal);
-                                        } else {
-                                            console.error("Status confirmation modal elements not found.");
-                                        }
-                                    } else {
-                                        // Changing back to draft or other non-confirm transitions
-                                        updateSectionStatus(sectionId, newStatus);
-                                    }
+                                        } else { console.error("Status confirmation modal elements not found."); }
+                                    } else { updateSectionStatus(sectionId, newStatus); }
                                 }
                             }
                         });
                     }
-                    const closeAllDropdowns = (exceptButton = null) => { /* ... Keep existing ... */ if (currentlyOpenDropdown) { if (!exceptButton || exceptButton !== currentlyOpenDropdown.previousElementSibling) { currentlyOpenDropdown.classList.add('hidden'); currentlyOpenDropdown = null; } } };
-                    document.addEventListener('click', (event) => { /* ... Keep existing ... */ if (currentlyOpenDropdown) { const toggle = event.target.closest('#status-badge-button'); const menu = event.target.closest('#status-dropdown'); if (!toggle && !menu) { closeAllDropdowns(); } } });
+                    document.addEventListener('click', (event) => {
+                        if (currentlyOpenDropdown) {
+                            const isClickInsideToggle = statusBadgeButton?.contains(event.target);
+                            const isClickInsideDropdown = statusDropdown?.contains(event.target);
+                            if (!isClickInsideToggle && !isClickInsideDropdown) {
+                                closeAllDropdowns();
+                            }
+                        }
+                    });
 
-                    // --- Status Update AJAX Function ---
-                    const updateSectionStatus = (id, newStatus) => { /* ... Keep existing ... */ if (isStatusLoading || !id) return; isStatusLoading = true; const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'); if (!csrfToken) { console.error('CSRF token missing!'); isStatusLoading = false; return; } const apiUrl = `/section/status/${id}`; console.log(`Updating status to: ${newStatus} for section ${id}`); fetch(apiUrl, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'X-HTTP-Method-Override': 'PATCH' }, body: JSON.stringify({ status: newStatus }) }) .then(response => response.json().then(data => ({ status: response.status, ok: response.ok, body: data }))) .then(({ status, ok, body }) => { if (!ok) { throw new Error(body.message || `HTTP error! status: ${status}`); } console.log('Status Update Success:', body); currentStatus = body.newStatus; updateBadgeStyle(currentStatus); if (typeof showToast === 'function') { showToast(body.message || 'Status updated!', 'success'); } else { alert(body.message || 'Status updated!'); } }) .catch(error => { console.error('Status Update Error:', error); if (typeof showToast === 'function') { showToast(`Error updating status: ${error.message}`, 'error'); } else { alert(`Error updating status: ${error.message}`); } }) .finally(() => { isStatusLoading = false; }); };
+                    const updateSectionStatus = (id, newStatus) => { /* ... existing code ... */
+                        if (isStatusLoading || !id) return;
+                        isStatusLoading = true;
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                        if (!csrfToken) { console.error('CSRF token missing!'); isStatusLoading = false; return; }
+                        const apiUrl = `/section/status/${id}`;
+                        fetch(apiUrl, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }, body: JSON.stringify({ status: newStatus }) })
+                            .then(response => response.json().then(data => ({ statusVal: response.status, ok: response.ok, body: data }))) // Renamed 'status' to 'statusVal' to avoid conflict
+                            .then(({ statusVal, ok, body }) => {
+                                if (!ok) { throw new Error(body.message || `HTTP error! status: ${statusVal}`); }
+                                currentStatus = body.newStatus;
+                                updateBadgeStyle(currentStatus);
+                                showToast(body.message || 'Status updated!', 'success');
+                            })
+                            .catch(error => {
+                                console.error('Status Update Error:', error);
+                                showToast(`Error updating status: ${error.message}`, 'error');
+                            })
+                            .finally(() => { isStatusLoading = false; });
+                    };
 
-                    // --- NEW: Status Confirmation Modal Logic ---
-                    if (statusConfirmInput && statusConfirmButton && statusConfirmRequiredIdEl) {
-                        // Enable/disable confirm button based on input match
+                    if (statusConfirmInput && statusConfirmButton && statusConfirmRequiredIdEl) { /* ... existing code ... */
                         statusConfirmInput.addEventListener('input', () => {
-                            const requiredId = statusConfirmRequiredIdEl.textContent;
-                            const enteredId = statusConfirmInput.value.trim();
-                            statusConfirmButton.disabled = (enteredId !== requiredId);
-                            statusConfirmError?.classList.add('hidden'); // Hide error on input change
+                            statusConfirmButton.disabled = (statusConfirmInput.value.trim() !== statusConfirmRequiredIdEl.textContent);
+                            statusConfirmError?.classList.add('hidden');
                         });
-
-                        // Handle confirm button click
                         statusConfirmButton.addEventListener('click', () => {
-                            const requiredId = statusConfirmRequiredIdEl.textContent;
-                            const enteredId = statusConfirmInput.value.trim();
-
-                            if (enteredId === requiredId) {
+                            if (statusConfirmInput.value.trim() === statusConfirmRequiredIdEl.textContent) {
                                 hideModal(statusConfirmModal);
-                                updateSectionStatus(sectionId, 'ready'); // Proceed with update
+                                updateSectionStatus(sectionId, 'ready');
                             } else {
-                                statusConfirmError?.classList.remove('hidden'); // Show error
-                                statusConfirmButton.disabled = true; // Keep disabled
+                                statusConfirmError?.classList.remove('hidden');
+                                statusConfirmButton.disabled = true;
                             }
                         });
                     }
-                    // --- Editor Tab Switching Logic ---
-                    if (tabContainer) { /* ... Keep existing ... */ tabContainer.addEventListener('click', (event) => { const targetButton = event.target.closest('.tab-btn'); if (!targetButton || targetButton.classList.contains('active')) return; const targetPaneId = targetButton.dataset.target; if (!targetPaneId) return; tabButtons.forEach(btn => btn.classList.remove('active')); targetButton.classList.add('active'); let newlyVisibleEditor = null; editorPanes.forEach(pane => { if (pane.id === targetPaneId) { pane.classList.remove('hidden'); if (editors[pane.id]) { newlyVisibleEditor = editors[pane.id](); } } else { pane.classList.add('hidden'); } }); if (newlyVisibleEditor) { setTimeout(() => { console.log(`Calling layout for editor in #${targetPaneId}`); newlyVisibleEditor.layout(); }, 50); } }); }
 
-                    // --- Preview Functionality ---
-                    const handlePreviewClick = () => { /* ... Keep existing ... */ if (!sectionId) { console.error('Section ID missing for preview.'); showToast('Cannot preview: Section ID is missing.', 'error'); return; } const savedProductId = localStorage.getItem(PREVIEW_PRODUCT_STORAGE_KEY); if (savedProductId) { console.log(`Using saved product ID: ${savedProductId} for section ${sectionId}`); fetchPreview(sectionId, savedProductId); } else { console.log(`No saved product ID found for section ${sectionId}, opening modal.`); productListContainer.innerHTML = '<p class="text-center text-gray-500 py-8 product-list-state">Loading products...</p>'; productPaginationContainer.innerHTML = ''; fetchProducts(1); showModal(productModal); } };
-                    // Note: Listener for previewBtn is attached later
-
-                    // Generic Modal Close/Cancel Logic
-                    document.querySelectorAll('.modal').forEach(modal => { modal.addEventListener('click', (event) => { if (event.target === modal) hideModal(modal); }); modal.querySelectorAll('.modal-close-btn, .modal-cancel-btn').forEach(btn => { btn.addEventListener('click', () => hideModal(modal)); }); });
-                    // Fetch Products Function
-                    const fetchProducts = async (page = 1) => { /* ... Keep existing ... */ const productsUrl = `{{ route('section.products') }}?page=${page}`; productListContainer.innerHTML = '<p class="text-center text-gray-500 py-8 product-list-state">Loading products...</p>'; productPaginationContainer.innerHTML = ''; try { const response = await fetch(productsUrl, { method: 'GET', headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } }); if (!response.ok) { const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` })); throw new Error(errorData.message || `HTTP error! status: ${response.status}`); } const data = await response.json(); displayProducts(data); } catch (error) { console.error('Error fetching products:', error); productListContainer.innerHTML = `<p class="text-center text-red-500 py-8 product-list-state">Error loading products: ${error.message}</p>`; } };
-                    // Display Products Function
-                    const displayProducts = (data) => { /* ... Keep existing (using data.products and data.paginator) ... */ const products = data.products || []; const paginator = data.paginator || {}; if (!products || products.length === 0) { productListContainer.innerHTML = '<p class="text-center text-gray-500 py-8 product-list-state">No products found.</p>'; productPaginationContainer.innerHTML = ''; return; } let productHtml = '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">'; products.forEach(product => { const productId = product.id; const productName = product.title || 'Unnamed Product'; const productImageUrl = product.image?.url || 'https://placehold.co/200x200/e2e8f0/475569?text=No+Image'; productHtml += ` <div class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md product-item group" data-product-id="${productId}" title="${productName}"> <img src="${productImageUrl}" alt="${productName}" loading="lazy" class="w-full h-32 object-cover transition-transform duration-200 group-hover:scale-105"> <p class="text-sm p-2 truncate">${productName}</p> </div> `; }); productHtml += '</div>'; productListContainer.innerHTML = productHtml; let paginationHtml = ''; const currentPage = paginator.currentPage || 1; const lastPage = paginator.lastPage || 1; if (lastPage > 1) { paginationHtml += ` <button type="button" data-page="${currentPage - 1}" class="!text-xs !py-1.5 !px-3 !w-fit bg-gray-100 text-grey-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'text-blue-600'} product-page-btn" ${currentPage === 1 ? 'disabled' : ''}> « Prev </button> `; paginationHtml += `<span class="px-3 py-1 text-sm text-gray-600">Page ${currentPage} of ${lastPage}</span>`; paginationHtml += ` <button type="button" data-page="${currentPage + 1}" class="!text-xs !py-1.5 !px-3 !w-fit bg-gray-100 text-grey-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm ${currentPage === lastPage ? 'opacity-50 cursor-not-allowed' : 'text-blue-600'} product-page-btn" ${currentPage === lastPage ? 'disabled' : ''}> Next » </button> `; } productPaginationContainer.innerHTML = paginationHtml; };
-                    // Event listener for product selection (delegated)
-                    if (productListContainer) { productListContainer.addEventListener('click', (event) => { /* ... Keep existing: Saves to localStorage ... */ const productItem = event.target.closest('.product-item'); if (productItem && productItem.dataset.productId) { const productId = productItem.dataset.productId; console.log(`Product selected: ${productId}`); localStorage.setItem(PREVIEW_PRODUCT_STORAGE_KEY, productId); console.log(`Saved product ID ${productId} to localStorage for key ${PREVIEW_PRODUCT_STORAGE_KEY}`); hideModal(productModal); fetchPreview(sectionId, productId); /* Use sectionId */ } }); }
-                    // Event listener for pagination buttons (delegated)
-                    if (productPaginationContainer) { productPaginationContainer.addEventListener('click', (event) => { /* ... Keep existing ... */ const pageButton = event.target.closest('.product-page-btn'); if (pageButton && pageButton.dataset.page && !pageButton.disabled) { fetchProducts(pageButton.dataset.page); } }); }
-                    // Fetch Preview Function
-                    //const fetchPreview = async (secId, productId) => { /* ... Keep existing ... */ if (!secId || !productId) { console.error('Missing sectionId or productId for preview.'); showToast('Cannot generate preview: Missing information.', 'error'); return; } const previewUrl = `/section/preview/${secId}`; const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'); if (!csrfToken) { console.error('CSRF token missing!'); showToast('Cannot generate preview: Missing security token.', 'error'); return; } showModal(previewModal); previewLoading?.classList.remove('hidden'); previewError?.classList.add('hidden'); if(previewIframe) previewIframe.srcdoc = ''; try { const response = await fetch(previewUrl, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }, body: JSON.stringify({ productId: productId }) }); const data = await response.json(); if (!response.ok) { throw new Error(data.message || `HTTP error! status: ${response.status}`); } console.log('Preview Success:', data); if(previewIframe) previewIframe.srcdoc = data.previewContent || '<p class="p-4 text-center text-gray-500">No preview content received.</p>'; } catch (error) { console.error('Error fetching preview:', error); if(previewErrorText) previewErrorText.textContent = `Failed to load preview: ${error.message}`; previewError?.classList.remove('hidden'); if(previewIframe) previewIframe.srcdoc = ''; } finally { previewLoading?.classList.add('hidden'); } };
-                    const fetchPreview = async (secId, productId) => {
-                        if (!secId || !productId) { console.error('Missing sectionId or productId for preview.'); showToast('Cannot generate preview: Missing information.', 'error'); return; }
-                        const previewUrl = `/section/preview/${secId}`;
-                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                        if (!csrfToken) { console.error('CSRF token missing!'); showToast('Cannot generate preview: Missing security token.', 'error'); return; }
-
-                        showModal(previewModal);
-                        previewLoading?.classList.remove('hidden');
-                        previewError?.classList.add('hidden');
-                        if(previewIframe) previewIframe.srcdoc = ''; // Clear previous content
-
-                        try {
-                            const response = await fetch(previewUrl, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }, body: JSON.stringify({ productId: productId }) });
-                            const data = await response.json();
-                            if (!response.ok) { throw new Error(data.message || `HTTP error! status: ${response.status}`); }
-                            console.log('Preview Success:', data);
-
-                            if(previewIframe) {
-                                previewIframe.srcdoc = data.previewContent || '<p class="p-4 text-center text-gray-500">No preview content received.</p>';
-                                // *** Apply styles AFTER iframe content is loaded ***
-                                previewIframe.onload = () => {
-                                    applyStoredStylesToIframe(); // Apply styles from localStorage
-                                    // Reset iframe onload handler to prevent re-applying styles on subsequent internal loads
-                                    previewIframe.onload = null;
-                                };
-                            }
-
-                        } catch (error) {
-                            console.error('Error fetching preview:', error);
-                            if(previewErrorText) previewErrorText.textContent = `Failed to load preview: ${error.message}`;
-                            previewError?.classList.remove('hidden');
-                            if(previewIframe) previewIframe.srcdoc = '';
-                        } finally {
-                            previewLoading?.classList.add('hidden');
-                        }
-                    };
-
-                    // Event listener for Clear Default Button
-
-                    if (clearDefaultBtn) {
-                        clearDefaultBtn.addEventListener('click', () => {
-                            // 1. Hide the current preview modal
-                            hideModal(previewModal);
-                            // 2. Clear the stored default product ID so the selection modal opens next time
-                            localStorage.removeItem(PREVIEW_PRODUCT_STORAGE_KEY);
-                            // 3. Trigger the logic that opens the product selection modal
-                            // We call handlePreviewClick again, which will now find no stored ID
-                            // and proceed to open the product selection.
-                            handlePreviewClick();
-
-                            // Alternative: Directly open the product modal if preferred
-                            // console.log(`Opening product selection modal.`);
-                            // productListContainer.innerHTML = '<p class="text-center text-gray-500 py-8 product-list-state">Loading products...</p>';
-                            // productPaginationContainer.innerHTML = '';
-                            // fetchProducts(1);
-                            // showModal(productModal);
-
-                        });
-                    }
-
-
-                    // --- Function to Submit Editor Content for UPDATE (Refactored for Save & Preview) ---
-                    const submitEditorContent = async (buttonElement, onSuccessCallback = null) => {
-                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                        const currentSectionId = sectionId; // Use sectionId defined at the top
-
-                        if (!htmlEditor || !cssEditor || !jsEditor || !buttonElement || !currentSectionId || !csrfToken) {
-                            console.error("Submit prerequisites missing.");
-                            showToast('Cannot save: Missing required elements or token.', 'error');
-                            return false; // Indicate failure
-                        }
-
-                        let htmlCode, cssCode, jsCode;
-                        try {
-                            htmlCode = htmlEditor.getValue();
-                            cssCode = cssEditor.getValue();
-                            jsCode = jsEditor.getValue();
-                        } catch (editorError) {
-                            console.error("Error getting editor content:", editorError);
-                            showToast('Cannot save: Editor content unavailable.', 'error');
-                            return false;
-                        }
-
-                        const apiUrl = `/section/edit/${currentSectionId}`;
-                        const buttonTextElement = buttonElement.querySelector('.button-text'); // Target the span for text change
-                        const icon = buttonElement.querySelector('svg'); // Get icon reference
-
-                        console.log("Submitting update to:", apiUrl);
-                        buttonElement.disabled = true;
-                        buttonElement.classList.add('button-loading'); // Add loading class (shows "Saving...")
-                        if(buttonTextElement) buttonTextElement.style.visibility = 'hidden'; // Hide original text
-                        if(icon) icon.style.visibility = 'hidden'; // Hide original icon
-
-                        try {
-                            const response = await fetch(apiUrl, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'X-HTTP-Method-Override': 'PUT' },
-                                body: JSON.stringify({ html_code: htmlCode, css_code: cssCode, js_code: jsCode })
-                            });
-                            const data = await response.json();
-                            if (!response.ok) { throw new Error(data.message || `HTTP error! status: ${response.status}`); }
-
-                            console.log('Update Success Response:', data);
-                            showToast(data.message || 'Section content saved successfully!', 'success');
-
-                            if (typeof onSuccessCallback === 'function') {
-                                onSuccessCallback(); // Execute preview logic only on success
-                            }
-                            return true; // Indicate success
-
-                        } catch (error) {
-                            console.error('Update Error:', error);
-                            showToast(`Error saving section: ${error.message}`, 'error');
-                            return false; // Indicate failure
-                        } finally {
-                            // Restore button state
-                            buttonElement.disabled = false;
-                            buttonElement.classList.remove('button-loading');
-                            // Restore original HTML content visibility
-                            if(buttonTextElement) buttonTextElement.style.visibility = 'visible';
-                            if(icon) icon.style.visibility = 'visible';
-                        }
-                    };
-
-                    // --- Attach Event Listeners for Buttons ---
-                    // Save Button
-                    if (submitButton) {
-                        submitButton.addEventListener('click', (event) => {
-                            submitEditorContent(event.currentTarget); // Pass button, no callback
-                        });
-                    } else { console.error("Save button element not found!"); }
-
-                    // Save & Preview Button
-                    if (previewBtn) {
-                        previewBtn.addEventListener('click', async (event) => {
-                            const buttonElement = event.currentTarget;
-                            // Call submit, passing handlePreviewClick as the success callback
-                            const success = await submitEditorContent(buttonElement, handlePreviewClick);
-                            if (success) {
-                                console.log("Save successful, proceeding to preview logic.");
-                            } else {
-                                console.log("Save failed, preview cancelled.");
-                                // Ensure button is fully reset visually if save fails
-                                buttonElement.disabled = false;
-                                buttonElement.classList.remove('button-loading');
-                                const textSpan = buttonElement.querySelector('.button-text');
-                                const iconSpan = buttonElement.querySelector('svg');
-                                if(textSpan) textSpan.style.visibility = 'visible';
-                                if(iconSpan) iconSpan.style.visibility = 'visible';
-                            }
-                        });
-                    } else { console.error("Save & Preview button element not found!"); }
-
-                    // --- Variables Modal Logic ---
-                    if (showVariablesBtn && variablesModal && variableListContainer) {
-                        // Populate the modal on DOMContentLoaded
-                        displayVariables(availableVariables);
-
-                        // Add listener to open the modal
-                        showVariablesBtn.addEventListener('click', () => {
-                            showModal(variablesModal);
-                        });
-
-                    }
-
-                    // --- NEW: Style Settings Modal Logic ---
-                    if (styleSettingsBtn && styleSettingsModal) {
-                        // Open modal
-                        styleSettingsBtn.addEventListener('click', () => {
-                            // Populate controls with current values before showing
-                            loadAndSetStyleControls();
-                            showModal(styleSettingsModal);
-                        });
-
-                        // Tab switching within style modal
-                        if (styleSettingsTabBar && styleSettingsTabButtons && styleSettingsTabPanes) {
-                            styleSettingsTabBar.addEventListener('click', (event) => {
-                                const targetButton = event.target.closest('.style-tab-button');
-                                if (!targetButton || targetButton.classList.contains('active')) return;
-                                const targetPaneId = targetButton.dataset.target;
-                                if (!targetPaneId) return;
-                                styleSettingsTabButtons.forEach(btn => btn.classList.remove('active'));
-                                targetButton.classList.add('active');
-                                styleSettingsTabPanes.forEach(pane => {
-                                    pane.classList.toggle('hidden', pane.id !== targetPaneId);
-                                    pane.classList.toggle('active', pane.id === targetPaneId);
-                                });
-                            });
-                        }
-
-                        // Add listeners for style controls to apply and save changes
-                        styleSettingsModal.querySelectorAll('input[type="color"][data-css-var][data-storage-key]').forEach(input => {
-                            input.addEventListener('input', (event) => { // Use 'input' for live color change
-                                const cssVar = event.target.dataset.cssVar;
-                                const storageKey = event.target.dataset.storageKey;
-                                const value = event.target.value;
-                                applyAndSaveStyle(cssVar, value, storageKey);
-                            });
-                        });
-
-                        styleSettingsModal.querySelectorAll('.font-size-btn').forEach(button => {
-                            button.addEventListener('click', (event) => {
-                                const value = event.target.dataset.value;
-                                const cssVar = '--base-font-size'; // Hardcoded target variable
-                                const storageKey = 'style-base-font-size'; // Hardcoded storage key
-                                applyAndSaveStyle(cssVar, value, storageKey);
-                                const customInput = document.getElementById('custom-font-size-input');
-                                if(customInput) customInput.value = parseInt(value); // Update input field
-                            });
-                        });
-
-                        const customSizeInput = document.getElementById('custom-font-size-input');
-                        if(customSizeInput) {
-                            customSizeInput.addEventListener('change', (event) => { // Use 'change' or 'input'
-                                const value = event.target.value;
-                                const cssVar = event.target.dataset.cssVar;
-                                const storageKey = event.target.dataset.storageKey;
-                                if (value && !isNaN(value) && cssVar && storageKey) {
-                                    const pixelValue = `${value}px`;
-                                    applyAndSaveStyle(cssVar, pixelValue, storageKey);
+                    if (tabContainer) { /* ... existing code ... */
+                        tabContainer.addEventListener('click', (event) => {
+                            const targetButton = event.target.closest('.tab-btn');
+                            if (!targetButton || targetButton.classList.contains('active')) return;
+                            const targetPaneId = targetButton.dataset.target;
+                            if (!targetPaneId) return;
+                            tabButtons.forEach(btn => btn.classList.remove('active'));
+                            targetButton.classList.add('active');
+                            let newlyVisibleEditor = null;
+                            editorPanes.forEach(pane => {
+                                const isTarget = pane.id === targetPaneId;
+                                pane.classList.toggle('hidden', !isTarget);
+                                if (isTarget && editors[pane.id]) {
+                                    newlyVisibleEditor = editors[pane.id]();
                                 }
                             });
+                            if (newlyVisibleEditor) {
+                                setTimeout(() => { newlyVisibleEditor.layout(); }, 50);
+                            } else if (targetPaneId === 'assets-container') {
+                                fetchAndDisplayCurrentAssets(); // Refresh assets when tab is clicked
+                            }
+                        });
+                    }
+
+                    const handlePreviewClick = () => { /* ... existing code ... */
+                        if (!sectionId) { showToast('Cannot preview: Section ID is missing.', 'error'); return; }
+                        const savedProductId = localStorage.getItem(PREVIEW_PRODUCT_STORAGE_KEY);
+                        updatePreviewHeaderProductImage();
+                        if (savedProductId) {
+                            fetchPreview(sectionId, savedProductId);
+                        } else {
+                            productListContainer.innerHTML = '<p class="text-center text-gray-500 py-8 product-list-state">Loading products...</p>';
+                            productPaginationContainer.innerHTML = '';
+                            fetchProducts(1);
+                            showModal(productModal);
+                        }
+                    };
+
+                    document.querySelectorAll('.modal').forEach(modal => { /* ... existing code ... */
+                        modal.addEventListener('click', (event) => { if (event.target === modal) hideModal(modal); });
+                        modal.querySelectorAll('.modal-close-btn, .modal-cancel-btn').forEach(btn => {
+                            btn.addEventListener('click', () => hideModal(modal));
+                        });
+                    });
+
+                    const fetchProducts = async (page = 1) => { /* ... existing code ... */
+                        const productsUrl = `{{ route('section.products') }}?page=${page}`;
+                        productListContainer.innerHTML = '<p class="text-center text-gray-500 py-8 product-list-state">Loading products...</p>';
+                        productPaginationContainer.innerHTML = '';
+                        try {
+                            const response = await fetch(productsUrl, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }});
+                            if (!response.ok) { const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` })); throw new Error(errorData.message || `HTTP error! status: ${response.status}`); }
+                            const data = await response.json(); displayProducts(data);
+                        } catch (error) { console.error('Error fetching products:', error); productListContainer.innerHTML = `<p class="text-center text-red-500 py-8 product-list-state">Error loading products: ${error.message}</p>`; }
+                    };
+
+                    const displayProducts = (data) => { /* ... existing code ... */
+                        const products = data.products || []; const paginator = data.paginator || {};
+                        if (!products || products.length === 0) { productListContainer.innerHTML = '<p class="text-center text-gray-500 py-8 product-list-state">No products found.</p>'; productPaginationContainer.innerHTML = ''; return; }
+                        let productHtml = '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">';
+                        products.forEach(product => {
+                            const productId = product.id; const productName = product.title || 'Unnamed Product';
+                            const productImageUrl = product.image?.url || placeholderProductImageUrl;
+                            productHtml += `<div class="border rounded-lg overflow-hidden cursor-pointer hover:shadow-md product-item group" data-product-id="${productId}" data-product-image-url="${productImageUrl}" title="${productName}"><img src="${productImageUrl}" alt="${productName}" loading="lazy" class="w-full h-32 object-cover transition-transform duration-200 group-hover:scale-105"><p class="text-sm p-2 truncate">${productName}</p></div>`;
+                        });
+                        productHtml += '</div>'; productListContainer.innerHTML = productHtml;
+                        let paginationHtml = ''; const currentPage = paginator.currentPage || 1; const lastPage = paginator.lastPage || 1;
+                        if (lastPage > 1) { paginationHtml += ` <button type="button" data-page="${currentPage - 1}" class="!text-xs !py-1.5 !px-3 !w-fit bg-gray-100 text-grey-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''} product-page-btn" ${currentPage === 1 ? 'disabled' : ''}>« Prev</button> `; paginationHtml += `<span class="px-3 py-1 text-sm text-gray-600">Page ${currentPage} of ${lastPage}</span>`; paginationHtml += ` <button type="button" data-page="${currentPage + 1}" class="!text-xs !py-1.5 !px-3 !w-fit bg-gray-100 text-grey-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm ${currentPage === lastPage ? 'opacity-50 cursor-not-allowed' : ''} product-page-btn" ${currentPage === lastPage ? 'disabled' : ''}>Next »</button> `; }
+                        productPaginationContainer.innerHTML = paginationHtml;
+                    };
+
+                    if (productListContainer) { /* ... existing code ... */
+                        productListContainer.addEventListener('click', (event) => {
+                            const productItem = event.target.closest('.product-item');
+                            if (productItem && productItem.dataset.productId) {
+                                const productId = productItem.dataset.productId; const productImageUrl = productItem.dataset.productImageUrl;
+                                localStorage.setItem(PREVIEW_PRODUCT_STORAGE_KEY, productId);
+                                if (productImageUrl && productImageUrl !== placeholderProductImageUrl) { localStorage.setItem(PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY, productImageUrl); }
+                                else { localStorage.removeItem(PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY); }
+                                updatePreviewHeaderProductImage(); hideModal(productModal); fetchPreview(sectionId, productId);
+                            }
+                        });
+                    }
+                    if (productPaginationContainer) { /* ... existing code ... */
+                        productPaginationContainer.addEventListener('click', (event) => {
+                            const pageButton = event.target.closest('.product-page-btn');
+                            if (pageButton && pageButton.dataset.page && !pageButton.disabled) { fetchProducts(pageButton.dataset.page); }
+                        });
+                    }
+
+                    const fetchPreview = async (secId, prodId) => { /* ... existing code ... */ // Renamed productId to prodId for clarity in this scope
+                        if (!secId || !prodId) { showToast('Cannot generate preview: Missing information.', 'error'); return; }
+                        const previewUrl = `/section/preview/${secId}`; const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                        if (!csrfToken) { showToast('Cannot generate preview: Missing security token.', 'error'); return; }
+                        updatePreviewHeaderProductImage(); showModal(previewModal);
+                        previewLoading?.classList.remove('hidden'); previewError?.classList.add('hidden');
+                        if(previewIframe) previewIframe.srcdoc = '';
+                        try {
+                            const response = await fetch(previewUrl, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }, body: JSON.stringify({ productId: prodId }) });
+                            const data = await response.json(); if (!response.ok) { throw new Error(data.message || `HTTP error! status: ${response.status}`); }
+                            if(previewIframe) { previewIframe.srcdoc = data.previewContent || '<p class="p-4 text-center text-gray-500">No preview content received.</p>'; previewIframe.onload = () => { applyStoredStylesToIframe(); previewIframe.onload = null; }; }
+                        } catch (error) { console.error('Error fetching preview:', error); if(previewErrorText) previewErrorText.textContent = `Failed to load preview: ${error.message}`; previewError?.classList.remove('hidden'); if(previewIframe) previewIframe.srcdoc = ''; }
+                        finally { previewLoading?.classList.add('hidden'); }
+                    };
+
+                    if (clearDefaultBtn) { /* ... existing code ... */
+                        clearDefaultBtn.addEventListener('click', () => {
+                            localStorage.removeItem(PREVIEW_PRODUCT_STORAGE_KEY); localStorage.removeItem(PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY);
+                            if (previewHeaderProductImage) {
+                                previewHeaderProductImage.src = 'https://placehold.co/200x200/e2e8f0/475569?text=No+Image';
+                                //previewHeaderProductImage.classList.add('hidden');
+                            }
+                            productListContainer.innerHTML = '<p class="text-center text-gray-500 py-8 product-list-state">Loading products...</p>';
+                            productPaginationContainer.innerHTML = ''; fetchProducts(1); showModal(productModal);
+                        });
+                    }
+
+                    const submitEditorContent = async (buttonElement, onSuccessCallback = null) => { /* ... existing code ... */
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                        if (!htmlEditor || !cssEditor || !jsEditor || !buttonElement || !sectionId || !csrfToken) { showToast('Cannot save: Missing required elements or token.', 'error'); return false; }
+                        let htmlCode, cssCode, jsCode; try { htmlCode = htmlEditor.getValue(); cssCode = cssEditor.getValue(); jsCode = jsEditor.getValue(); } catch (e) { showToast('Cannot save: Editor content unavailable.', 'error'); return false;}
+                        const apiUrl = `/section/edit/${sectionId}`; const buttonTextElement = buttonElement.querySelector('.button-text'); const icon = buttonElement.querySelector('svg');
+                        buttonElement.disabled = true; buttonElement.classList.add('button-loading'); if(buttonTextElement) buttonTextElement.style.visibility = 'hidden'; if(icon) icon.style.visibility = 'hidden';
+                        try {
+                            const response = await fetch(apiUrl, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }, body: JSON.stringify({ html_code: htmlCode, css_code: cssCode, js_code: jsCode }) });
+                            const data = await response.json(); if (!response.ok) { throw new Error(data.message || `HTTP error! status: ${response.status}`); }
+                            showToast(data.message || 'Section content saved successfully!', 'success');
+                            if (typeof onSuccessCallback === 'function') { onSuccessCallback(); } return true;
+                        } catch (error) { console.error('Update Error:', error); showToast(`Error saving section: ${error.message}`, 'error'); return false; }
+                        finally { buttonElement.disabled = false; buttonElement.classList.remove('button-loading'); if(buttonTextElement) buttonTextElement.style.visibility = 'visible'; if(icon) icon.style.visibility = 'visible';}
+                    };
+
+                    if (submitButton) submitButton.addEventListener('click', (e) => submitEditorContent(e.currentTarget));
+                    if (previewBtn) previewBtn.addEventListener('click', async (e) => { await submitEditorContent(e.currentTarget, handlePreviewClick); });
+
+                    if (showVariablesBtn && variablesModal && variableListContainer) { /* ... existing code ... */
+                        displayVariables(availableVariables);
+                        showVariablesBtn.addEventListener('click', () => showModal(variablesModal));
+                    }
+
+                    // --- Style Settings Modal Logic ---
+                    const applyAndSaveStyle = (cssVarName, value, storageKey) => { /* ... existing code ... */
+                        if (!previewIframe || !previewIframe.contentWindow || !cssVarName) return;
+                        try {
+                            previewIframe.contentWindow.document.documentElement.style.setProperty(cssVarName, value);
+                            if(storageKey) localStorage.setItem(storageKey, value);
+                        } catch (e) { console.error("Error setting style in iframe:", e); showToast('Could not apply style to preview.', 'error');}
+                    };
+
+                    function applyStoredStylesToIframe() { /* ... existing code ... using the globally defined stylesToLoad ... */
+                        const iframeDoc = previewIframe?.contentWindow?.document; if (!iframeDoc) return;
+                        stylesToLoad.forEach(style => { // Uses the global stylesToLoad
+                            if(style.cssVar) { // Only apply if it's meant to be a CSS var
+                                const storedValue = localStorage.getItem(style.key);
+                                const valueToApply = storedValue !== null ? storedValue : style.default;
+                                // For font sizes from number inputs, ensure unit is appended if not already part of default/stored value
+                                let finalValueToApply = valueToApply;
+                                if (style.unit && !String(valueToApply).endsWith(style.unit) && !isNaN(parseFloat(valueToApply))) {
+                                    finalValueToApply = `${parseFloat(valueToApply)}${style.unit}`;
+                                }
+                                try { iframeDoc.documentElement.style.setProperty(style.cssVar, finalValueToApply); }
+                                catch (e) { console.error(`Error applying ${style.cssVar}:`, e); }
+                            }
+                        });
+                    }
+
+                    function loadAndSetStyleControls() { // Now uses the global stylesToLoad
+                        if (!stylesToLoad || !Array.isArray(stylesToLoad)) { console.error("stylesToLoad is not available for loadAndSetStyleControls"); return; }
+                        stylesToLoad.forEach(style => {
+                            const control = document.getElementById(style.inputId);
+                            if (control) {
+                                const storedValue = localStorage.getItem(style.key);
+                                let valueToSet = storedValue !== null ? storedValue : style.default;
+                                if (control.type === 'number' && style.unit) {
+                                    control.value = parseFloat(valueToSet) || parseFloat(style.default);
+                                } else {
+                                    control.value = valueToSet;
+                                }
+                            } else { /* console.warn(`Control with ID ${style.inputId} not found for loading.`); */ }
+                        });
+                    }
+
+                    function renderPaletteGrid() { /* ... existing code ... */
+                        const gridContainer = document.getElementById('ssp-palette-grid'); if (!gridContainer) return; gridContainer.innerHTML = '';
+                        Object.keys(predefinedPalettes).forEach(paletteKey => {
+                            const palette = predefinedPalettes[paletteKey]; const paletteItem = document.createElement('button');
+                            paletteItem.type = 'button'; paletteItem.className = 'p-2.5 border border-gray-300 rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-150 flex flex-col items-center space-y-1.5';
+                            paletteItem.dataset.paletteKey = paletteKey; paletteItem.setAttribute('aria-label', `Apply ${paletteKey.replace(/_/g, ' ')} palette`);
+                            const name = document.createElement('div'); name.className = 'text-xs font-semibold text-gray-700'; name.textContent = paletteKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()); paletteItem.appendChild(name);
+                            const swatchesContainer = document.createElement('div'); swatchesContainer.className = 'flex space-x-1';
+                            const keyColorsForPreview = [palette['style-color-primary'], palette['style-color-secondary'], palette['style-color-accent'], palette['style-color-background'], palette['style-color-foreground']].filter(Boolean).slice(0, 5);
+                            keyColorsForPreview.forEach(color => { const swatch = document.createElement('div'); swatch.className = 'w-4 h-4 rounded-full border border-gray-200 shadow-sm'; swatch.style.backgroundColor = color; swatchesContainer.appendChild(swatch); });
+                            paletteItem.appendChild(swatchesContainer); gridContainer.appendChild(paletteItem);
+                        });
+                    }
+
+
+                    if (styleSettingsBtn && styleSettingsModal) {
+                        styleSettingsBtn.addEventListener('click', () => { loadAndSetStyleControls(); showModal(styleSettingsModal); });
+                        if (styleSettingsTabBar && styleSettingsTabButtons && styleSettingsTabPanes) { /* ... existing tab logic ... */
+                            styleSettingsTabBar.addEventListener('click', (event) => {
+                                const targetButton = event.target.closest('.style-tab-button'); if (!targetButton || targetButton.classList.contains('active')) return;
+                                const targetPaneId = targetButton.dataset.target; if (!targetPaneId) return;
+                                styleSettingsTabButtons.forEach(btn => btn.classList.remove('active')); targetButton.classList.add('active');
+                                styleSettingsTabPanes.forEach(pane => { pane.classList.toggle('hidden', pane.id !== targetPaneId); pane.classList.toggle('active', pane.id === targetPaneId);});
+                            });
                         }
 
-                        styleSettingsModal.querySelectorAll('select[data-css-var][data-storage-key]').forEach(select => {
+                        styleSettingsModal.querySelectorAll('input[type="color"][data-css-var][data-storage-key]').forEach(input => { /* ... existing event listener ... */
+                            input.addEventListener('input', (event) => {
+                                applyAndSaveStyle(event.target.dataset.cssVar, event.target.value, event.target.dataset.storageKey);
+                            });
+                        });
+                        styleSettingsModal.querySelectorAll('input[type="number"][data-css-var][data-storage-key]').forEach(input => { /* ... existing event listener, ensures unit handling ... */
+                            input.addEventListener('change', (event) => {
+                                const cssVar = event.target.dataset.cssVar; const storageKey = event.target.dataset.storageKey;
+                                let value = event.target.value; const targetUnit = event.target.dataset.unit || '';
+                                if (value && !isNaN(value) && cssVar && storageKey) {
+                                    let finalValue = value; if (targetUnit) { finalValue = `${value}${targetUnit}`; }
+                                    applyAndSaveStyle(cssVar, finalValue, storageKey);
+                                }
+                            });
+                        });
+                        styleSettingsModal.querySelectorAll('select[data-css-var][data-storage-key]').forEach(select => { /* ... existing event listener ... */
                             select.addEventListener('change', (event) => {
-                                const cssVar = event.target.dataset.cssVar;
-                                const storageKey = event.target.dataset.storageKey;
-                                const value = event.target.value;
-                                applyAndSaveStyle(cssVar, value, storageKey);
+                                applyAndSaveStyle(event.target.dataset.cssVar, event.target.value, event.target.dataset.storageKey);
                             });
                         });
 
+                        if (paletteGrid && typeof predefinedPalettes !== 'undefined' && typeof stylesToLoad !== 'undefined') { // Ensure stylesToLoad is available
+                            renderPaletteGrid();
+                            paletteGrid.addEventListener('click', (event) => {
+                                const paletteButton = event.target.closest('button[data-palette-key]'); if (!paletteButton) return;
+                                const selectedPaletteKey = paletteButton.dataset.paletteKey; if (!selectedPaletteKey || !predefinedPalettes[selectedPaletteKey]) return;
+                                paletteGrid.querySelectorAll('button[data-palette-key]').forEach(btn => { btn.classList.remove('ring-2', 'ring-indigo-600', 'border-indigo-600', 'shadow-xl'); btn.classList.add('border-gray-300'); });
+                                paletteButton.classList.add('ring-2', 'ring-indigo-600', 'border-indigo-600', 'shadow-xl'); paletteButton.classList.remove('border-gray-300');
+                                const palette = predefinedPalettes[selectedPaletteKey];
+                                stylesToLoad.forEach(styleControl => {
+                                    if (palette[styleControl.key] && styleControl.inputId && styleControl.inputId.startsWith('ssp-color-')) {
+                                        const newValue = palette[styleControl.key]; const inputElement = document.getElementById(styleControl.inputId);
+                                        const cssVarName = styleControl.cssVar;
+                                        if (inputElement && inputElement.type === 'color' && cssVarName) {
+                                            inputElement.value = newValue; applyAndSaveStyle(cssVarName, newValue, styleControl.key);
+                                        }
+                                    }
+                                });
+                                //showToast(`Palette '${selectedPaletteKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}' applied!`, 'success');
+                            });
+                        }
                     } // End Style Settings Logic
 
-                    // --- NEW: Asset Upload Logic ---
-                    if (assetDropZone && assetFileInput && assetUploadPreview && uploadAssetsBtn) {
-                        // Prevent default drag behaviors
-                        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => { assetDropZone.addEventListener(eventName, (e) => { e.preventDefault(); e.stopPropagation(); }, false); });
-                        // Highlight drop zone
-                        ['dragenter', 'dragover'].forEach(eventName => { assetDropZone.addEventListener(eventName, () => assetDropZone.classList.add('dragover'), false); });
-                        ['dragleave', 'drop'].forEach(eventName => { assetDropZone.addEventListener(eventName, () => assetDropZone.classList.remove('dragover'), false); });
-                        // Handle dropped files
-                        assetDropZone.addEventListener('drop', (e) => { let dt = e.dataTransfer; let files = dt.files; assetFileInput.files = files; handleFiles(files); }, false);
-                        // Handle files selected via input click
-                        assetFileInput.addEventListener('change', (e) => { handleFiles(e.target.files); });
-                        // Function to handle selected/dropped files
-                        function handleFiles(files) { assetUploadPreview.innerHTML = ''; if (files.length > 0) { let fileNames = Array.from(files).map(file => `<span class="block p-1 bg-gray-100 rounded text-xs mb-1">${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>`).join(''); assetUploadPreview.innerHTML = `Selected files:<div class="mt-2">${fileNames}</div>`; uploadAssetsBtn.disabled = false; } else { assetUploadPreview.innerHTML = ''; uploadAssetsBtn.disabled = true; } }
-                        // Handle form submission (Upload button click)
-                        uploadAssetsBtn.addEventListener('click', async (event) => {
-                            event.preventDefault();
-                            const files = assetFileInput.files;
-                            if (!files || files.length === 0) { showToast('No files selected for upload.', 'error'); return; }
-                            const formData = new FormData();
-                            for (let i = 0; i < files.length; i++) { formData.append('assets[]', files[i]); }
-                            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                            if (csrfToken) { formData.append('_token', csrfToken); }
-                            const uploadUrl = `/section/assets/${sectionId}`; // <<< Needs backend route
-                            const originalButtonText = event.target.textContent;
-                            event.target.disabled = true; event.target.textContent = 'Uploading...';
-                            try {
-                                const response = await fetch(uploadUrl, { method: 'POST', body: formData, headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken } });
-                                const result = await response.json();
-                                if (!response.ok) { throw new Error(result.message || `HTTP error! status: ${response.status}`); }
-                                showToast(result.message || 'Assets uploaded successfully!', 'success');
-                                assetFileInput.value = ''; assetUploadPreview.innerHTML = '';
-                                // TODO: Refresh the 'Current Assets' list
-                            } catch (error) { console.error('Asset Upload Error:', error); showToast(`Error uploading assets: ${error.message}`, 'error'); }
-                            finally { event.target.disabled = false; event.target.textContent = originalButtonText;
-                                fetchAndDisplayCurrentAssets();}
-                        });
-
-                    }
-                    async function fetchAndDisplayCurrentAssets() {
-                        // Construct the URL using the sectionId variable defined earlier
-                        const assetsUrl = `/section/assets/${sectionId}`; // Uses the route defined in web.php
-                        if (!currentAssetsList) {
-                            console.error("Current assets list container not found.");
-                            return; // Exit if the container element doesn't exist
-                        }
-
-                        // Display loading state
+                    // --- Asset Management Logic ---
+                    async function fetchAndDisplayCurrentAssets() { /* ... existing code ... */
+                        const assetsUrl = `/section/assets/${sectionId}`; if (!currentAssetsList) return;
                         currentAssetsList.innerHTML = '<p class="text-sm text-gray-500 italic col-span-full asset-list-state">Loading assets...</p>';
-
                         try {
-                            // Fetch the list of assets from the backend
-                            const response = await fetch(assetsUrl, {
-                                headers: {
-                                    'Accept': 'application/json', // Expect a JSON response
-                                    'X-Requested-With': 'XMLHttpRequest' // Standard header for AJAX requests in Laravel
-                                }
-                            });
-
-                            // Check if the fetch was successful
-                            if (!response.ok) {
-                                // Try to get error message from response, otherwise use generic message
-                                const errorData = await response.json().catch(() => null);
-                                throw new Error(errorData?.message || `Failed to fetch assets (Status: ${response.status})`);
-                            }
-
-                            // Parse the JSON response (expecting an array of asset objects)
+                            const response = await fetch(assetsUrl, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }});
+                            if (!response.ok) { const errorData = await response.json().catch(() => null); throw new Error(errorData?.message || `Failed to fetch assets (Status: ${response.status})`);}
                             const assets = await response.json();
-
-                            // Check if assets array exists and has items
                             if (assets && Array.isArray(assets) && assets.length > 0) {
                                 let assetsHtml = '';
-                                // Loop through each asset and create HTML for it
                                 assets.forEach(asset => {
-                                    const assetUrl = asset.url || '#'; // Fallback URL
-                                    const assetName = asset.name || 'Unnamed Asset';
-                                    // Construct the Liquid tag to be copied
-                                    const assetLiquidTag = `@{{ '${assetName}' | asset_url }}`; // Example Liquid tag structure
-
-                                    assetsHtml += `
-                                <div class="asset-preview-item group" title="${assetName}"> {{-- Added group class --}}
-                                    <img src="${assetUrl}" alt="${assetName}" loading="lazy"
-                                         onerror="this.style.display='none'; this.parentElement.innerHTML += '<span class=\\'text-xs text-gray-500 p-1\\'>Cannot preview</span><span class=\\'asset-filename \\ '>${assetName}</span>';">
-                                    <span class="asset-filename  text-xs text-gray-500">${assetName}</span>
-                                    {{-- Copy Button for Liquid Tag --}}
-                                    {{-- Delete Button (Functionality TBD) --}}
-                                    <button class="asset-delete-btn" data-asset-name="${assetName}" title="Delete">&times;</button>
-                                </div>
-                            `;
-                                    // Note: Add more complex previews for video, pdf etc. if needed based on asset.type
+                                    const assetUrl = asset.url || '#'; const assetName = asset.name || 'Unnamed Asset';
+                                    assetsHtml += `<div class="asset-preview-item group truncate" title="${assetName}"><img src="${assetUrl}" alt="${assetName}" loading="lazy" onerror="this.style.display='none'; this.parentElement.innerHTML += '<span class=\\'text-xs text-gray-500 p-1\\'>Cannot preview</span><span class=\\'asset-filename \\'>${assetName}</span>';"><span class="asset-filename text-xs text-gray-500">${assetName}</span><button class="asset-delete-btn" data-asset-name="${assetName}" title="Delete">&times;</button></div>`;
                                 });
-                                currentAssetsList.innerHTML = assetsHtml; // Display the generated grid
-                            } else {
-                                // Display message if no assets are found
-                                currentAssetsList.innerHTML = '<p class="text-sm text-gray-500 italic col-span-full asset-list-state">No assets uploaded yet.</p>';
-                            }
-
-                        } catch (error) {
-                            // Handle errors during fetch or processing
-                            console.error('Error fetching or displaying current assets:', error);
-                            currentAssetsList.innerHTML = '<p class="text-sm text-red-500 italic col-span-full asset-list-state">Could not load assets.</p>';
-                            showToast('Error loading current assets.', 'error');
-                        }
+                                currentAssetsList.innerHTML = assetsHtml;
+                            } else { currentAssetsList.innerHTML = '<p class="text-sm text-gray-500 italic col-span-full asset-list-state">No assets uploaded yet.</p>';}
+                        } catch (error) { console.error('Error fetching or displaying current assets:', error); currentAssetsList.innerHTML = '<p class="text-sm text-red-500 italic col-span-full asset-list-state">Could not load assets.</p>'; showToast('Error loading current assets.', 'error');}
                     }
-                    fetchAndDisplayCurrentAssets();
 
-                    // --- NEW: Function to Delete an Asset ---
-                    async function deleteAsset(assetName) {
-                        if (!assetName) {
-                            console.error('Asset name is missing for deletion.');
-                            showToast('Cannot delete asset: Name missing.', 'error');
-                            return;
-                        }
-
-
-                        const deleteUrl = `/section/assets/${sectionId}/${encodeURIComponent(assetName)}`; // <<< YOU NEED TO CREATE THIS ROUTE/CONTROLLER METHOD >>>
-                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-                        // Optional: Add a loading state to the specific asset item being deleted
-
+                    async function deleteAsset(assetName) { /* ... existing code ... */
+                        if (!assetName) { showToast('Cannot delete asset: Name missing.', 'error'); return; }
+                        const deleteUrl = `/section/assets/${sectionId}/${encodeURIComponent(assetName)}`; const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
                         try {
-                            const response = await fetch(deleteUrl, {
-                                method: 'DELETE',
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                    'X-CSRF-TOKEN': csrfToken // Important for DELETE requests
-                                }
-                            });
-
-                            const result = await response.json();
-
-                            if (!response.ok) {
-                                throw new Error(result.message || `HTTP error! status: ${response.status}`);
-                            }
-
-                            showToast(result.message || 'Asset deleted successfully!', 'success');
-                            fetchAndDisplayCurrentAssets(); // Refresh the asset list
-
-                        } catch (error) {
-                            console.error('Asset Deletion Error:', error);
-                            showToast(`Error deleting asset: ${error.message}`, 'error');
-                        } finally {
-                            // Optional: Remove loading state from the asset item
-                        }
+                            const response = await fetch(deleteUrl, { method: 'DELETE', headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrfToken }});
+                            const result = await response.json(); if (!response.ok) { throw new Error(result.message || `HTTP error! status: ${response.status}`);}
+                            showToast(result.message || 'Asset deleted successfully!', 'success'); fetchAndDisplayCurrentAssets();
+                        } catch (error) { console.error('Asset Deletion Error:', error); showToast(`Error deleting asset: ${error.message}`, 'error');}
                     }
-                    if (currentAssetsList) {
+
+                    if (assetDropZone && assetFileInput && assetUploadPreview && uploadAssetsBtn) { /* ... existing asset upload setup ... */
+                        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => { assetDropZone.addEventListener(eventName, (e) => { e.preventDefault(); e.stopPropagation(); }, false); });
+                        ['dragenter', 'dragover'].forEach(eventName => { assetDropZone.addEventListener(eventName, () => assetDropZone.classList.add('dragover'), false); });
+                        ['dragleave', 'drop'].forEach(eventName => { assetDropZone.addEventListener(eventName, () => assetDropZone.classList.remove('dragover'), false); });
+                        assetDropZone.addEventListener('drop', (e) => { let dt = e.dataTransfer; assetFileInput.files = dt.files; handleFiles(dt.files); }, false);
+                        assetFileInput.addEventListener('change', (e) => { handleFiles(e.target.files); });
+                        function handleFiles(files) { assetUploadPreview.innerHTML = ''; if (files.length > 0) { let fileNames = Array.from(files).map(file => `<span class="block p-1 bg-gray-100 rounded text-xs mb-1">${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>`).join(''); assetUploadPreview.innerHTML = `Selected files:<div class="mt-2">${fileNames}</div>`; uploadAssetsBtn.disabled = false; } else { assetUploadPreview.innerHTML = ''; uploadAssetsBtn.disabled = true; } }
+                        uploadAssetsBtn.addEventListener('click', async (event) => { /* ... existing upload logic ... */
+                            event.preventDefault(); const files = assetFileInput.files; if (!files || files.length === 0) { showToast('No files selected for upload.', 'error'); return; }
+                            const formData = new FormData(); for (let i = 0; i < files.length; i++) { formData.append('assets[]', files[i]); }
+                            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'); if (csrfToken) formData.append('_token', csrfToken);
+                            const uploadUrl = `/section/assets/${sectionId}`; const originalButtonText = uploadAssetsBtn.textContent;
+                            uploadAssetsBtn.disabled = true; uploadAssetsBtn.textContent = 'Uploading...';
+                            try {
+                                const response = await fetch(uploadUrl, { method: 'POST', body: formData, headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }});
+                                const result = await response.json(); if (!response.ok) { throw new Error(result.message || `HTTP error! status: ${response.status}`);}
+                                showToast(result.message || 'Assets uploaded successfully!', 'success'); assetFileInput.value = ''; assetUploadPreview.innerHTML = '';
+                            } catch (error) { console.error('Asset Upload Error:', error); showToast(`Error uploading assets: ${error.message}`, 'error');}
+                            finally { uploadAssetsBtn.disabled = false; uploadAssetsBtn.textContent = originalButtonText; fetchAndDisplayCurrentAssets(); }
+                        });
+                    }
+                    if (currentAssetsList) { /* ... existing delete listener ... */
                         currentAssetsList.addEventListener('click', async (event) => {
                             if (event.target.classList.contains('asset-delete-btn')) {
                                 const assetName = event.target.dataset.assetName;
-                                if (assetName) {
-                                    await deleteAsset(assetName); // Call the delete function
-                                } else {
-                                    console.error('Delete button clicked but asset name not found.');
+                                if (assetName && confirm(`Are you sure you want to delete the asset "${assetName}"?`)) { // Added confirm
+                                    await deleteAsset(assetName);
                                 }
                             }
                         });
                     }
+                    fetchAndDisplayCurrentAssets(); // Initial fetch
 
-
-                    // --- Reload Preview Logic ---
-
-                    if (reloadPreviewBtn) {
-                        reloadPreviewBtn.addEventListener('click', () => {
-                            // Retrieve the currently stored product ID for this section
-                            const savedProductId = localStorage.getItem(PREVIEW_PRODUCT_STORAGE_KEY);
-                            if (savedProductId) {
-                                console.log(`Reloading preview for section ${sectionId} with product ${savedProductId}`);
-                                // Call the existing fetchPreview function
-                                fetchPreview(sectionId, savedProductId);
-                            } else {
-                                // Should ideally not happen if preview is open, but handle just in case
-                                showToast('No default product set to reload preview.', 'error');
-                                // Optionally close the preview modal and open the product selection
-                                // hideModal(previewModal);
-                                // handlePreviewClick(); // This would open product selection if no default
-                            }
-                        });
-                    }
-
-                    // --- NEW: Style Settings Logic ---
-
-                    // Function to apply a specific style to the iframe and save it
-                    const applyAndSaveStyle = (cssVarName, value, storageKey) => {
-                        if (!previewIframe || !previewIframe.contentWindow || !cssVarName) return;
-                        try {
-                            // Apply to iframe immediately
-                            previewIframe.contentWindow.document.documentElement.style.setProperty(cssVarName, value);
-                            console.log(`Applied ${cssVarName}: ${value} to iframe`);
-
-                            // Save to localStorage if a key is provided
-                            if(storageKey) {
-                                localStorage.setItem(storageKey, value);
-                                console.log(`Saved ${value} to localStorage key ${storageKey}`);
-                            }
-                        } catch (e) {
-                            // Catch potential cross-origin errors if srcdoc fails or is replaced
-                            console.error("Error setting style in iframe:", e);
-                            showToast('Could not apply style to preview.', 'error');
-                        }
-                    };
-
-                    // Function to load all stored styles and apply them to the iframe
-                    function applyStoredStylesToIframe() {
-                        console.log("Applying stored styles to iframe...");
-                        const iframeDoc = previewIframe?.contentWindow?.document;
-                        if (!iframeDoc) {
-                            console.warn("Preview iframe document not accessible yet for applying styles.");
-                            return; // Exit if iframe content isn't ready
-                        }
-
-                        // Define the styles to check in localStorage
-                        const stylesToApply = [
-                            { key: 'style-primary-color', cssVar: '--primary-color', default: '#3b82f6' },
-                            { key: 'style-secondary-color', cssVar: '--secondary-color', default: '#6b7280' },
-                            { key: 'style-text-color', cssVar: '--text-color', default: '#1f2937' },
-                            { key: 'style-bg-color', cssVar: '--bg-color', default: '#ffffff' },
-                            { key: 'style-base-font-size', cssVar: '--base-font-size', default: '16px' },
-                            { key: 'style-body-font', cssVar: '--body-font-family', default: 'Inter, sans-serif' },
-                            // Add more styles here if you implement more controls (e.g., heading font)
-                            // { key: 'style-heading-font', cssVar: '--heading-font-family', default: 'Inter, sans-serif' },
-                            // { key: 'style-heading-multiplier', cssVar: '--heading-font-size-multiplier', default: '1.2' },
-                        ];
-
-                        stylesToApply.forEach(style => {
-                            const storedValue = localStorage.getItem(style.key);
-                            // Use stored value if available, otherwise use the default
-                            const valueToApply = storedValue !== null ? storedValue : style.default;
-                            try {
-                                iframeDoc.documentElement.style.setProperty(style.cssVar, valueToApply);
-                                console.log(`Applied ${style.cssVar}: ${valueToApply}`);
-                            } catch (e) {
-                                console.error(`Error applying ${style.cssVar}:`, e);
-                                // Don't necessarily show toast here, might spam if iframe is weird
-                            }
-                        });
-                    }
-
-                    // Function to load stored styles into the settings modal controls
-                    function loadAndSetStyleControls() {
-                        console.log("Loading stored styles into controls...");
-                        const stylesToLoad = [
-                            { key: 'style-primary-color', inputId: 'primary-color-input', default: '#3b82f6' },
-                            { key: 'style-secondary-color', inputId: 'secondary-color-input', default: '#6b7280' },
-                            { key: 'style-text-color', inputId: 'text-color-input', default: '#1f2937' },
-                            { key: 'style-bg-color', inputId: 'bg-color-input', default: '#ffffff' },
-                            { key: 'style-base-font-size', inputId: 'custom-font-size-input', default: '16px', isPixelValue: true }, // Special handling for px
-                            { key: 'style-body-font', inputId: 'body-font-select', default: 'Inter, sans-serif' },
-                            // Add other controls here if implemented
-                        ];
-
-                        stylesToLoad.forEach(style => {
-                            const control = document.getElementById(style.inputId);
-                            if(control) {
-                                const storedValue = localStorage.getItem(style.key);
-                                let valueToSet = storedValue !== null ? storedValue : style.default;
-                                // Remove 'px' for the number input
-                                if(style.isPixelValue && typeof valueToSet === 'string') {
-                                    valueToSet = parseInt(valueToSet) || parseInt(style.default);
-                                }
-                                control.value = valueToSet;
-                                console.log(`Set control ${style.inputId} to ${valueToSet}`);
-                            } else {
-                                console.warn(`Control with ID ${style.inputId} not found.`);
-                            }
-                        });
-                    }
-
-
-
-                }); // End DOMContentLoaded
-                // --- Copy to Clipboard Function ---
-                function copyToClipboard(text, buttonElement) { /* ... keep existing ... */ if (navigator && navigator.clipboard) { navigator.clipboard.writeText(text) .then(() => { buttonElement.htmlContent = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path opacity="0.1" d="M3 12C3 4.5885 4.5885 3 12 3C19.4115 3 21 4.5885 21 12C21 19.4115 19.4115 21 12 21C4.5885 21 3 19.4115 3 12Z" fill="#89d779"></path> <path d="M3 12C3 4.5885 4.5885 3 12 3C19.4115 3 21 4.5885 21 12C21 19.4115 19.4115 21 12 21C4.5885 21 3 19.4115 3 12Z" stroke="#89d779" stroke-width="2"></path> <path d="M9 12L10.6828 13.6828V13.6828C10.858 13.858 11.142 13.858 11.3172 13.6828V13.6828L15 10" stroke="#89d779" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>'; setTimeout(() => { buttonElement.htmlContent ='Copy'; }, 3000); }) .catch(err => { console.error('Failed to copy using navigator: ', err); alert('Failed to copy name.'); }); } else { const tempInput = document.createElement('textarea'); tempInput.value = text; tempInput.style.position = 'absolute'; tempInput.style.left = '-9999px'; document.body.appendChild(tempInput); tempInput.select(); tempInput.focus(); try { document.execCommand('copy');
-                    const svg = buttonElement.querySelector('svg');
-                    if (svg) {
-                        svg.outerHTML = `<svg class="icon line-color w-5 h-5 rounded-md" viewBox="0 0 48 48" enable-background="new 0 0 48 48" id="_x3C_Layer_x3E_" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="tick_x2C__check_mark"> <circle cx="24" cy="24" fill="#E1F5FE" r="21.5"></circle> <path d="M24,46C11.869,46,2,36.131,2,24S11.869,2,24,2c6.219,0,12.175,2.65,16.342,7.271 c0.186,0.205,0.169,0.521-0.036,0.706c-0.206,0.185-0.522,0.168-0.706-0.036C35.622,5.53,29.937,3,24,3C12.421,3,3,12.42,3,24 s9.421,21,21,21s21-9.42,21-21c0-2.299-0.369-4.56-1.098-6.72c-0.089-0.262,0.052-0.545,0.313-0.633 c0.268-0.088,0.546,0.052,0.634,0.314C45.613,19.224,46,21.592,46,24C46,36.131,36.131,46,24,46z" fill="#0277BD"></path> <path d="M24,45C12.421,45,3,35.58,3,24S12.421,3,24,3c5.834,0,11.454,2.458,15.419,6.743 c0.188,0.203,0.175,0.519-0.027,0.707c-0.203,0.187-0.52,0.176-0.707-0.028C34.909,6.341,29.557,4,24,4C12.972,4,4,12.972,4,24 s8.972,20,20,20s20-8.972,20-20c0-2.03-0.303-4.031-0.899-5.948c-0.082-0.264,0.065-0.544,0.329-0.626 c0.263-0.08,0.545,0.066,0.626,0.329C44.683,19.768,45,21.869,45,24C45,35.58,35.579,45,24,45z" fill="#FFFFFF"></path> <g> <g> <path d="M21.584,33.834c0.892,0.888,2.438,0.888,3.331,0l19.387-19.309c0.931-0.926,0.931-2.433,0-3.359 c-0.892-0.888-2.438-0.888-3.33,0L24.007,28.061c-0.399,0.398-1.116,0.398-1.516,0l-6.463-6.436 c-0.446-0.444-1.037-0.688-1.665-0.688s-1.22,0.244-1.665,0.688c-0.931,0.926-0.931,2.433,0,3.359L21.584,33.834z" fill="#64FFDA"></path> <path d="M23.249,35.005c-0.735,0-1.471-0.272-2.018-0.817v0l-8.886-8.85c-0.545-0.542-0.846-1.265-0.846-2.035 c0-0.769,0.301-1.491,0.846-2.033c1.077-1.074,2.954-1.076,4.035,0l6.463,6.436c0.205,0.204,0.606,0.205,0.81,0l16.966-16.896 c1.094-1.089,2.941-1.089,4.035,0c0.545,0.542,0.846,1.265,0.846,2.034c0,0.769-0.301,1.491-0.846,2.033L25.268,34.188 C24.721,34.733,23.984,35.005,23.249,35.005z M14.363,21.437c-0.495,0-0.961,0.193-1.312,0.542 c-0.355,0.354-0.552,0.824-0.552,1.325s0.195,0.972,0.551,1.325l8.886,8.851c0.699,0.695,1.927,0.696,2.626,0L43.949,14.17 c0.354-0.353,0.551-0.824,0.551-1.325s-0.195-0.972-0.551-1.325c-0.699-0.696-1.926-0.697-2.625,0L24.359,28.416 c-0.59,0.59-1.63,0.59-2.222,0l-6.462-6.436C15.324,21.629,14.858,21.437,14.363,21.437z" fill="#0277BD"></path> </g> <path d="M13,23.804c-0.276,0-0.5-0.224-0.5-0.5c0-0.5,0.196-0.971,0.552-1.325c0.351-0.35,0.816-0.542,1.312-0.542 c0.276,0,0.5,0.224,0.5,0.5s-0.224,0.5-0.5,0.5c-0.229,0-0.443,0.089-0.606,0.25c-0.165,0.166-0.257,0.385-0.257,0.617 C13.5,23.581,13.276,23.804,13,23.804z" fill="#FFFFFF"></path> <path d="M26.161,27.828c-0.128,0-0.257-0.049-0.354-0.147c-0.194-0.196-0.194-0.512,0.002-0.708l14.07-14.013 c0.195-0.194,0.512-0.195,0.707,0.001c0.194,0.196,0.194,0.512-0.002,0.708l-14.07,14.013 C26.416,27.779,26.289,27.828,26.161,27.828z" fill="#FFFFFF"></path> </g> </g> </g></svg>`;
-                    }
-                    setTimeout(() => {
-                            const svg = buttonElement.querySelector('svg');
-                            if (svg) {
-                                svg.outerHTML = `<svg class="icon line-color w-5 h-5 rounded-md" fill="#000000" viewBox="0 0 24 24" id="clipboard" data-name="Line Color" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="primary" d="M15,5h3a1,1,0,0,1,1,1V20a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V6A1,1,0,0,1,6,5H9" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="secondary" d="M15,4a1,1,0,0,0-1-1H10A1,1,0,0,0,9,4V7h6ZM9,17h6M9,13h6" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>`;
-                            }
-                        },
-                        3000);
-                } catch (e) { console.warn('Fallback copy failed:', e); alert('Please copy manually.'); } finally { document.body.removeChild(tempInput); } } }
-
-
-                // --- Function to display grouped variables ---
-                function displayVariables(variablesData) {
-                    const container = document.getElementById('variable-list-container');
-                    if (!container || typeof variablesData !== 'object' || variablesData === null) {
-                        container.innerHTML = '<p class="text-center text-gray-500 py-8">No variables defined or failed to load.</p>';
-                        return;
-                    }
-
-                    let html = '';
-                    // Iterate over the main groups (product, images, etc.)
-                    for (const groupName in variablesData) {
-                        if (variablesData.hasOwnProperty(groupName) && Array.isArray(variablesData[groupName])) {
-                            html += `<h3 class="variable-group-title">${groupName}<span class="bg-white text-sm text-gray-500 border-gray-300 p-1">(object)</span></h3>`; // Group heading
-                            const variables = variablesData[groupName];
-
-                            if (variables.length > 0) {
-                                variables.forEach(variable => {
-                                    // Sanitize potential HTML in description/example if needed before rendering
-                                    const safeName = variable.name ? variable.name.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
-                                    const safeDesc = variable.description ? variable.description.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
-                                    const safeExample = variable.example ? variable.example.replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
-
-
-                                    html += `
-                                <div class="variable-item">
-                                    <div class="flex justify-between items-center">
-                                        {{-- Use safeName for display, copyName for the copy function --}}
-                                    <span onclick="copyToClipboard('${groupName}.${safeName}', this)" title="Copy to clipboard"  class=" variable-item-tag cursor-pointer hover:text-blue-500 transition">
-                                            <code class="variable-item-name"">${groupName}.${safeName}  </code>
-                                            <button type="button" class="copy-button" >
-                                            <svg class="icon line-color w-5 h-5 rounded-md" fill="#000000" viewBox="0 0 24 24" id="clipboard" data-name="Line Color" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="primary" d="M15,5h3a1,1,0,0,1,1,1V20a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V6A1,1,0,0,1,6,5H9" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="secondary" d="M15,4a1,1,0,0,0-1-1H10A1,1,0,0,0,9,4V7h6ZM9,17h6M9,13h6" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>
-                                            </button>
-                                        </span>
-                                    </div>
-                                    ${safeDesc ? `<p class="variable-item-desc">${safeDesc}</p>` : ''}
-                                    ${safeExample ? `<pre><span onclick="copyToClipboard('${safeExample}', this)" title="Copy to clipboard"  class=" variable-item-tag cursor-pointer hover:text-blue-500 transition"><code class="variable-item-example hover:bg-blue-100" >${safeExample}</code><button type="button" class="copy-button" ><svg class="icon line-color w-5 h-5 rounded-md" fill="#000000" viewBox="0 0 24 24" id="clipboard" data-name="Line Color" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="primary" d="M15,5h3a1,1,0,0,1,1,1V20a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V6A1,1,0,0,1,6,5H9" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="secondary" d="M15,4a1,1,0,0,0-1-1H10A1,1,0,0,0,9,4V7h6ZM9,17h6M9,13h6" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg></button> </span></pre>` : ''}
-                                </div>
-                            `;
-                                });
-                            } else {
-                                html += `<p class="text-sm text-gray-500 italic">No variables defined for ${groupName}.</p>`;
-                            }
-                        }
-                    }
-
-                    container.innerHTML = html || '<p class="text-center text-gray-500 py-8">No variable groups found.</p>'; // Fallback if object was empty
-                }
-
-
-                // --- Ensure showToast is available (should be in layout) ---
-                function showToast(message, type = 'success', duration = 5000) {
-                    const container = document.getElementById('toast-container');
-                    if (!container || !message) return;
-                    const toastElement = document.createElement('div');
-                    toastElement.setAttribute('role', 'alert');
-                    toastElement.className = ` relative w-full p-4 rounded-lg shadow-lg text-white text-sm transition-all duration-300 ease-in-out transform opacity-0 translate-y-2 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} `;
-                    toastElement.textContent = message;
-                    container.appendChild(toastElement);
-                    setTimeout(() => { toastElement.classList.remove('opacity-0', 'translate-y-2'); toastElement.classList.add('opacity-100', 'translate-y-0'); }, 10);
-                    const timerId = setTimeout(() => { dismissToast(toastElement); }, duration);
-                    const dismissToast = (element) => { if (!element) return; clearTimeout(timerId); element.classList.remove('opacity-100', 'translate-y-0'); element.classList.add('opacity-0', 'translate-y-2'); setTimeout(() => { element.remove(); }, 350); };
-                }
-
-                // Removed duplicate Monaco editor related code from the end
-                // Removed duplicate initialContent/isDirty code
-
-                document.querySelectorAll('.device-btn').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const width = button.getAttribute('data-width');
-                        const wrapper = document.getElementById('preview-wrapper');
-                        wrapper.style.width = width === '100%' ? '100%' : `${width}px`;
+                    if (reloadPreviewBtn) reloadPreviewBtn.addEventListener('click', () => { /* ... existing code ... */
+                        const savedProductId = localStorage.getItem(PREVIEW_PRODUCT_STORAGE_KEY);
+                        if (savedProductId) fetchPreview(sectionId, savedProductId); else showToast('No default product set to reload preview.', 'error');
                     });
+
+                    function copyToClipboard(text, buttonElement) { /* ... existing code ... */
+                        if (navigator && navigator.clipboard) { navigator.clipboard.writeText(text).then(() => { const originalHTML = buttonElement.innerHTML; buttonElement.innerHTML = '<svg viewBox="0 0 24 24" class="h-4 w-4 text-green-500" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path></svg> Copied!'; setTimeout(() => { buttonElement.innerHTML = originalHTML; }, 2000); }).catch(err => {showToast('Failed to copy.', 'error');}); }
+                        else { const tempInput = document.createElement('textarea'); tempInput.value = text; document.body.appendChild(tempInput); tempInput.select(); tempInput.focus(); try { document.execCommand('copy'); showToast('Copied to clipboard!', 'success');} catch (e) {showToast('Failed to copy.', 'error');} finally {document.body.removeChild(tempInput);}}
+                    }
+
+                    function displayVariables(variablesData) { /* ... existing code ... */
+                        const container = document.getElementById('variable-list-container'); if (!container || typeof variablesData !== 'object' || variablesData === null) { container.innerHTML = '<p class="text-center text-gray-500 py-8">No variables defined.</p>'; return;}
+                        let html = ''; for (const groupName in variablesData) { if (variablesData.hasOwnProperty(groupName) && Array.isArray(variablesData[groupName])) { html += `<h3 class="variable-group-title">${groupName}<span class="bg-white text-sm text-gray-500 border-gray-300 p-1">(object)</span></h3>`; const variables = variablesData[groupName]; if (variables.length > 0) { variables.forEach(variable => { const safeName = variable.name ? variable.name.replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''; const safeDesc = variable.description ? variable.description.replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''; const safeExample = variable.example ? variable.example.replace(/</g, "&lt;").replace(/>/g, "&gt;") : ''; html += `<div class="variable-item"><div class="flex justify-between items-center"><span onclick="copyToClipboard('${groupName}.${safeName}', this.querySelector('button'))" title="Copy to clipboard" class="variable-item-tag cursor-pointer hover:text-blue-500 transition"> <code class="variable-item-name">${groupName}.${safeName}</code> <button type="button" class="copy-button"><svg class="icon line-color w-4 h-4" fill="#000000" viewBox="0 0 24 24"><path d="M15,5h3a1,1,0,0,1,1,1V20a1,1,0,0,1-1,1H6a1,1,0,0,1-1-1V6A1,1,0,0,1,6,5H9"></path><path d="M15,4a1,1,0,0,0-1-1H10A1,1,0,0,0,9,4V7h6ZM9,17h6M9,13h6" style="fill:none;stroke:#2ca9bc;stroke-linecap:round;stroke-linejoin:round;stroke-width:2;"></path></svg></button></span></div> ${safeDesc ? `<p class="variable-item-desc">${safeDesc}</p>` : ''} ${safeExample ? `<pre><span onclick="copyToClipboard('${safeExample}', this.querySelector('button'))" title="Copy to clipboard" class="variable-item-tag cursor-pointer hover:text-blue-500 transition"><code class="variable-item-example hover:bg-blue-100">${safeExample}</code><button type="button" class="copy-button"><svg class="icon line-color w-4 h-4"><use xlink:href="#clipboard-icon-svg-path-here"></use></svg></button></span></pre>` : ''}</div>`; }); } else { html += `<p class="text-sm text-gray-500 italic">No variables defined for ${groupName}.</p>`; } } } container.innerHTML = html || '<p class="text-center text-gray-500 py-8">No variable groups found.</p>';
+                    }
+
+
+                    document.querySelectorAll('.device-btn').forEach(button => { /* ... existing code ... */
+                        button.addEventListener('click', () => {
+                            const width = button.getAttribute('data-width'); const wrapper = document.getElementById('preview-wrapper');
+                            if (wrapper) wrapper.style.width = width === '100%' ? '100%' : `${width}px`;
+                        });
+                    });
+
+                    if (localStorage.getItem(PREVIEW_PRODUCT_STORAGE_KEY)) {
+                        updatePreviewHeaderProductImage();
+                    }
                 });
+
+
+                const modal = document.getElementById("style-settings-modal");
+                const header = document.getElementById("style-modal-header");
+
+                let isDragging = false;
+                let offsetX, offsetY;
+
+                header.addEventListener("mousedown", (e) => {
+                    isDragging = true;
+                    offsetX = e.clientX - modal.offsetLeft;
+                    offsetY = e.clientY - modal.offsetTop;
+                    document.body.style.userSelect = 'none'; // Prevent text selection while dragging
+                });
+
+                document.addEventListener("mousemove", (e) => {
+                    if (isDragging) {
+                        modal.style.left = (e.clientX - offsetX) + "px";
+                        modal.style.top = (e.clientY - offsetY) + "px";
+                    }
+                });
+
+                document.addEventListener("mouseup", () => {
+                    isDragging = false;
+                    document.body.style.userSelect = ''; // Re-enable text selection
+                });
+
+
             </script>
     @endpush

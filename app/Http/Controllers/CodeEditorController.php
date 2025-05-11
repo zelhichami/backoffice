@@ -80,9 +80,6 @@ class CodeEditorController extends Controller
                 'name' => $validated['section_name'], // Use validated name
                 'screenshot_path' => $screenshotPath, // Store path or null
                 'status' => 'draft', // Default status
-                'html_content' => '', // Add placeholder content
-                'css_path' => null,
-                'js_path' => null,
             ]);
 
             if ($newSection) {
@@ -606,7 +603,7 @@ class CodeEditorController extends Controller
                 'required',
                 'file',
                 // Example validation: Allow common images, videos, pdf up to 10MB
-                'mimes:jpg,jpeg,png,gif,svg,webp,mp4,mov,avi,pdf,zip', // Adjust allowed types
+                'mimes:jpg,jpeg,png,gif,svg,webp,mp4,mov,avi,pdf,zip,avif', // Adjust allowed types
                 'max:102400' // Max 100MB per file (adjust as needed)
             ],
         ]);

@@ -18,9 +18,6 @@ return new class extends Migration
             $table->string('name')->index();
             $table->string('screenshot_path')->nullable();
             $table->string('status')->default('draft'); // e.g., draft, published
-            $table->longText('html_content')->nullable();
-            $table->string('css_path')->nullable(); // Store path relative to storage/app
-            $table->string('js_path')->nullable();  // Store path relative to storage/app
             $table->timestamps(); // created_at and updated_at
         });
     }

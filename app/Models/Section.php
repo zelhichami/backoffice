@@ -11,6 +11,19 @@ class Section extends Model
 {
     use HasFactory;
 
+    // section status values
+    const STATUS_DRAFT = 'draft';                   // Created by integrator, not submitted yet
+    const STATUS_READY = 'ready';                   // Created by integrator, submitted to review
+    const STATUS_UNDER_REVIEW = 'under_review';     // Under review
+    const STATUS_REJECTED = 'rejected';             // Rejected by reviewer
+    const STATUS_VERIFIED = 'verified';             // Verified by reviewer
+    const STATUS_PENDING_PROMPT = 'pending_prompt'; // Waiting for AI prompt work
+    const STATUS_PROMPTED = 'prompted';             // Prompt engineer finished AI/Liquid integration
+    const STATUS_PENDING_VALIDATION = 'pending_validation'; // Waiting for admin approval
+    const STATUS_APPROVED = 'approved';             // Approved by admin, ready to publish
+    const STATUS_PUBLISHED = 'published';           // Live on the platform
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -138,5 +151,26 @@ class Section extends Model
         }
         return null;
     }
+
+    public function statusLogs()
+    {
+        return $this->hasMany(SectionStatusLog::class);
+    }
+
+
+    protected static function booted()
+    {
+        static::updating(function ($section) {
+            if ($section->isDirty('status')) {
+                SectionStatusLog::create([
+                    'section_id' => $section->id,
+                    'changed_by' => auth()->id(),
+                    'from_status' => $section->getOriginal('status'),
+                    'to_status' => $section->status,
+                ]);
+            }
+        });
+    }
+
 
 }

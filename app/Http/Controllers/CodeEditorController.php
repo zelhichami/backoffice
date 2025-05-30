@@ -25,10 +25,40 @@ class CodeEditorController extends Controller
     public function index()
     {
         $variables = $this->get_variables();
-        $userId = Auth::id();
-        $sections = Section::where('user_id', $userId)
-            ->orderBy('updated_at', 'desc') // Order by most recently updated
-            ->paginate(20); // Adjust pagination count as needed
+        $user= Auth::user();
+        $query = Section::query();
+
+        switch ($user->role) {
+            case User::ROLE_INTEGRATOR :
+                // Show only this user's own sections
+                $query->where('user_id', $user->id);
+                break;
+
+            case User::ROLE_REVIEWER :
+                // Show sections that are pending review
+                $query->where('status', '!=',Section::STATUS_DRAFT);
+                break;
+
+          /*  case User::ROLE_PROMPT_ENGINEER :
+                // Show sections that are verified and waiting for prompt work
+                $query->where('status', Section::STATUS_VERIFIED);
+                break;
+
+            case User::ROLE_ADMIN :
+                // Show sections pending admin validation
+                $query->where('status', Section::STATUS_PENDING_VALIDATION);
+                break;
+
+            case User::ROLE_SUPERADMIN :
+                // Superadmin sees all sections, no filter
+                break;*/
+
+            default:
+                // Unknown role — no access
+                $query->whereNull('id'); // Always false condition
+        }
+
+        $sections = $query->orderBy('updated_at', 'desc')->paginate(20);
 
         return view('sections-list', compact('sections','variables'));
     }
@@ -106,43 +136,32 @@ class CodeEditorController extends Controller
      */
     public function edit(Section $section) {
         // Optional: Add authorization check if needed (e.g., user can only edit their own sections)
-         if ($section->user_id !== Auth::id()) {
-             abort(403, 'Unauthorized action.');
-         }
+        // Authorization Check
+        $user = Auth::user();
+        if ($user->hasRole(User::ROLE_INTEGRATOR) ) {
+            if ($section->user_id !== $user->id ) {
+                abort(403, 'Unauthorized action.');
+            }
+        }
+        if ($user->hasRole(User::ROLE_REVIEWER) ) {
+            if ($section->status == Section::STATUS_DRAFT ) {
+                return redirect('/sections');
+            }
+            if ($section->status == Section::STATUS_READY ) {
+                // Update the status field on the model to under review
+                $section->status = Section::STATUS_UNDER_REVIEW;
+                $section->save();
+            }
+        }
+
         // Use model accessors to get content
         $htmlContent = $section->html_content;
         $cssContent = $section->css_content;
         $jsContent = $section->js_content;
         $variables = $this->get_variables();
+
         return view('section-edit', compact('section', 'htmlContent', 'cssContent', 'jsContent', 'variables'));
 
-
-        $storageDisk = 'public';
-        $cssContent = '';
-        $jsContent = '';
-
-        try {
-            // Load CSS content if path exists
-            if ($section->css_path && Storage::disk($storageDisk)->exists($section->css_path)) {
-                $cssContent = Storage::disk($storageDisk)->get($section->css_path);
-            }
-
-            // Load JS content if path exists
-            if ($section->js_path && Storage::disk($storageDisk)->exists($section->js_path)) {
-                $jsContent = Storage::disk($storageDisk)->get($section->js_path);
-            }
-
-        } catch (\Exception $e) {
-            Log::error("Error loading assets for section {$section->id}: " . $e->getMessage());
-            // Redirect back with error or show view with warning
-            return back()->with('error', 'Could not load associated CSS/JS files.');
-        }
-
-
-        // Example variables (can be shared with show() via a private method or trait)
-        $variables = $this->get_variables();
-        // Pass section data and loaded content to the edit view
-        return view('section-edit', compact('section', 'cssContent', 'jsContent', 'variables'));
     }
 
     /**
@@ -155,10 +174,15 @@ class CodeEditorController extends Controller
      */
     public function update(Request $request, Section $section): JsonResponse
     {
+        $user = Auth::user();
+
         // Authorization Check
-        if ($section->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized action.'], 403);
+        if ($user->hasRole(User::ROLE_INTEGRATOR) ) {
+            if ($section->user_id !== $user->id or $section->status != Section::STATUS_DRAFT ) {
+                return response()->json(['message' => 'Unauthorized action.'], 403);
+            }
         }
+
 
         // 1. Validate incoming code content
         $validated = $request->validate([
@@ -373,19 +397,30 @@ class CodeEditorController extends Controller
     public function updateStatus(Request $request, Section $section): JsonResponse
     {
         // Authorization Check: Ensure the logged-in user owns this section
-        if ($section->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized action.'], 403);
+        $user = Auth::user();
+
+        // Authorization Check
+        if ($user->hasRole(User::ROLE_INTEGRATOR) ) {
+            if ($section->user_id !== Auth::id()) {
+                return response()->json(['message' => 'Unauthorized action.'], 403);
+            }
+
+            if($section->status != Section::STATUS_DRAFT && $section->status != Section::STATUS_READY && $section->status != Section::STATUS_REJECTED ){
+                return response()->json(['message' => 'Unauthorized action.'], 403);
+            }
+            $allowedStatuses = [Section::STATUS_DRAFT, Section::STATUS_READY];
         }
 
-        // Define allowed statuses
-        // TODO: Consider using a PHP Enum for better type safety and maintainability
-        // e.g., enum SectionStatus: string { case Draft = 'draft'; case Published = 'published'; ... }
-        // and then use: 'status' => ['required', new Enum(SectionStatus::class)]
-        $allowedStatuses = ['draft', 'ready']; // Example statuses
+        // Authorization Check
+        if ($user->hasRole(User::ROLE_REVIEWER) ) {
 
-        // Validate the incoming status
-        // Use ->validate() which throws ValidationException on failure (handled by Laravel)
-        // or use Validator::make() for manual handling
+            if($section->status != Section::STATUS_READY && $section->status != Section::STATUS_UNDER_REVIEW && $section->status != Section::STATUS_VERIFIED && $section->status != Section::STATUS_REJECTED ){
+                return response()->json(['message' => 'Unauthorized action.'], 403);
+            }
+            $allowedStatuses = [Section::STATUS_VERIFIED, Section::STATUS_REJECTED, Section::STATUS_UNDER_REVIEW];
+        }
+
+
         $validated = $request->validate([
             'status' => ['required', 'string', Rule::in($allowedStatuses)],
         ]);
@@ -502,24 +537,42 @@ class CodeEditorController extends Controller
 
         try {
 
-            // Use model accessors to get content
-            $htmlContent = $section->html_content;
-            $cssContent = $section->css_content;
-            $jsContent = $section->js_content;
-            $layout_content= getAssetContent('layout_section');
+// Retrieve dynamic content
+            $htmlContent     = $section->html_content;
+            $cssContent      = $section->css_content;
+            $jsContent       = $section->js_content;
+
+// Load the layout template
+            $layout_content = getAssetContent('layout_section');
+
+// Replace placeholders in layout
             $layout_content = str_replace('{{_SECTION_}}', $htmlContent, $layout_content);
             $layout_content = str_replace('{{_CSS_}}', $cssContent, $layout_content);
             $layout_content = str_replace('{{_JS_}}', $jsContent, $layout_content);
 
-            $baseUrl = config('app.url');
-            $media_path= Storage::url("sections_assets/{$section->id}/media/");
-            $assetUrl = $baseUrl.$media_path;
+// Get asset base URL
+            $baseUrl     = rtrim(config('app.url'), '/');
+            $mediaPath   = Storage::url("sections_assets/{$section->id}/media/");
+            $assetUrl    = $baseUrl . rtrim($mediaPath, '/');
 
+// Fix local src/href URLs (non-external)
             $layout_content = preg_replace_callback(
-                '/(src|href)=["\'](?!https?:\/\/|\/\/|data:|#|\{\{)([^"\'}]+)["\']/',
+                '/\b(src|href)=["\'](?!https?:\/\/|\/\/|data:|#|\{\{)([^"\'}]+)["\']/i',
                 function ($matches) use ($assetUrl) {
-                    $filename = basename($matches[2]); // Get only the filename
-                    return $matches[1] . '="' . rtrim($assetUrl, '/') . '/' . $filename . '"';
+                    $attr = $matches[1];
+                    $path = ltrim($matches[2], '/'); // Remove leading slash if exists
+                    $filename = basename($path);     // Optional: use full path if folder structure is needed
+                    return sprintf('%s="%s/%s"', $attr, $assetUrl, $filename);
+                },
+                $layout_content
+            );
+            $layout_content = preg_replace_callback(
+                '/url\((?![\'"]?(?:https?:\/\/|\/\/|data:|#|\{\{))([\'"]?)([^\'"\)]+)\1\)/i',
+                function ($matches) use ($assetUrl) {
+                    $quote = $matches[1];
+                    $path = ltrim($matches[2], '/'); // remove leading slash
+                    $filename = basename($path);
+                    return 'url(' . $quote . rtrim($assetUrl, '/') . '/' . $filename . $quote . ')';
                 },
                 $layout_content
             );

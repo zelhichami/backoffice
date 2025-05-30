@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('hosting_id')->nullable()->after('remember_token');
+            $table->string('role')->default('integrator')->after('hosting_id');
+
 
         });
     }

@@ -556,13 +556,54 @@
                     this.expandedIndex = this.expandedIndex === index ? null : index;
                 },
                 properties: [
-                    { name: 'is_product_available', type: 'boolean', description: 'Returns true if at least one of the variants of the product is available. Returns false if not.', example: '@{{ product | is_product_available }}' },
-                    { name: 'first_available_variant', type: '<a class="text-[#003870] hover:text-primary underline" href="#variant">variant</a>' , description: 'The first available variant of the product.', example: '@{% assign first_available_variant = product | first_available_variant %}</br>@{{ first_available_variant.quantity }}' },
-                    { name: 'options', type: 'array of string', description: 'The option names of the product.', example: '@{{ product | options }}' },
-                    { name: 'min_price', type: 'number', description: 'The lowest price of any variants of the product in the currency\'s subunit.', example: '@{{ product | min_price }}' },
-                    { name: 'max_price', type: 'number', description: 'The highest price of any variants of the product in the currency\'s subunit.', example: '@{{ product | max_price }}' },
-                    { name: 'price_varies', type: 'boolean', description: 'Returns true if the product\'s variant prices vary. Returns false if not.', example: '@{{ product | price_varies }}' }
-
+                    {
+                        name: 'is_product_available',
+                        type: 'boolean',
+                        description: 'Returns true if at least one of the product\'s variants is available. Returns false otherwise.',
+                        example: '@{{ product | is_product_available }}'
+                    },
+                    {
+                        name: 'first_available_variant',
+                        type: '<a class="text-[#003870] hover:text-primary underline" href="#variant">variant</a>',
+                        description: 'Returns the first available variant of the product.',
+                        example: '@{% assign first_available_variant = product | first_available_variant %}</br>@{{ first_available_variant.quantity }}'
+                    },
+                    {
+                        name: 'options',
+                        type: 'array of string',
+                        description: 'An array of the product\'s option names (e.g., Size, Color).',
+                        example: '@{{ product | options }}'
+                    },
+                    {
+                        name: 'min_price',
+                        type: 'number',
+                        description: 'The lowest price among all product variants, in the currency\'s smallest unit (e.g., cents).',
+                        example: '@{{ product | min_price }}'
+                    },
+                    {
+                        name: 'max_price',
+                        type: 'number',
+                        description: 'The highest price among all product variants, in the currency\'s smallest unit (e.g., cents).',
+                        example: '@{{ product | max_price }}'
+                    },
+                    {
+                        name: 'price_varies',
+                        type: 'boolean',
+                        description: 'Returns true if the product\'s variant prices differ. Returns false if all variants have the same price.',
+                        example: '@{{ product | price_varies }}'
+                    },
+                    {
+                        name: 'stock_tracked',
+                        type: 'boolean',
+                        description: 'Returns true if stock tracking is enabled for the product. Returns false otherwise.',
+                        example: '@{{ product | stock_tracked }}'
+                    },
+                    {
+                        name: 'allow_order_when_oos',
+                        type: 'boolean',
+                        description: 'Returns true if the product allows orders when out of stock. Returns false otherwise.',
+                        example: '@{{ product | allow_order_when_oos }}'
+                    }
                 ]
             })),
             Alpine.data('imageObject', () => ({

@@ -1,6 +1,6 @@
 <div id="preview-display-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-90 overflow-hidden h-full w-full z-[60] flex items-center justify-center hidden">
     <div class="modal-content relative w-full h-full max-w-full max-h-full bg-white rounded-lg shadow-xl flex flex-col">
-        <div class="flex border-b border-b-grey-800 justify-between items-center p-3 sm:p-4 border-b flex-shrink-0 bg-gray-100 relative">
+        <div class="flex border-b border-b-gray-300 justify-between items-center p-3 sm:p-4 border-b flex-shrink-0 bg-gray-100 relative">
             <h3 class="text-sm font-semibold text-gray-900">Section Preview</h3>
             <div class="absolute left-1/2 -translate-x-1/2 flex items-center space-x-2">
                 <button data-width="100%" class="device-btn flex items-center justify-center gap-1 text-gray-800  px-2 py-2 bg-gray-300 rounded hover:bg-gray-400 transition">

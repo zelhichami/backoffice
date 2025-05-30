@@ -61,7 +61,19 @@
                 </h2>
                 <div class="relative">
                     <button id="status-badge-button" data-section-id="{{ $section->id }}" type="button" class=" py-2 px-4 :opacity-50 modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit rounded-lg border border-border shadow-sm inline-flex items-center"> <span id="status-badge-indicator" class="inline-block w-2 h-2 rounded-full mr-1.5"></span> <span id="status-badge-text"></span> <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg> </button>
-                    <div id="status-dropdown" class="hidden absolute left-0 mt-2 w-40 origin-top-left bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"> <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu"> @php $statuses = ['draft', 'ready']; @endphp @foreach($statuses as $statusOption) <button type="button" data-status="{{ $statusOption }}" class="status-option block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"> {{ ucfirst($statusOption) }} </button> @endforeach </div> </div>
+                    <div id="status-dropdown" class="hidden absolute left-0 mt-2 w-40 origin-top-left bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"> <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            @php
+                                if(auth()->user()->hasRole('integrator')){
+                                    $statuses = ['draft', 'ready'];
+                                }else{
+
+                                     $statuses = ['under_review','rejected', 'verified'];
+                                }
+
+                            @endphp
+                            @foreach($statuses as $statusOption)
+                                <button type="button" data-status="{{ $statusOption }}" class="status-option block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"> {{ ucfirst($statusOption) }} </button>
+                            @endforeach </div> </div>
                 </div>
             </div>
             {{-- Right Side: Buttons --}}
@@ -209,187 +221,178 @@
                     const placeholderProductImageUrl = 'https://placehold.co/200x200/e2e8f0/475569?text=No+Image';
                     const availableVariables = @json($variables ?? []);
 
-                    const predefinedPalettes = {
-                        "user_default_theme": { // Based on your originally provided CSS variables
-                            'style-color-primary': '#0b4e24',        'style-color-primary-foreground': '#f1f1f1',
-                            'style-color-secondary': '#17833e',      'style-color-secondary-foreground': '#FFFFFF',
-                            'style-color-accent': '#1bb353',         'style-color-accent-foreground': '#262729', // Dark text on light green
-                            'style-color-muted': '#FAF8F2',          'style-color-muted-foreground': '#7f8083',
-                            'style-color-active-link': '#5c5c5c',    'style-color-active-link-foreground': '#FFFFFF',
-                            'style-color-background': '#ffffff',     'style-color-foreground': '#000000', // Black text on white bg
-                            'style-color-border': '#E5E7EB',         'style-color-input': '#F9FAFB'
-                        },
-                        "arctic_white": { // Clean, minimalist, high-contrast
-                            'style-color-primary': '#007AFF',        'style-color-primary-foreground': '#FFFFFF', // Apple Blue
-                            'style-color-secondary': '#5AC8FA',      'style-color-secondary-foreground': '#000000', // Lighter Blue
-                            'style-color-accent': '#FF2D55',         'style-color-accent-foreground': '#FFFFFF', // Bright Pink/Red
-                            'style-color-muted': '#F2F2F7',          'style-color-muted-foreground': '#6C6C70',   // Light Gray
-                            'style-color-active-link': '#007AFF',    'style-color-active-link-foreground': '#FFFFFF',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#1D1D1F', // Near Black for text
-                            'style-color-border': '#D1D1D6',         'style-color-input': '#F2F2F7'
-                        },
-                        "midnight_bloom": { // Dark theme with vibrant floral accents
-                            'style-color-primary': '#8A3FFC',        'style-color-primary-foreground': '#FFFFFF', // Vibrant Purple (IBM)
-                            'style-color-secondary': '#00A78F',      'style-color-secondary-foreground': '#FFFFFF', // Teal
-                            'style-color-accent': '#FF66A8',         'style-color-accent-foreground': '#161616', // Hot Pink
-                            'style-color-muted': '#2C2C2E',          'style-color-muted-foreground': '#A0A0A5',   // Darker Gray
-                            'style-color-active-link': '#FF66A8',    'style-color-active-link-foreground': '#161616',
-                            'style-color-background': '#161616',     'style-color-foreground': '#F4F4F4', // Light Gray text
-                            'style-color-border': '#3A3A3C',         'style-color-input': '#2C2C2E'
-                        },
-                        "forest_canopy": { // Earthy, natural greens and browns
-                            'style-color-primary': '#2E7D32',        'style-color-primary-foreground': '#FFFFFF', // Forest Green
-                            'style-color-secondary': '#689F38',      'style-color-secondary-foreground': '#FFFFFF', // Lighter Green
-                            'style-color-accent': '#FF8F00',         'style-color-accent-foreground': '#FFFFFF', // Amber/Orange
-                            'style-color-muted': '#F1F8E9',          'style-color-muted-foreground': '#556B2F',   // Light Olive Green
-                            'style-color-active-link': '#689F38',    'style-color-active-link-foreground': '#FFFFFF',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#3E2723', // Dark Brown text
-                            'style-color-border': '#DCEDC8',         'style-color-input': '#F1F8E9'
-                        },
-                        "oceanic_depth": { // Deep blues and teals
-                            'style-color-primary': '#0D47A1',        'style-color-primary-foreground': '#FFFFFF', // Deep Blue
-                            'style-color-secondary': '#00ACC1',      'style-color-secondary-foreground': '#FFFFFF', // Cyan/Teal
-                            'style-color-accent': '#FFD600',         'style-color-accent-foreground': '#000000', // Yellow accent
-                            'style-color-muted': '#E1F5FE',          'style-color-muted-foreground': '#0277BD',   // Lightest Blue
-                            'style-color-active-link': '#00ACC1',    'style-color-active-link-foreground': '#FFFFFF',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#1A237E', // Navy text
-                            'style-color-border': '#B3E5FC',         'style-color-input': '#E1F5FE'
-                        },
-                        "sunrise_citrus": { // Vibrant oranges and yellows
-                            'style-color-primary': '#FF6F00',        'style-color-primary-foreground': '#FFFFFF', // Bright Orange
-                            'style-color-secondary': '#FFC107',      'style-color-secondary-foreground': '#000000', // Amber
-                            'style-color-accent': '#F44336',         'style-color-accent-foreground': '#FFFFFF', // Red
-                            'style-color-muted': '#FFF8E1',          'style-color-muted-foreground': '#E65100',   // Light Orange/Yellow
-                            'style-color-active-link': '#FFC107',    'style-color-active-link-foreground': '#000000',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#BF360C', // Deep Orange text
-                            'style-color-border': '#FFECB3',         'style-color-input': '#FFF8E1'
-                        },
-                        "lavender_haze": { // Soft purples and pinks
-                            'style-color-primary': '#9575CD',        'style-color-primary-foreground': '#FFFFFF', // Lavender
-                            'style-color-secondary': '#CE93D8',      'style-color-secondary-foreground': '#000000', // Light Purple/Pink
-                            'style-color-accent': '#F48FB1',         'style-color-accent-foreground': '#000000', // Soft Pink
-                            'style-color-muted': '#F3E5F5',          'style-color-muted-foreground': '#6A1B9A',   // Very Light Purple
-                            'style-color-active-link': '#CE93D8',    'style-color-active-link-foreground': '#000000',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#4A148C', // Deep Purple text
-                            'style-color-border': '#E1BEE7',         'style-color-input': '#F3E5F5'
-                        },
-                        "charcoal_slate": { // Modern, sophisticated dark gray theme
-                            'style-color-primary': '#455A64',        'style-color-primary-foreground': '#FFFFFF', // Blue Grey
-                            'style-color-secondary': '#78909C',      'style-color-secondary-foreground': '#FFFFFF', // Lighter Blue Grey
-                            'style-color-accent': '#00ACC1',         'style-color-accent-foreground': '#FFFFFF', // Cyan accent
-                            'style-color-muted': '#37474F',          'style-color-muted-foreground': '#CFD8DC',   // Darker Shade
-                            'style-color-active-link': '#00ACC1',    'style-color-active-link-foreground': '#FFFFFF',
-                            'style-color-background': '#263238',     'style-color-foreground': '#ECEFF1', // Light Grey text
-                            'style-color-border': '#546E7A',         'style-color-input': '#37474F'
-                        },
-                        "sandstone_beige": { // Warm, neutral, and calm
-                            'style-color-primary': '#A1887F',        'style-color-primary-foreground': '#FFFFFF', // Brownish Grey
-                            'style-color-secondary': '#D7CCC8',      'style-color-secondary-foreground': '#3E2723', // Lightest Brown/Beige
-                            'style-color-accent': '#8D6E63',         'style-color-accent-foreground': '#FFFFFF', // Brown
-                            'style-color-muted': '#F5F5F0',          'style-color-muted-foreground': '#6D4C41',   // Off-white/Beige
-                            'style-color-active-link': '#A1887F',    'style-color-active-link-foreground': '#FFFFFF',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#4E342E', // Dark Brown text
-                            'style-color-border': '#EFEBE9',         'style-color-input': '#F5F5F0'
-                        },
-                        "crimson_gold": { // Luxurious, bold
-                            'style-color-primary': '#C62828',        'style-color-primary-foreground': '#FFFFFF', // Deep Red
-                            'style-color-secondary': '#FBC02D',      'style-color-secondary-foreground': '#000000', // Gold/Yellow
-                            'style-color-accent': '#D81B60',         'style-color-accent-foreground': '#FFFFFF', // Magenta/Pink
-                            'style-color-muted': '#3E2723',          'style-color-muted-foreground': '#FFEBEE',   // Dark Brown
-                            'style-color-active-link': '#FBC02D',    'style-color-active-link-foreground': '#000000',
-                            'style-color-background': '#1B0000',     'style-color-foreground': '#FFCDD2', // Light Red text
-                            'style-color-border': '#5D4037',         'style-color-input': '#3E2723'
-                        },
-                        "aqua_spark": { // Fresh, modern, energetic
-                            'style-color-primary': '#00BCD4',        'style-color-primary-foreground': '#FFFFFF', // Cyan
-                            'style-color-secondary': '#00E676',      'style-color-secondary-foreground': '#000000', // Bright Green
-                            'style-color-accent': '#FFEB3B',         'style-color-accent-foreground': '#000000', // Yellow
-                            'style-color-muted': '#E0F7FA',          'style-color-muted-foreground': '#006064',   // Light Cyan
-                            'style-color-active-link': '#00E676',    'style-color-active-link-foreground': '#000000',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#004D40', // Dark Teal text
-                            'style-color-border': '#B2EBF2',         'style-color-input': '#E0F7FA'
-                        },
-                        "graphite_lime": { // Dark industrial with a pop of color
-                            'style-color-primary': '#343A40',        'style-color-primary-foreground': '#F8F9FA', // Dark Gray
-                            'style-color-secondary': '#6C757D',      'style-color-secondary-foreground': '#FFFFFF', // Medium Gray
-                            'style-color-accent': '#AFFF33',         'style-color-accent-foreground': '#1B2B00', // Electric Lime
-                            'style-color-muted': '#212529',          'style-color-muted-foreground': '#ADB5BD',   // Near Black
-                            'style-color-active-link': '#AFFF33',    'style-color-active-link-foreground': '#1B2B00',
-                            'style-color-background': '#121212',     'style-color-foreground': '#E9ECEF', // Light Gray text
-                            'style-color-border': '#495057',         'style-color-input': '#212529'
-                        },
-                        "peach_serenity": { // Soft, warm, inviting
-                            'style-color-primary': '#FFB3A7',        'style-color-primary-foreground': '#5D4037', // Peach
-                            'style-color-secondary': '#FFDAC1',      'style-color-secondary-foreground': '#5D4037', // Lighter Peach
-                            'style-color-accent': '#B0E0E6',         'style-color-accent-foreground': '#3A5F6A', // Powder Blue
-                            'style-color-muted': '#FFF5F3',          'style-color-muted-foreground': '#A1887F',   // Very Light Peach
-                            'style-color-active-link': '#FFB3A7',    'style-color-active-link-foreground': '#5D4037',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#6D4C41', // Brown text
-                            'style-color-border': '#FFEAE6',         'style-color-input': '#FFF5F3'
-                        },
-                        "vintage_wine": { // Rich, classic, sophisticated
-                            'style-color-primary': '#722F37',        'style-color-primary-foreground': '#F5EBE0', // Wine Red
-                            'style-color-secondary': '#8C5040',      'style-color-secondary-foreground': '#F5EBE0', // Muted Brown
-                            'style-color-accent': '#D4AF37',         'style-color-accent-foreground': '#4A3B0C', // Old Gold
-                            'style-color-muted': '#F5F5DC',          'style-color-muted-foreground': '#5E503F',   // Beige
-                            'style-color-active-link': '#D4AF37',    'style-color-active-link-foreground': '#4A3B0C',
-                            'style-color-background': '#FDF6E3',     'style-color-foreground': '#402F2B', // Dark Brown text
-                            'style-color-border': '#EADDCA',         'style-color-input': '#F5F5DC'
-                        },
-                        "steel_blue_tech": { // Clean, modern, tech-focused
-                            'style-color-primary': '#4682B4',        'style-color-primary-foreground': '#FFFFFF', // Steel Blue
-                            'style-color-secondary': '#B0C4DE',      'style-color-secondary-foreground': '#000000', // Light Steel Blue
-                            'style-color-accent': '#32CD32',         'style-color-accent-foreground': '#FFFFFF', // Lime Green
-                            'style-color-muted': '#F0F8FF',          'style-color-muted-foreground': '#4682B4',   // Alice Blue
-                            'style-color-active-link': '#32CD32',    'style-color-active-link-foreground': '#FFFFFF',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#2F4F4F', // Dark Slate Gray text
-                            'style-color-border': '#D8E2EB',         'style-color-input': '#F0F8FF'
-                        },
-                        "muted_rose_gold": { // Elegant, trendy, soft
-                            'style-color-primary': '#B76E79',        'style-color-primary-foreground': '#FFFFFF', // Muted Rose
-                            'style-color-secondary': '#D9A9A9',      'style-color-secondary-foreground': '#4A2C2E', // Dusty Pink
-                            'style-color-accent': '#E6B8A2',         'style-color-accent-foreground': '#5E3A27', // Rose Gold/Copper
-                            'style-color-muted': '#FAF0E6',          'style-color-muted-foreground': '#7D5A5A',   // Linen
-                            'style-color-active-link': '#E6B8A2',    'style-color-active-link-foreground': '#5E3A27',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#5C3E40', // Dark Rose Brown text
-                            'style-color-border': '#F2E4E4',         'style-color-input': '#FAF0E6'
-                        },
-                        "terracotta_earth": { // Warm, grounded, natural clay
-                            'style-color-primary': '#E2725B',        'style-color-primary-foreground': '#FFFFFF', // Terracotta
-                            'style-color-secondary': '#FFA07A',      'style-color-secondary-foreground': '#5D2A18', // Light Salmon
-                            'style-color-accent': '#8FBC8F',         'style-color-accent-foreground': '#2E452E', // Dark Sea Green
-                            'style-color-muted': '#FAEBD7',          'style-color-muted-foreground': '#8B4513',   // Antique White
-                            'style-color-active-link': '#FFA07A',    'style-color-active-link-foreground': '#5D2A18',
-                            'style-color-background': '#FFF8DC',     'style-color-foreground': '#7A3B2E', // Sienna text
-                            'style-color-border': '#F5DEB3',         'style-color-input': '#FAEBD7'
-                        },
-                        "vibrant_candy": { // Playful, bright, energetic
-                            'style-color-primary': '#FF69B4',        'style-color-primary-foreground': '#FFFFFF', // Hot Pink
-                            'style-color-secondary': '#00FFFF',      'style-color-secondary-foreground': '#000000', // Aqua
-                            'style-color-accent': '#FFFF00',         'style-color-accent-foreground': '#000000', // Yellow
-                            'style-color-muted': '#F0FFFF',          'style-color-muted-foreground': '#FF1493',   // Azure (for muted fg, deep pink on light)
-                            'style-color-active-link': '#00FFFF',    'style-color-active-link-foreground': '#000000',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#4B0082', // Indigo text
-                            'style-color-border': '#E0FEFE',         'style-color-input': '#F0FFFF'
-                        },
-                        "classic_cream_black": { // High contrast, timeless
-                            'style-color-primary': '#2F2F2F',        'style-color-primary-foreground': '#FFFDD0', // Near Black
-                            'style-color-secondary': '#555555',      'style-color-secondary-foreground': '#FFFDD0', // Dark Gray
-                            'style-color-accent': '#E0A800',         'style-color-accent-foreground': '#2F2F2F', // Muted Gold
-                            'style-color-muted': '#F5F5F5',          'style-color-muted-foreground': '#4A4A4A',   // Light Gray
-                            'style-color-active-link': '#E0A800',    'style-color-active-link-foreground': '#2F2F2F',
-                            'style-color-background': '#FFFDD0',     'style-color-foreground': '#1C1C1C', // Cream background, very dark text
-                            'style-color-border': '#EAEAEA',         'style-color-input': '#F5F5F5'
-                        },
-                        "nordic_blue_gray": { // Calm, cool, Scandinavian inspired
-                            'style-color-primary': '#607D8B',        'style-color-primary-foreground': '#FFFFFF', // Blue Gray
-                            'style-color-secondary': '#90A4AE',      'style-color-secondary-foreground': '#263238', // Lighter Blue Gray
-                            'style-color-accent': '#FFCC80',         'style-color-accent-foreground': '#5D4037', // Light Orange accent
-                            'style-color-muted': '#ECEFF1',          'style-color-muted-foreground': '#546E7A',   // Very Light Blue Gray
-                            'style-color-active-link': '#FFCC80',    'style-color-active-link-foreground': '#5D4037',
-                            'style-color-background': '#FFFFFF',     'style-color-foreground': '#37474F', // Dark Slate text
-                            'style-color-border': '#CFD8DC',         'style-color-input': '#ECEFF1'
-                        }
+                    const predefinedPalettes =
+                    {
+                        "classic_dark_blend": {
+                        "style-color-primary": "#1F1F23",
+                            "style-color-primary-foreground": "#FEFEFE",
+                            "style-color-secondary": "#FAF8F8",
+                            "style-color-secondary-foreground": "#1F1F23",
+                            "style-color-accent": "#1F1F23",
+                            "style-color-accent-foreground": "#F3F4F6",
+                            "style-color-muted": "#C9C8C8",
+                            "style-color-muted-foreground": "#686767",
+                            "style-color-active-link": "#E24747",
+                            "style-color-active-link-foreground": "#F3F4F6",
+                            "style-color-background": "#F3F4F6",
+                            "style-color-foreground": "#000000",
+                            "style-color-border": "#D1D5DB",
+                            "style-color-input": "#F9FAFB"
+                    },
+
+                        "sunset_glow": {
+                        "style-color-primary": "#ff6b6b",
+                            "style-color-primary-foreground": "#ffffff",
+                            "style-color-secondary": "#ffa07a",
+                            "style-color-secondary-foreground": "#2d2d2d",
+                            "style-color-accent": "#ffd166",
+                            "style-color-accent-foreground": "#2d2d2d",
+                            "style-color-muted": "#fff5ec",
+                            "style-color-muted-foreground": "#7f7f7f",
+                            "style-color-active-link": "#d62828",
+                            "style-color-active-link-foreground": "#ffffff",
+                            "style-color-background": "#fffaf5",
+                            "style-color-foreground": "#2b2b2b",
+                            "style-color-border": "#f2e8df",
+                            "style-color-input": "#fff1e5"
+                    },
+
+                        "arctic_frost": {
+                        "style-color-primary": "#0a84ff",
+                            "style-color-primary-foreground": "#ffffff",
+                            "style-color-secondary": "#5ac8fa",
+                            "style-color-secondary-foreground": "#1e1e1e",
+                            "style-color-accent": "#30d158",
+                            "style-color-accent-foreground": "#1e1e1e",
+                            "style-color-muted": "#f2f2f7",
+                            "style-color-muted-foreground": "#6c6c70",
+                            "style-color-active-link": "#0a84ff",
+                            "style-color-active-link-foreground": "#ffffff",
+                            "style-color-background": "#ffffff",
+                            "style-color-foreground": "#1d1d1f",
+                            "style-color-border": "#d1d1d6",
+                            "style-color-input": "#f2f2f7"
+                    },
+
+                        "desert_dune": {
+                        "style-color-primary": "#c2b280",
+                            "style-color-primary-foreground": "#2c2c2c",
+                            "style-color-secondary": "#e0c097",
+                            "style-color-secondary-foreground": "#3a2c1a",
+                            "style-color-accent": "#a97c50",
+                            "style-color-accent-foreground": "#ffffff",
+                            "style-color-muted": "#f6f1e7",
+                            "style-color-muted-foreground": "#857c6d",
+                            "style-color-active-link": "#7e5e3c",
+                            "style-color-active-link-foreground": "#ffffff",
+                            "style-color-background": "#fffaf4",
+                            "style-color-foreground": "#2a2a2a",
+                            "style-color-border": "#ddd2c2",
+                            "style-color-input": "#f9f4ef"
+                    },
+
+                        "midnight_ocean": {
+                        "style-color-primary": "#0f172a",
+                            "style-color-primary-foreground": "#e0f2fe",
+                            "style-color-secondary": "#1e293b",
+                            "style-color-secondary-foreground": "#cbd5e1",
+                            "style-color-accent": "#38bdf8",
+                            "style-color-accent-foreground": "#0f172a",
+                            "style-color-muted": "#334155",
+                            "style-color-muted-foreground": "#94a3b8",
+                            "style-color-active-link": "#2563eb",
+                            "style-color-active-link-foreground": "#ffffff",
+                            "style-color-background": "#0f172a",
+                            "style-color-foreground": "#f1f5f9",
+                            "style-color-border": "#1e293b",
+                            "style-color-input": "#1e293b"
+                    },
+
+                        "forest_moss": {
+                        "style-color-primary": "#0b4e24",
+                            "style-color-primary-foreground": "#f1f1f1",
+                            "style-color-secondary": "#17833e",
+                            "style-color-secondary-foreground": "#ffffff",
+                            "style-color-accent": "#1bb353",
+                            "style-color-accent-foreground": "#262729",
+                            "style-color-muted": "#f3f7f2",
+                            "style-color-muted-foreground": "#7f8083",
+                            "style-color-active-link": "#116530",
+                            "style-color-active-link-foreground": "#ffffff",
+                            "style-color-background": "#ffffff",
+                            "style-color-foreground": "#202221",
+                            "style-color-border": "#dce3db",
+                            "style-color-input": "#f3f7f2"
+                    },
+
+                        "rose_gold": {
+                        "style-color-primary": "#b76e79",
+                            "style-color-primary-foreground": "#ffffff",
+                            "style-color-secondary": "#eccac2",
+                            "style-color-secondary-foreground": "#3a2e2e",
+                            "style-color-accent": "#f7d6cb",
+                            "style-color-accent-foreground": "#2e2d2c",
+                            "style-color-muted": "#fbf4f1",
+                            "style-color-muted-foreground": "#806d69",
+                            "style-color-active-link": "#a14d5d",
+                            "style-color-active-link-foreground": "#ffffff",
+                            "style-color-background": "#fffdfc",
+                            "style-color-foreground": "#2a2a2a",
+                            "style-color-border": "#eedfdb",
+                            "style-color-input": "#faf4f2"
+                    },
+
+                        "lavender_haze": {
+                        "style-color-primary": "#8e44ad",
+                            "style-color-primary-foreground": "#ffffff",
+                            "style-color-secondary": "#dcd6f7",
+                            "style-color-secondary-foreground": "#2d2a4a",
+                            "style-color-accent": "#a29bfe",
+                            "style-color-accent-foreground": "#2e2d2c",
+                            "style-color-muted": "#f6f4fb",
+                            "style-color-muted-foreground": "#8a89a3",
+                            "style-color-active-link": "#6c5ce7",
+                            "style-color-active-link-foreground": "#ffffff",
+                            "style-color-background": "#ffffff",
+                            "style-color-foreground": "#1d1d26",
+                            "style-color-border": "#e5e3f3",
+                            "style-color-input": "#f3f0fa"
+                    },
+
+                        "neon_energy": {
+                        "style-color-primary": "#ff0055",
+                            "style-color-primary-foreground": "#ffffff",
+                            "style-color-secondary": "#00f2ff",
+                            "style-color-secondary-foreground": "#0d0d0d",
+                            "style-color-accent": "#ffee00",
+                            "style-color-accent-foreground": "#0d0d0d",
+                            "style-color-muted": "#f2f2f2",
+                            "style-color-muted-foreground": "#4d4d4d",
+                            "style-color-active-link": "#ff3cac",
+                            "style-color-active-link-foreground": "#ffffff",
+                            "style-color-background": "#ffffff",
+                            "style-color-foreground": "#111111",
+                            "style-color-border": "#e2e2e2",
+                            "style-color-input": "#f8f8f8"
+                    },
+
+                        "soft_creme": {
+                        "style-color-primary": "#f5e1da",
+                            "style-color-primary-foreground": "#3e3e3e",
+                            "style-color-secondary": "#f9f1ec",
+                            "style-color-secondary-foreground": "#4a4a4a",
+                            "style-color-accent": "#dfbfae",
+                            "style-color-accent-foreground": "#2f2f2f",
+                            "style-color-muted": "#faf6f3",
+                            "style-color-muted-foreground": "#898989",
+                            "style-color-active-link": "#e0c3b1",
+                            "style-color-active-link-foreground": "#3a3a3a",
+                            "style-color-background": "#ffffff",
+                            "style-color-foreground": "#1a1a1a",
+                            "style-color-border": "#e8e4e0",
+                            "style-color-input": "#fdfaf9"
+                    }
+
                     };
 
 
@@ -449,11 +452,15 @@
                         if (!statusBadgeButton || !statusBadgeText || !statusBadgeIndicator) return;
                         statusBadgeText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
                         const baseButtonClasses = ['py-2 px-4 :opacity-50 modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit rounded-lg border border-border shadow-sm inline-flex items-center'];
-                        const statusButtonClasses = { 'draft': 'bg-gray-100 text-gray-800', 'ready': 'bg-sky-100 text-sky-800 hover:bg-sky-200' };
-                        const statusIndicatorClasses = { 'draft': 'bg-gray-400 hover:bg-gray-200', 'ready': 'bg-sky-500 hover:bg-sky-200' }; // Corrected hover for draft
-                        statusBadgeButton.className = baseButtonClasses.join(' ') + ' ' + (statusButtonClasses[status] || 'bg-gray-100 text-gray-800'); // Removed hover:bg-sky-200 from default
-                        statusBadgeIndicator.className = 'inline-block w-2 h-2 rounded-full mr-1.5 ' + (statusIndicatorClasses[status] || 'bg-gray-400');
-                        toggleEditorInteractivity(status === 'ready');
+                        const statusButtonClasses = { 'draft': 'bg-gray-100 text-gray-800', 'ready': 'bg-sky-100 text-sky-800 hover:bg-sky-200', 'rejected': 'bg-red-100 text-red-800 hover:bg-red-200','under_review': 'bg-orange-100 text-orange-800 hover:bg-orange-200' };
+                        const statusIndicatorClasses = { 'draft': 'bg-gray-400 hover:bg-gray-200', 'ready': 'bg-sky-500 hover:bg-sky-200', 'rejected': 'bg-red-500 hover:bg-red-200', 'under_review': 'bg-orange-500 hover:bg-orange-200' }; // Corrected hover for draft
+                        statusBadgeButton.className = baseButtonClasses.join(' ') + ' ' + (statusButtonClasses[status] || 'bg-green-100 text-green-800'); // Removed hover:bg-sky-200 from default
+                        statusBadgeIndicator.className = 'inline-block w-2 h-2 rounded-full mr-1.5 ' + (statusIndicatorClasses[status] || 'bg-green-400');
+                        @if(auth()->user()->hasRole('integrator'))
+                            toggleEditorInteractivity(status != 'draft');
+                        @else
+                            toggleEditorInteractivity(true);
+                        @endif
                     };
 
                     if(statusBadgeButton) { updateBadgeStyle(initialStatus); }

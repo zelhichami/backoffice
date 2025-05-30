@@ -4,9 +4,7 @@ use App\Http\Controllers\CodeEditorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -19,6 +17,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/', [CodeEditorController::class, 'index'])->name('sections.racine');
+
 // Section Listing (replaces old GET /editor)
     Route::get('/sections', [CodeEditorController::class, 'index'])->name('sections.index'); // Changed name
 

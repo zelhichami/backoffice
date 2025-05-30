@@ -12,6 +12,29 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    // Role definitions for backoffice platform
+    const ROLE_INTEGRATOR = 'integrator';           // Can create landing page sections
+    const ROLE_REVIEWER = 'reviewer';               // Verifies and reviews submitted sections
+    const ROLE_PROMPT_ENGINEER = 'prompt_engineer'; // Edits AI prompts and makes sections dynamic with Liquid
+    const ROLE_ADMIN = 'admin';                     // Final validation + full access
+    const ROLE_SUPERADMIN = 'superadmin';           // Full system control
+
+    /**
+     * Get role of user.
+     *
+     * @return string
+     */
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, [self::ROLE_ADMIN, self::ROLE_SUPERADMIN]);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,7 +44,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'hosting_id'
+        'hosting_id',
+        'role'
     ];
 
     /**
@@ -46,4 +70,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+
 }

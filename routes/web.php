@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
 
     // Display the page listing available variables from variables.json
     Route::get('/variables', [CodeEditorController::class, 'showVariablesPage'])->name('variables.index');
+    Route::get('/render-state-docs', [CodeEditorController::class, 'showRenderStateDocsPage'])->name('render-state.docs');
 
     Route::post('section/assets/{section}', [CodeEditorController::class, 'uploadAssets'])->name('uploadAssets');
     Route::get('section/assets/{section}', [CodeEditorController::class, 'getAssets'])->name('getAssets');

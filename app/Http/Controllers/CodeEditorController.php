@@ -633,6 +633,16 @@ class CodeEditorController extends Controller
         return view('variables', compact('variables'));
     }
 
+    /**
+     * NEW: Display the RenderState class documentation page.
+     *
+     * @return View
+     */
+    public function showRenderStateDocsPage(): View
+    {
+        return view('render-state-documentation');
+    }
+
 
     // --- NEW METHOD for Asset Upload ---
     /**

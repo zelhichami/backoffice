@@ -1,3 +1,4 @@
+{{-- resources/views/section-edit.blade.php --}}
 @extends('layouts.app')
 
 @push('styles')
@@ -157,12 +158,77 @@
             <script>
                 // --- Monaco Editor Initialization ---
                 let htmlEditor, cssEditor, jsEditor;
+
+                // START: Snippet Definitions
+                const customSnippets = {
+                    "__.setQuantity": { "prefix": "__.setQuantity", "body": ["__.setQuantity(\"@{{ product.id }}\", ${1:quantity})$0;"], "description": "Sets the quantity for a given category and notifies listeners." },
+                    "__.setVariantId": { "prefix": "__.setVariantId", "body": ["__.setVariantId(\"@{{ product.id }}\", ${1:variantId})$0;"], "description": "Sets the variant ID for a given category and notifies listeners." },
+                    "__.addToCart": { "prefix": "__.addToCart", "body": ["__.addToCart(\"@{{ product.id }}\", ${1:checkout})$0;"], "description": "Adds an item to the cart, optionally proceeding to checkout." },
+                    "__.removeFromCart": { "prefix": "__.removeFromCart", "body": ["__.removeFromCart(${1:variantId})$0;"], "description": "Removes an item from the cart." },
+                    "__.getQuantityUpdateHandler": { "prefix": "__.getQuantityUpdateHandler", "body": ["__.getQuantityUpdateHandler(\"@{{ product.id }}\"})$0;"], "description": "Returns a handler function for quantity input changes." },
+                    "__.getVariantUpdateHandler": { "prefix": "__.getVariantUpdateHandler", "body": ["__.getVariantUpdateHandler(\"@{{ product.id }}\"})$0;"], "description": "Returns a handler function for variant select changes." },
+                    "__.bindQuantityInput": { "prefix": "__.bindQuantityInput", "body": ["__.bindQuantityInput(\"@{{ product.id }}\"})$0;"], "description": "Binds a quantity input element to the render state." },
+                    "__.bindVariantSelect": { "prefix": "__.bindVariantSelect", "body": ["__.bindVariantSelect(\"@{{ product.id }}\"})$0;"], "description": "Binds a variant select element to the render state." },
+                    "__.getQuantity": { "prefix": "__.getQuantity", "body": ["__.getQuantity(\"@{{ product.id }}\"})$0;"], "description": "Gets the current quantity for a category." },
+                    "__.getVariantId": { "prefix": "__.getVariantId", "body": ["__.getVariantId(\"@{{ product.id }}\"})$0;"], "description": "Gets the current variant ID for a category." },
+                    "__.getCart": { "prefix": "__.getCart", "body": ["__.getCart()$0;"], "description": "Gets a deep clone of the current cart." },
+                    "__.registerChangeListener": { "prefix": "__.registerChangeListener", "body": ["__.registerChangeListener('${1:property}', ${2:callback})$0;"], "description": "Registers a callback function to listen for state changes." },
+                    "__.removeChangeListener": { "prefix": "__.removeChangeListener", "body": ["__.removeChangeListener('${1:property}', ${2:callback})$0;"], "description": "Removes a previously registered change listener." },
+                    "__.pushError": { "prefix": "__.pushError", "body": ["__.pushError('${1:message}', ${2:timeout})$0;"], "description": "Pushes an error message to registered error handlers." },
+                    "__.defineErrorHandler": { "prefix": "__.defineErrorHandler", "body": ["__.defineErrorHandler(${1:callback})$0;"], "description": "Defines a callback function to handle errors." },
+                    "__.removeErrorHandler": { "prefix": "__.removeErrorHandler", "body": ["__.removeErrorHandler(${1:callback})$0;"], "description": "Removes a previously defined error handler." }
+                };
+                // END: Snippet Definitions
+
                 require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs' }});
                 require(['vs/editor/editor.main'], function() {
                     const commonEditorOptions = { theme: 'vs-dark', automaticLayout: true, minimap: { enabled: true }, wordWrap: 'on', fontSize: 14, scrollBeyondLastLine: false, padding: { top: 20, bottom: 10 } };
                     htmlEditor = monaco.editor.create(document.getElementById('html-editor-container'), { ...commonEditorOptions, value: {!! json_encode(old('html_code', $htmlContent ?? '')) !!}, language: 'html' });
                     cssEditor = monaco.editor.create(document.getElementById('css-editor-container'), { ...commonEditorOptions, value:{!! json_encode(old('css_code', $cssContent ?? '')) !!}, language: 'css' });
                     jsEditor = monaco.editor.create(document.getElementById('js-editor-container'), { ...commonEditorOptions, value: {!! json_encode(old('js_code', $jsContent ?? '')) !!}, language: 'javascript' });
+
+                    // Function to create completion items from snippet definitions
+                    function createCompletionItems(snippets) {
+                        let suggestions = [];
+                        for (const key in snippets) {
+                            if (snippets.hasOwnProperty(key)) {
+                                const snippet = snippets[key];
+                                suggestions.push({
+                                    label: snippet.prefix,
+                                    kind: monaco.languages.CompletionItemKind.Snippet,
+                                    documentation: snippet.description,
+                                    insertText: snippet.body.join('\n'),
+                                    insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                                    // Range will be set by the provider based on current word
+                                });
+                            }
+                        }
+                        return suggestions;
+                    }
+
+                    const sharedCompletionProvider = {
+                        provideCompletionItems: function(model, position) {
+                            const word = model.getWordUntilPosition(position);
+                            const range = {
+                                startLineNumber: position.lineNumber,
+                                endLineNumber: position.lineNumber,
+                                startColumn: word.startColumn,
+                                endColumn: word.endColumn
+                            };
+                            const items = createCompletionItems(customSnippets);
+                            // Update range for all suggestions
+                            const suggestionsWithRange = items.map(item => ({...item, range: range }));
+                            return { suggestions: suggestionsWithRange };
+                        }
+                    };
+
+                    // Register Completion Provider for JavaScript
+                    monaco.languages.registerCompletionItemProvider('javascript', sharedCompletionProvider);
+
+                    // START: Register Completion Provider for HTML
+                    monaco.languages.registerCompletionItemProvider('html', sharedCompletionProvider);
+                    // END: Register Completion Provider for HTML
+
                     setTimeout(() => { htmlEditor?.layout(); cssEditor?.layout(); jsEditor?.layout(); }, 100); // Ensure all editors layout
                 });
 
@@ -222,178 +288,178 @@
                     const availableVariables = @json($variables ?? []);
 
                     const predefinedPalettes =
-                    {
-                        "classic_dark_blend": {
-                        "style-color-primary": "#1F1F23",
-                            "style-color-primary-foreground": "#FEFEFE",
-                            "style-color-secondary": "#FAF8F8",
-                            "style-color-secondary-foreground": "#1F1F23",
-                            "style-color-accent": "#1F1F23",
-                            "style-color-accent-foreground": "#F3F4F6",
-                            "style-color-muted": "#C9C8C8",
-                            "style-color-muted-foreground": "#686767",
-                            "style-color-active-link": "#E24747",
-                            "style-color-active-link-foreground": "#F3F4F6",
-                            "style-color-background": "#F3F4F6",
-                            "style-color-foreground": "#000000",
-                            "style-color-border": "#D1D5DB",
-                            "style-color-input": "#F9FAFB"
-                    },
+                        {
+                            "classic_dark_blend": {
+                                "style-color-primary": "#1F1F23",
+                                "style-color-primary-foreground": "#FEFEFE",
+                                "style-color-secondary": "#FAF8F8",
+                                "style-color-secondary-foreground": "#1F1F23",
+                                "style-color-accent": "#1F1F23",
+                                "style-color-accent-foreground": "#F3F4F6",
+                                "style-color-muted": "#C9C8C8",
+                                "style-color-muted-foreground": "#686767",
+                                "style-color-active-link": "#E24747",
+                                "style-color-active-link-foreground": "#F3F4F6",
+                                "style-color-background": "#F3F4F6",
+                                "style-color-foreground": "#000000",
+                                "style-color-border": "#D1D5DB",
+                                "style-color-input": "#F9FAFB"
+                            },
 
-                        "sunset_glow": {
-                        "style-color-primary": "#ff6b6b",
-                            "style-color-primary-foreground": "#ffffff",
-                            "style-color-secondary": "#ffa07a",
-                            "style-color-secondary-foreground": "#2d2d2d",
-                            "style-color-accent": "#ffd166",
-                            "style-color-accent-foreground": "#2d2d2d",
-                            "style-color-muted": "#fff5ec",
-                            "style-color-muted-foreground": "#7f7f7f",
-                            "style-color-active-link": "#d62828",
-                            "style-color-active-link-foreground": "#ffffff",
-                            "style-color-background": "#fffaf5",
-                            "style-color-foreground": "#2b2b2b",
-                            "style-color-border": "#f2e8df",
-                            "style-color-input": "#fff1e5"
-                    },
+                            "sunset_glow": {
+                                "style-color-primary": "#ff6b6b",
+                                "style-color-primary-foreground": "#ffffff",
+                                "style-color-secondary": "#ffa07a",
+                                "style-color-secondary-foreground": "#2d2d2d",
+                                "style-color-accent": "#ffd166",
+                                "style-color-accent-foreground": "#2d2d2d",
+                                "style-color-muted": "#fff5ec",
+                                "style-color-muted-foreground": "#7f7f7f",
+                                "style-color-active-link": "#d62828",
+                                "style-color-active-link-foreground": "#ffffff",
+                                "style-color-background": "#fffaf5",
+                                "style-color-foreground": "#2b2b2b",
+                                "style-color-border": "#f2e8df",
+                                "style-color-input": "#fff1e5"
+                            },
 
-                        "arctic_frost": {
-                        "style-color-primary": "#0a84ff",
-                            "style-color-primary-foreground": "#ffffff",
-                            "style-color-secondary": "#5ac8fa",
-                            "style-color-secondary-foreground": "#1e1e1e",
-                            "style-color-accent": "#30d158",
-                            "style-color-accent-foreground": "#1e1e1e",
-                            "style-color-muted": "#f2f2f7",
-                            "style-color-muted-foreground": "#6c6c70",
-                            "style-color-active-link": "#0a84ff",
-                            "style-color-active-link-foreground": "#ffffff",
-                            "style-color-background": "#ffffff",
-                            "style-color-foreground": "#1d1d1f",
-                            "style-color-border": "#d1d1d6",
-                            "style-color-input": "#f2f2f7"
-                    },
+                            "arctic_frost": {
+                                "style-color-primary": "#0a84ff",
+                                "style-color-primary-foreground": "#ffffff",
+                                "style-color-secondary": "#5ac8fa",
+                                "style-color-secondary-foreground": "#1e1e1e",
+                                "style-color-accent": "#30d158",
+                                "style-color-accent-foreground": "#1e1e1e",
+                                "style-color-muted": "#f2f2f7",
+                                "style-color-muted-foreground": "#6c6c70",
+                                "style-color-active-link": "#0a84ff",
+                                "style-color-active-link-foreground": "#ffffff",
+                                "style-color-background": "#ffffff",
+                                "style-color-foreground": "#1d1d1f",
+                                "style-color-border": "#d1d1d6",
+                                "style-color-input": "#f2f2f7"
+                            },
 
-                        "desert_dune": {
-                        "style-color-primary": "#c2b280",
-                            "style-color-primary-foreground": "#2c2c2c",
-                            "style-color-secondary": "#e0c097",
-                            "style-color-secondary-foreground": "#3a2c1a",
-                            "style-color-accent": "#a97c50",
-                            "style-color-accent-foreground": "#ffffff",
-                            "style-color-muted": "#f6f1e7",
-                            "style-color-muted-foreground": "#857c6d",
-                            "style-color-active-link": "#7e5e3c",
-                            "style-color-active-link-foreground": "#ffffff",
-                            "style-color-background": "#fffaf4",
-                            "style-color-foreground": "#2a2a2a",
-                            "style-color-border": "#ddd2c2",
-                            "style-color-input": "#f9f4ef"
-                    },
+                            "desert_dune": {
+                                "style-color-primary": "#c2b280",
+                                "style-color-primary-foreground": "#2c2c2c",
+                                "style-color-secondary": "#e0c097",
+                                "style-color-secondary-foreground": "#3a2c1a",
+                                "style-color-accent": "#a97c50",
+                                "style-color-accent-foreground": "#ffffff",
+                                "style-color-muted": "#f6f1e7",
+                                "style-color-muted-foreground": "#857c6d",
+                                "style-color-active-link": "#7e5e3c",
+                                "style-color-active-link-foreground": "#ffffff",
+                                "style-color-background": "#fffaf4",
+                                "style-color-foreground": "#2a2a2a",
+                                "style-color-border": "#ddd2c2",
+                                "style-color-input": "#f9f4ef"
+                            },
 
-                        "midnight_ocean": {
-                        "style-color-primary": "#0f172a",
-                            "style-color-primary-foreground": "#e0f2fe",
-                            "style-color-secondary": "#1e293b",
-                            "style-color-secondary-foreground": "#cbd5e1",
-                            "style-color-accent": "#38bdf8",
-                            "style-color-accent-foreground": "#0f172a",
-                            "style-color-muted": "#334155",
-                            "style-color-muted-foreground": "#94a3b8",
-                            "style-color-active-link": "#2563eb",
-                            "style-color-active-link-foreground": "#ffffff",
-                            "style-color-background": "#0f172a",
-                            "style-color-foreground": "#f1f5f9",
-                            "style-color-border": "#1e293b",
-                            "style-color-input": "#1e293b"
-                    },
+                            "midnight_ocean": {
+                                "style-color-primary": "#0f172a",
+                                "style-color-primary-foreground": "#e0f2fe",
+                                "style-color-secondary": "#1e293b",
+                                "style-color-secondary-foreground": "#cbd5e1",
+                                "style-color-accent": "#38bdf8",
+                                "style-color-accent-foreground": "#0f172a",
+                                "style-color-muted": "#334155",
+                                "style-color-muted-foreground": "#94a3b8",
+                                "style-color-active-link": "#2563eb",
+                                "style-color-active-link-foreground": "#ffffff",
+                                "style-color-background": "#0f172a",
+                                "style-color-foreground": "#f1f5f9",
+                                "style-color-border": "#1e293b",
+                                "style-color-input": "#1e293b"
+                            },
 
-                        "forest_moss": {
-                        "style-color-primary": "#0b4e24",
-                            "style-color-primary-foreground": "#f1f1f1",
-                            "style-color-secondary": "#17833e",
-                            "style-color-secondary-foreground": "#ffffff",
-                            "style-color-accent": "#1bb353",
-                            "style-color-accent-foreground": "#262729",
-                            "style-color-muted": "#f3f7f2",
-                            "style-color-muted-foreground": "#7f8083",
-                            "style-color-active-link": "#116530",
-                            "style-color-active-link-foreground": "#ffffff",
-                            "style-color-background": "#ffffff",
-                            "style-color-foreground": "#202221",
-                            "style-color-border": "#dce3db",
-                            "style-color-input": "#f3f7f2"
-                    },
+                            "forest_moss": {
+                                "style-color-primary": "#0b4e24",
+                                "style-color-primary-foreground": "#f1f1f1",
+                                "style-color-secondary": "#17833e",
+                                "style-color-secondary-foreground": "#ffffff",
+                                "style-color-accent": "#1bb353",
+                                "style-color-accent-foreground": "#262729",
+                                "style-color-muted": "#f3f7f2",
+                                "style-color-muted-foreground": "#7f8083",
+                                "style-color-active-link": "#116530",
+                                "style-color-active-link-foreground": "#ffffff",
+                                "style-color-background": "#ffffff",
+                                "style-color-foreground": "#202221",
+                                "style-color-border": "#dce3db",
+                                "style-color-input": "#f3f7f2"
+                            },
 
-                        "rose_gold": {
-                        "style-color-primary": "#b76e79",
-                            "style-color-primary-foreground": "#ffffff",
-                            "style-color-secondary": "#eccac2",
-                            "style-color-secondary-foreground": "#3a2e2e",
-                            "style-color-accent": "#f7d6cb",
-                            "style-color-accent-foreground": "#2e2d2c",
-                            "style-color-muted": "#fbf4f1",
-                            "style-color-muted-foreground": "#806d69",
-                            "style-color-active-link": "#a14d5d",
-                            "style-color-active-link-foreground": "#ffffff",
-                            "style-color-background": "#fffdfc",
-                            "style-color-foreground": "#2a2a2a",
-                            "style-color-border": "#eedfdb",
-                            "style-color-input": "#faf4f2"
-                    },
+                            "rose_gold": {
+                                "style-color-primary": "#b76e79",
+                                "style-color-primary-foreground": "#ffffff",
+                                "style-color-secondary": "#eccac2",
+                                "style-color-secondary-foreground": "#3a2e2e",
+                                "style-color-accent": "#f7d6cb",
+                                "style-color-accent-foreground": "#2e2d2c",
+                                "style-color-muted": "#fbf4f1",
+                                "style-color-muted-foreground": "#806d69",
+                                "style-color-active-link": "#a14d5d",
+                                "style-color-active-link-foreground": "#ffffff",
+                                "style-color-background": "#fffdfc",
+                                "style-color-foreground": "#2a2a2a",
+                                "style-color-border": "#eedfdb",
+                                "style-color-input": "#faf4f2"
+                            },
 
-                        "lavender_haze": {
-                        "style-color-primary": "#8e44ad",
-                            "style-color-primary-foreground": "#ffffff",
-                            "style-color-secondary": "#dcd6f7",
-                            "style-color-secondary-foreground": "#2d2a4a",
-                            "style-color-accent": "#a29bfe",
-                            "style-color-accent-foreground": "#2e2d2c",
-                            "style-color-muted": "#f6f4fb",
-                            "style-color-muted-foreground": "#8a89a3",
-                            "style-color-active-link": "#6c5ce7",
-                            "style-color-active-link-foreground": "#ffffff",
-                            "style-color-background": "#ffffff",
-                            "style-color-foreground": "#1d1d26",
-                            "style-color-border": "#e5e3f3",
-                            "style-color-input": "#f3f0fa"
-                    },
+                            "lavender_haze": {
+                                "style-color-primary": "#8e44ad",
+                                "style-color-primary-foreground": "#ffffff",
+                                "style-color-secondary": "#dcd6f7",
+                                "style-color-secondary-foreground": "#2d2a4a",
+                                "style-color-accent": "#a29bfe",
+                                "style-color-accent-foreground": "#2e2d2c",
+                                "style-color-muted": "#f6f4fb",
+                                "style-color-muted-foreground": "#8a89a3",
+                                "style-color-active-link": "#6c5ce7",
+                                "style-color-active-link-foreground": "#ffffff",
+                                "style-color-background": "#ffffff",
+                                "style-color-foreground": "#1d1d26",
+                                "style-color-border": "#e5e3f3",
+                                "style-color-input": "#f3f0fa"
+                            },
 
-                        "neon_energy": {
-                        "style-color-primary": "#ff0055",
-                            "style-color-primary-foreground": "#ffffff",
-                            "style-color-secondary": "#00f2ff",
-                            "style-color-secondary-foreground": "#0d0d0d",
-                            "style-color-accent": "#ffee00",
-                            "style-color-accent-foreground": "#0d0d0d",
-                            "style-color-muted": "#f2f2f2",
-                            "style-color-muted-foreground": "#4d4d4d",
-                            "style-color-active-link": "#ff3cac",
-                            "style-color-active-link-foreground": "#ffffff",
-                            "style-color-background": "#ffffff",
-                            "style-color-foreground": "#111111",
-                            "style-color-border": "#e2e2e2",
-                            "style-color-input": "#f8f8f8"
-                    },
+                            "neon_energy": {
+                                "style-color-primary": "#ff0055",
+                                "style-color-primary-foreground": "#ffffff",
+                                "style-color-secondary": "#00f2ff",
+                                "style-color-secondary-foreground": "#0d0d0d",
+                                "style-color-accent": "#ffee00",
+                                "style-color-accent-foreground": "#0d0d0d",
+                                "style-color-muted": "#f2f2f2",
+                                "style-color-muted-foreground": "#4d4d4d",
+                                "style-color-active-link": "#ff3cac",
+                                "style-color-active-link-foreground": "#ffffff",
+                                "style-color-background": "#ffffff",
+                                "style-color-foreground": "#111111",
+                                "style-color-border": "#e2e2e2",
+                                "style-color-input": "#f8f8f8"
+                            },
 
-                        "soft_creme": {
-                        "style-color-primary": "#f5e1da",
-                            "style-color-primary-foreground": "#3e3e3e",
-                            "style-color-secondary": "#f9f1ec",
-                            "style-color-secondary-foreground": "#4a4a4a",
-                            "style-color-accent": "#dfbfae",
-                            "style-color-accent-foreground": "#2f2f2f",
-                            "style-color-muted": "#faf6f3",
-                            "style-color-muted-foreground": "#898989",
-                            "style-color-active-link": "#e0c3b1",
-                            "style-color-active-link-foreground": "#3a3a3a",
-                            "style-color-background": "#ffffff",
-                            "style-color-foreground": "#1a1a1a",
-                            "style-color-border": "#e8e4e0",
-                            "style-color-input": "#fdfaf9"
-                    }
+                            "soft_creme": {
+                                "style-color-primary": "#f5e1da",
+                                "style-color-primary-foreground": "#3e3e3e",
+                                "style-color-secondary": "#f9f1ec",
+                                "style-color-secondary-foreground": "#4a4a4a",
+                                "style-color-accent": "#dfbfae",
+                                "style-color-accent-foreground": "#2f2f2f",
+                                "style-color-muted": "#faf6f3",
+                                "style-color-muted-foreground": "#898989",
+                                "style-color-active-link": "#e0c3b1",
+                                "style-color-active-link-foreground": "#3a3a3a",
+                                "style-color-background": "#ffffff",
+                                "style-color-foreground": "#1a1a1a",
+                                "style-color-border": "#e8e4e0",
+                                "style-color-input": "#fdfaf9"
+                            }
 
-                    };
+                        };
 
 
                     // Single source of truth for style control definitions
@@ -457,9 +523,9 @@
                         statusBadgeButton.className = baseButtonClasses.join(' ') + ' ' + (statusButtonClasses[status] || 'bg-green-100 text-green-800'); // Removed hover:bg-sky-200 from default
                         statusBadgeIndicator.className = 'inline-block w-2 h-2 rounded-full mr-1.5 ' + (statusIndicatorClasses[status] || 'bg-green-400');
                         @if(auth()->user()->hasRole('integrator'))
-                            toggleEditorInteractivity(status != 'draft');
+                        toggleEditorInteractivity(status != 'draft');
                         @else
-                            toggleEditorInteractivity(true);
+                        toggleEditorInteractivity(true);
                         @endif
                     };
 

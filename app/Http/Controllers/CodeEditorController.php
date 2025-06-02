@@ -604,7 +604,7 @@ class CodeEditorController extends Controller
             if ($response->failed()) {
                 Log::error("XPage preview API error for section {$section->id}, product {$productId} (Status: {$response->status()}): " . $response->body());
                 $errorMessage = $response->json('message', 'Failed to generate preview from XPage.');
-                return response()->json(['message' => $errorMessage], $response->status());
+                return response()->json(['message' => $response->body()], $response->status());
             }
 
             $previewHtml = $response->json('previewContent', $response->body());
@@ -616,7 +616,7 @@ class CodeEditorController extends Controller
 
         } catch (\Exception $e) {
             Log::error("Exception generating preview for section {$section->id}: " . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while generating the preview.'], 500);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 

@@ -287,7 +287,7 @@
                     const placeholderProductImageUrl = 'https://placehold.co/200x200/e2e8f0/475569?text=No+Image';
                     const availableVariables = @json($variables ?? []);
 
-                    // MODIFIED: predefinedPalettes with new additions focusing on light backgrounds
+                    // MODIFIED: predefinedPalettes with new additions based on your CSS
                     const predefinedPalettes = {
                         "modern_blue": {
                             "--bg-section-primary": "#E0F2FE", // Light Sky Blue
@@ -308,7 +308,9 @@
                             "--color-border": "#D1D5DB",        // Tailwind Gray 300
                             "--color-input": "#F9FAFB",         // Tailwind Gray 50
                             "--color-background": "#FFFFFF",    // White
-                            "--color-foreground": "#111827"     // Tailwind Gray 900
+                            "--color-foreground": "#111827",     // Tailwind Gray 900
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
                         "sunset_glow_updated": {
                             "--bg-section-primary": "#ffedd5",
@@ -329,7 +331,9 @@
                             "--color-border": "#f2e8df",
                             "--color-input": "#fff1e5",
                             "--color-background": "#FFFBF5",    // Very Light Peach
-                            "--color-foreground": "#3A3A3A"     // Dark Gray
+                            "--color-foreground": "#3A3A3A",     // Dark Gray
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
                         "ocean_breeze": {
                             "--bg-section-primary": "#E0F2FE",
@@ -350,7 +354,9 @@
                             "--color-border": "#E2E8F0",
                             "--color-input": "#F1F5F9",
                             "--color-background": "#FFFFFF", // White
-                            "--color-foreground": "#0F172A"
+                            "--color-foreground": "#0F172A",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
                         "forest_shade": {
                             "--bg-section-primary": "#D1FAE5",
@@ -371,7 +377,9 @@
                             "--color-border": "#D6D3D1",
                             "--color-input": "#E7E5E4",
                             "--color-background": "#FCFCFC", // Off-White
-                            "--color-foreground": "#292524"
+                            "--color-foreground": "#292524",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
                         "vibrant_grape": {
                             "--bg-section-primary": "#F3E8FF",
@@ -392,7 +400,9 @@
                             "--color-border": "#D8B4FE",
                             "--color-input": "#F5F3FF",
                             "--color-background": "#FFFFFF", // White
-                            "--color-foreground": "#4A044E"
+                            "--color-foreground": "#4A044E",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
                         "earthy_stone": {
                             "--bg-section-primary": "#FEFCE8",
@@ -413,9 +423,11 @@
                             "--color-border": "#E7E5E4",
                             "--color-input": "#F5F5F4",
                             "--color-background": "#FEFDFD", // Off-White
-                            "--color-foreground": "#1C1917"
+                            "--color-foreground": "#1C1917",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
-                        "midnight_deep": { // A darker theme example (kept for variety, though not light bg)
+                        "midnight_deep": { // A darker theme example
                             "--bg-section-primary": "#0F172A",
                             "--fg-section-primary": "#E2E8F0",
                             "--bg-section-secondary": "#1E293B",
@@ -434,92 +446,194 @@
                             "--color-border": "#334155",
                             "--color-input": "#0F172A",
                             "--color-background": "#020617", // Dark Background
-                            "--color-foreground": "#F1F5F9"
+                            "--color-foreground": "#F1F5F9",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
-                        // --- NEW PALETTES WITH LIGHT BACKGROUNDS ---
                         "minimalist_clean": {
-                            "--bg-section-primary": "#F9FAFB",   // Very Light Gray (Tailwind Gray-50)
-                            "--fg-section-primary": "#374151",   // Tailwind Gray-700
-                            "--bg-section-secondary": "#FFFFFF", // White
-                            "--fg-section-secondary": "#4B5563", // Tailwind Gray-600
-                            "--bg-section-accent": "#EFF6FF",    // Tailwind Blue-50 (very light)
-                            "--fg-section-accent": "#1D4ED8",    // Tailwind Blue-700
-                            "--color-primary": "#60A5FA",        // Tailwind Blue-400
+                            "--bg-section-primary": "#F9FAFB",
+                            "--fg-section-primary": "#374151",
+                            "--bg-section-secondary": "#FFFFFF",
+                            "--fg-section-secondary": "#4B5563",
+                            "--bg-section-accent": "#EFF6FF",
+                            "--fg-section-accent": "#1D4ED8",
+                            "--color-primary": "#60A5FA",
                             "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#9CA3AF",      // Tailwind Gray-400
-                            "--color-secondary-fg": "#1F2937",   // Tailwind Gray-800
-                            "--color-accent": "#3B82F6",         // Tailwind Blue-500
+                            "--color-secondary": "#9CA3AF",
+                            "--color-secondary-fg": "#1F2937",
+                            "--color-accent": "#3B82F6",
                             "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#6B7280",           // Tailwind Gray-500
-                            "--bg-muted": "#F3F4F6",             // Tailwind Gray-100
-                            "--muted-fg": "#1F2937",             // Tailwind Gray-800
-                            "--color-border": "#E5E7EB",         // Tailwind Gray-200
-                            "--color-input": "#FFFFFF",          // White
-                            "--color-background": "#FFFFFF",     // White
-                            "--color-foreground": "#111827"      // Tailwind Gray-900
+                            "--text-muted": "#6B7280",
+                            "--bg-muted": "#F3F4F6",
+                            "--muted-fg": "#1F2937",
+                            "--color-border": "#E5E7EB",
+                            "--color-input": "#FFFFFF",
+                            "--color-background": "#FFFFFF", // White
+                            "--color-foreground": "#111827",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
                         "soft_pastel_sky": {
-                            "--bg-section-primary": "#E0F2FE",   // Light Sky Blue
-                            "--fg-section-primary": "#0C4A6E",   // Darker Sky Blue
-                            "--bg-section-secondary": "#FEF3C7", // Pale Yellow
-                            "--fg-section-secondary": "#78350F",   // Dark Amber/Brown
-                            "--bg-section-accent": "#FCE7F3",    // Light Pink
-                            "--fg-section-accent": "#86198F",    // Dark Fuchsia
-                            "--color-primary": "#7DD3FC",        // Sky Blue 300
-                            "--color-primary-fg": "#075985",     // Sky Blue 800
-                            "--color-secondary": "#FBCFE8",      // Pink 200
-                            "--color-secondary-fg": "#9D174D",   // Pink 700
-                            "--color-accent": "#A7F3D0",         // Green 200 (Minty)
-                            "--color-accent-fg": "#047857",      // Green 700
-                            "--text-muted": "#A1A1AA",           // Zinc 400
-                            "--bg-muted": "#F4F4F5",             // Zinc 100
-                            "--muted-fg": "#3F3F46",             // Zinc 700
-                            "--color-border": "#E4E4E7",         // Zinc 200
-                            "--color-input": "#FAFAFA",          // Zinc 50
-                            "--color-background": "#F8FAFC",     // Slate 50 (Very Light Gray)
-                            "--color-foreground": "#334155"      // Slate 700
+                            "--bg-section-primary": "#E0F2FE",
+                            "--fg-section-primary": "#0C4A6E",
+                            "--bg-section-secondary": "#FEF3C7",
+                            "--fg-section-secondary": "#78350F",
+                            "--bg-section-accent": "#FCE7F3",
+                            "--fg-section-accent": "#86198F",
+                            "--color-primary": "#7DD3FC",
+                            "--color-primary-fg": "#075985",
+                            "--color-secondary": "#FBCFE8",
+                            "--color-secondary-fg": "#9D174D",
+                            "--color-accent": "#A7F3D0",
+                            "--color-accent-fg": "#047857",
+                            "--text-muted": "#A1A1AA",
+                            "--bg-muted": "#F4F4F5",
+                            "--muted-fg": "#3F3F46",
+                            "--color-border": "#E4E4E7",
+                            "--color-input": "#FAFAFA",
+                            "--color-background": "#F8FAFC", // Very Light Gray
+                            "--color-foreground": "#334155",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
                         "warm_sandstone": {
-                            "--bg-section-primary": "#FFF7ED",   // Very Pale Orange (Orange 50)
-                            "--fg-section-primary": "#7C2D12",   // Dark Orange-Brown (Orange 900)
-                            "--bg-section-secondary": "#FEFBEB", // Very Pale Yellow (Amber 50)
-                            "--fg-section-secondary": "#78350F",   // Dark Amber/Brown (Amber 800)
-                            "--bg-section-accent": "#FAFAF9",    // Off-White (Stone 50)
-                            "--fg-section-accent": "#3B0764",    // Dark Neutral Purple (for contrast)
-                            "--color-primary": "#F97316",        // Orange 500
+                            "--bg-section-primary": "#FFF7ED",
+                            "--fg-section-primary": "#7C2D12",
+                            "--bg-section-secondary": "#FEFBEB",
+                            "--fg-section-secondary": "#78350F",
+                            "--bg-section-accent": "#FAFAF9",
+                            "--fg-section-accent": "#3B0764",
+                            "--color-primary": "#F97316",
                             "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#D97706",      // Amber 600
+                            "--color-secondary": "#D97706",
                             "--color-secondary-fg": "#FFFBEB",
-                            "--color-accent": "#78716C",         // Stone 500 (Muted Stone Gray)
+                            "--color-accent": "#78716C",
                             "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#A8A29E",           // Stone 400
-                            "--bg-muted": "#F5F5F4",             // Stone 100
-                            "--muted-fg": "#382F2F",             // Darker Stone
-                            "--color-border": "#E7E5E4",         // Stone 200
-                            "--color-input": "#FEFBF7",          // Very light beige
-                            "--color-background": "#FEFDFB",     // Off-White, almost beige
-                            "--color-foreground": "#44403C"      // Stone 700
+                            "--text-muted": "#A8A29E",
+                            "--bg-muted": "#F5F5F4",
+                            "--muted-fg": "#382F2F",
+                            "--color-border": "#E7E5E4",
+                            "--color-input": "#FEFBF7",
+                            "--color-background": "#FEFDFB", // Off-White, almost beige
+                            "--color-foreground": "#44403C",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
                         },
                         "aqua_fresh": {
-                            "--bg-section-primary": "#E0FFFF",   // Light Cyan / Pale Aqua
-                            "--fg-section-primary": "#008080",   // Teal
-                            "--bg-section-secondary": "#F0FFFF", // Azure (very light blue)
-                            "--fg-section-secondary": "#20B2AA",   // Light Sea Green
-                            "--bg-section-accent": "#AFEEEE",    // Pale Turquoise
-                            "--fg-section-accent": "#008B8B",    // Dark Cyan
-                            "--color-primary": "#40E0D0",        // Turquoise
-                            "--color-primary-fg": "#004D40",     // Dark Teal for contrast
-                            "--color-secondary": "#7FFFD4",      // Aquamarine
-                            "--color-secondary-fg": "#006A4E",   // Darker Aquamarine Green
-                            "--color-accent": "#5F9EA0",         // Cadet Blue
+                            "--bg-section-primary": "#E0FFFF",
+                            "--fg-section-primary": "#008080",
+                            "--bg-section-secondary": "#F0FFFF",
+                            "--fg-section-secondary": "#20B2AA",
+                            "--bg-section-accent": "#AFEEEE",
+                            "--fg-section-accent": "#008B8B",
+                            "--color-primary": "#40E0D0",
+                            "--color-primary-fg": "#004D40",
+                            "--color-secondary": "#7FFFD4",
+                            "--color-secondary-fg": "#006A4E",
+                            "--color-accent": "#5F9EA0",
                             "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#5D9C9C",           // Muted Tealish Gray
-                            "--bg-muted": "#EAF6F6",             // Very Light Cyan/Gray
-                            "--muted-fg": "#2F4F4F",             // Dark Slate Gray
-                            "--color-border": "#B2DFDB",         // Pale Teal for borders
-                            "--color-input": "#F5FFFA",          // Mint Cream
-                            "--color-background": "#FFFFFF",     // White
-                            "--color-foreground": "#005F5F"      // Dark Teal/Cyan for text
+                            "--text-muted": "#5D9C9C",
+                            "--bg-muted": "#EAF6F6",
+                            "--muted-fg": "#2F4F4F",
+                            "--color-border": "#B2DFDB",
+                            "--color-input": "#F5FFFA",
+                            "--color-background": "#FFFFFF", // White
+                            "--color-foreground": "#005F5F",
+                            "--font-primary": "Inter, sans-serif",
+                            "--font-secondary": "Inter, sans-serif"
+                        },
+                        // --- NEWLY ADDED PALETTES BASED ON YOUR CSS ---
+                        "fashion_apparel": {
+                            "--color-background": "#FEFCFA",
+                            "--color-foreground": "#000000",
+                            "--bg-section-primary": "#E8E2D4",
+                            "--fg-section-primary": "#000000",
+                            "--bg-section-secondary": "#F5F0E8",
+                            "--fg-section-secondary": "#000000",
+                            "--bg-section-accent": "#D4C5B9",
+                            "--fg-section-accent": "#000000",
+                            "--color-primary": "#2C2C2C",
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#8B7355",
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#A67C52",
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#6B6B6B",
+                            "--bg-muted": "#F0ECE6",
+                            "--muted-fg": "#000000",
+                            "--font-primary": "'Poppins', sans-serif",
+                            "--font-secondary": "'Poppins', sans-serif",
+                            "--color-border": "#D1D5DB", // Default, consider adjusting if theme implies darker/lighter
+                            "--color-input": "#F9FAFB"   // Default, consider adjusting
+                        },
+                        "beauty_makeup": {
+                            "--color-background": "#FDF8F6",
+                            "--color-foreground": "#000000",
+                            "--bg-section-primary": "#FFE4E1",
+                            "--fg-section-primary": "#000000",
+                            "--bg-section-secondary": "#F8E8E5",
+                            "--fg-section-secondary": "#000000",
+                            "--bg-section-accent": "#FFCCCB",
+                            "--fg-section-accent": "#000000",
+                            "--color-primary": "#E91E63",
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#D81B60",
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#FF6B9D",
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#8D6E6E",
+                            "--bg-muted": "#F5E6E8",
+                            "--muted-fg": "#000000",
+                            "--font-primary": "'Poppins', sans-serif",
+                            "--font-secondary": "'Poppins', sans-serif",
+                            "--color-border": "#F0D8D6", // Adjusted to be lighter, derived from bg-muted
+                            "--color-input": "#FCF7F6"   // Adjusted to be lighter, derived from background
+                        },
+                        "digital_products": {
+                            "--color-background": "#F8FAFC",
+                            "--color-foreground": "#000000",
+                            "--bg-section-primary": "#E0E7FF",
+                            "--fg-section-primary": "#000000",
+                            "--bg-section-secondary": "#F1F5F9",
+                            "--fg-section-secondary": "#000000",
+                            "--bg-section-accent": "#DBEAFE",
+                            "--fg-section-accent": "#000000",
+                            "--color-primary": "#3B82F6",
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#1E40AF",
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#60A5FA",
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#64748B",
+                            "--bg-muted": "#E2E8F0",
+                            "--muted-fg": "#000000",
+                            "--font-primary": "'Poppins', sans-serif",
+                            "--font-secondary": "'Poppins', sans-serif",
+                            "--color-border": "#D1D5DB", // Standard light gray border
+                            "--color-input": "#F3F4F6"   // Standard light gray input background
+                        },
+                        "home_furniture": {
+                            "--color-background": "#FEFAF7",
+                            "--color-foreground": "#000000",
+                            "--bg-section-primary": "#F4E4C1",
+                            "--fg-section-primary": "#000000",
+                            "--bg-section-secondary": "#F9F3E9",
+                            "--fg-section-secondary": "#000000",
+                            "--bg-section-accent": "#E8D5B7",
+                            "--fg-section-accent": "#000000",
+                            "--color-primary": "#8B4513",
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#A0522D",
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#D2B48C",
+                            "--color-accent-fg": "#000000",
+                            "--text-muted": "#8B7765",
+                            "--bg-muted": "#F0E6D6",
+                            "--muted-fg": "#000000",
+                            "--font-primary": "'Poppins', sans-serif",
+                            "--font-secondary": "'Poppins', sans-serif",
+                            "--color-border": "#E0D8CD", // Adjusted to warm light beige
+                            "--color-input": "#FAF5EF"   // Adjusted to soft cream
                         }
                     };
 

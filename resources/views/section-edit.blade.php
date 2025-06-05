@@ -287,205 +287,272 @@
                     const placeholderProductImageUrl = 'https://placehold.co/200x200/e2e8f0/475569?text=No+Image';
                     const availableVariables = @json($variables ?? []);
 
-                    const predefinedPalettes =
-                        {
-                            "classic_dark_blend": {
-                                "style-color-primary": "#1F1F23",
-                                "style-color-primary-foreground": "#FEFEFE",
-                                "style-color-secondary": "#FAF8F8",
-                                "style-color-secondary-foreground": "#1F1F23",
-                                "style-color-accent": "#1F1F23",
-                                "style-color-accent-foreground": "#F3F4F6",
-                                "style-color-muted": "#C9C8C8",
-                                "style-color-muted-foreground": "#686767",
-                                "style-color-active-link": "#E24747",
-                                "style-color-active-link-foreground": "#F3F4F6",
-                                "style-color-background": "#F3F4F6",
-                                "style-color-foreground": "#000000",
-                                "style-color-border": "#D1D5DB",
-                                "style-color-input": "#F9FAFB"
-                            },
+                    // MODIFIED: predefinedPalettes with new additions focusing on light backgrounds
+                    const predefinedPalettes = {
+                        "modern_blue": {
+                            "--bg-section-primary": "#E0F2FE", // Light Sky Blue
+                            "--fg-section-primary": "#0369A1", // Dark Sky Blue
+                            "--bg-section-secondary": "#FEF3C7", // Pale Yellow
+                            "--fg-section-secondary": "#92400E", // Dark Amber
+                            "--bg-section-accent": "#ECFDF5",   // Pale Green
+                            "--fg-section-accent": "#065F46",   // Dark Emerald
+                            "--color-primary": "#3B82F6",       // Tailwind Blue 500
+                            "--color-primary-fg": "#ffffff",
+                            "--color-secondary": "#F59E0B",     // Tailwind Amber 500
+                            "--color-secondary-fg": "#000000",
+                            "--color-accent": "#10B981",        // Tailwind Emerald 500
+                            "--color-accent-fg": "#ffffff",
+                            "--text-muted": "#6B7280",          // Tailwind Gray 500
+                            "--bg-muted": "#F3F4F6",            // Tailwind Gray 100
+                            "--muted-fg": "#1F2937",            // Tailwind Gray 800
+                            "--color-border": "#D1D5DB",        // Tailwind Gray 300
+                            "--color-input": "#F9FAFB",         // Tailwind Gray 50
+                            "--color-background": "#FFFFFF",    // White
+                            "--color-foreground": "#111827"     // Tailwind Gray 900
+                        },
+                        "sunset_glow_updated": {
+                            "--bg-section-primary": "#ffedd5",
+                            "--fg-section-primary": "#9a3412",
+                            "--bg-section-secondary": "#fef3c7",
+                            "--fg-section-secondary": "#92400E",
+                            "--bg-section-accent": "#d1fae5",
+                            "--fg-section-accent": "#047857",
+                            "--color-primary": "#ff6b6b",       // Coral Red
+                            "--color-primary-fg": "#ffffff",
+                            "--color-secondary": "#ffa07a",     // Light Salmon
+                            "--color-secondary-fg": "#2d2d2d",
+                            "--color-accent": "#ffd166",        // Light Orange-Yellow
+                            "--color-accent-fg": "#2d2d2d",
+                            "--text-muted": "#7f7f7f",
+                            "--bg-muted": "#fff5ec",
+                            "--muted-fg": "#7f7f7f",
+                            "--color-border": "#f2e8df",
+                            "--color-input": "#fff1e5",
+                            "--color-background": "#FFFBF5",    // Very Light Peach
+                            "--color-foreground": "#3A3A3A"     // Dark Gray
+                        },
+                        "ocean_breeze": {
+                            "--bg-section-primary": "#E0F2FE",
+                            "--fg-section-primary": "#0EA5E9",
+                            "--bg-section-secondary": "#CFFAFE",
+                            "--fg-section-secondary": "#0E7490",
+                            "--bg-section-accent": "#A5F3FC",
+                            "--fg-section-accent": "#0891B2",
+                            "--color-primary": "#0EA5E9",
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#06B6D4",
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#22D3EE",
+                            "--color-accent-fg": "#0E7490",
+                            "--text-muted": "#64748B",
+                            "--bg-muted": "#F8FAFC",      // Light Gray
+                            "--muted-fg": "#334155",
+                            "--color-border": "#E2E8F0",
+                            "--color-input": "#F1F5F9",
+                            "--color-background": "#FFFFFF", // White
+                            "--color-foreground": "#0F172A"
+                        },
+                        "forest_shade": {
+                            "--bg-section-primary": "#D1FAE5",
+                            "--fg-section-primary": "#065F46",
+                            "--bg-section-secondary": "#FEFCE8",
+                            "--fg-section-secondary": "#713F12",
+                            "--bg-section-accent": "#E4E4E7",
+                            "--fg-section-accent": "#3F3F46",
+                            "--color-primary": "#16A34A",
+                            "--color-primary-fg": "#F0FDF4",
+                            "--color-secondary": "#CA8A04",
+                            "--color-secondary-fg": "#422006",
+                            "--color-accent": "#52525B",
+                            "--color-accent-fg": "#FAFAFA",
+                            "--text-muted": "#78716C",
+                            "--bg-muted": "#F5F5F4",      // Light Gray
+                            "--muted-fg": "#44403C",
+                            "--color-border": "#D6D3D1",
+                            "--color-input": "#E7E5E4",
+                            "--color-background": "#FCFCFC", // Off-White
+                            "--color-foreground": "#292524"
+                        },
+                        "vibrant_grape": {
+                            "--bg-section-primary": "#F3E8FF",
+                            "--fg-section-primary": "#6B21A8",
+                            "--bg-section-secondary": "#FFE4E6",
+                            "--fg-section-secondary": "#9F1239",
+                            "--bg-section-accent": "#E0F2FE",
+                            "--fg-section-accent": "#075985",
+                            "--color-primary": "#9333EA",
+                            "--color-primary-fg": "#FAFAF9",
+                            "--color-secondary": "#E11D48",
+                            "--color-secondary-fg": "#FFF1F2",
+                            "--color-accent": "#0EA5E9",
+                            "--color-accent-fg": "#F0F9FF",
+                            "--text-muted": "#7C3AED",
+                            "--bg-muted": "#EDE9FE",     // Very Light Purple-Gray
+                            "--muted-fg": "#5B21B6",
+                            "--color-border": "#D8B4FE",
+                            "--color-input": "#F5F3FF",
+                            "--color-background": "#FFFFFF", // White
+                            "--color-foreground": "#4A044E"
+                        },
+                        "earthy_stone": {
+                            "--bg-section-primary": "#FEFCE8",
+                            "--fg-section-primary": "#713F12",
+                            "--bg-section-secondary": "#F0FDF4",
+                            "--fg-section-secondary": "#14532D",
+                            "--bg-section-accent": "#FFF7ED",
+                            "--fg-section-accent": "#7C2D12",
+                            "--color-primary": "#A16207",
+                            "--color-primary-fg": "#FFFBEB",
+                            "--color-secondary": "#166534",
+                            "--color-secondary-fg": "#DCFCE7",
+                            "--color-accent": "#C2410C",
+                            "--color-accent-fg": "#FFF7ED",
+                            "--text-muted": "#57534E",
+                            "--bg-muted": "#FAFAF9",        // Very Light Gray/Stone
+                            "--muted-fg": "#292524",
+                            "--color-border": "#E7E5E4",
+                            "--color-input": "#F5F5F4",
+                            "--color-background": "#FEFDFD", // Off-White
+                            "--color-foreground": "#1C1917"
+                        },
+                        "midnight_deep": { // A darker theme example (kept for variety, though not light bg)
+                            "--bg-section-primary": "#0F172A",
+                            "--fg-section-primary": "#E2E8F0",
+                            "--bg-section-secondary": "#1E293B",
+                            "--fg-section-secondary": "#94A3B8",
+                            "--bg-section-accent": "#334155",
+                            "--fg-section-accent": "#CBD5E1",
+                            "--color-primary": "#38BDF8",
+                            "--color-primary-fg": "#075985",
+                            "--color-secondary": "#F472B6",
+                            "--color-secondary-fg": "#831843",
+                            "--color-accent": "#A78BFA",
+                            "--color-accent-fg": "#4C1D95",
+                            "--text-muted": "#94A3B8",
+                            "--bg-muted": "#1E293B",
+                            "--muted-fg": "#E2E8F0",
+                            "--color-border": "#334155",
+                            "--color-input": "#0F172A",
+                            "--color-background": "#020617", // Dark Background
+                            "--color-foreground": "#F1F5F9"
+                        },
+                        // --- NEW PALETTES WITH LIGHT BACKGROUNDS ---
+                        "minimalist_clean": {
+                            "--bg-section-primary": "#F9FAFB",   // Very Light Gray (Tailwind Gray-50)
+                            "--fg-section-primary": "#374151",   // Tailwind Gray-700
+                            "--bg-section-secondary": "#FFFFFF", // White
+                            "--fg-section-secondary": "#4B5563", // Tailwind Gray-600
+                            "--bg-section-accent": "#EFF6FF",    // Tailwind Blue-50 (very light)
+                            "--fg-section-accent": "#1D4ED8",    // Tailwind Blue-700
+                            "--color-primary": "#60A5FA",        // Tailwind Blue-400
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#9CA3AF",      // Tailwind Gray-400
+                            "--color-secondary-fg": "#1F2937",   // Tailwind Gray-800
+                            "--color-accent": "#3B82F6",         // Tailwind Blue-500
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#6B7280",           // Tailwind Gray-500
+                            "--bg-muted": "#F3F4F6",             // Tailwind Gray-100
+                            "--muted-fg": "#1F2937",             // Tailwind Gray-800
+                            "--color-border": "#E5E7EB",         // Tailwind Gray-200
+                            "--color-input": "#FFFFFF",          // White
+                            "--color-background": "#FFFFFF",     // White
+                            "--color-foreground": "#111827"      // Tailwind Gray-900
+                        },
+                        "soft_pastel_sky": {
+                            "--bg-section-primary": "#E0F2FE",   // Light Sky Blue
+                            "--fg-section-primary": "#0C4A6E",   // Darker Sky Blue
+                            "--bg-section-secondary": "#FEF3C7", // Pale Yellow
+                            "--fg-section-secondary": "#78350F",   // Dark Amber/Brown
+                            "--bg-section-accent": "#FCE7F3",    // Light Pink
+                            "--fg-section-accent": "#86198F",    // Dark Fuchsia
+                            "--color-primary": "#7DD3FC",        // Sky Blue 300
+                            "--color-primary-fg": "#075985",     // Sky Blue 800
+                            "--color-secondary": "#FBCFE8",      // Pink 200
+                            "--color-secondary-fg": "#9D174D",   // Pink 700
+                            "--color-accent": "#A7F3D0",         // Green 200 (Minty)
+                            "--color-accent-fg": "#047857",      // Green 700
+                            "--text-muted": "#A1A1AA",           // Zinc 400
+                            "--bg-muted": "#F4F4F5",             // Zinc 100
+                            "--muted-fg": "#3F3F46",             // Zinc 700
+                            "--color-border": "#E4E4E7",         // Zinc 200
+                            "--color-input": "#FAFAFA",          // Zinc 50
+                            "--color-background": "#F8FAFC",     // Slate 50 (Very Light Gray)
+                            "--color-foreground": "#334155"      // Slate 700
+                        },
+                        "warm_sandstone": {
+                            "--bg-section-primary": "#FFF7ED",   // Very Pale Orange (Orange 50)
+                            "--fg-section-primary": "#7C2D12",   // Dark Orange-Brown (Orange 900)
+                            "--bg-section-secondary": "#FEFBEB", // Very Pale Yellow (Amber 50)
+                            "--fg-section-secondary": "#78350F",   // Dark Amber/Brown (Amber 800)
+                            "--bg-section-accent": "#FAFAF9",    // Off-White (Stone 50)
+                            "--fg-section-accent": "#3B0764",    // Dark Neutral Purple (for contrast)
+                            "--color-primary": "#F97316",        // Orange 500
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#D97706",      // Amber 600
+                            "--color-secondary-fg": "#FFFBEB",
+                            "--color-accent": "#78716C",         // Stone 500 (Muted Stone Gray)
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#A8A29E",           // Stone 400
+                            "--bg-muted": "#F5F5F4",             // Stone 100
+                            "--muted-fg": "#382F2F",             // Darker Stone
+                            "--color-border": "#E7E5E4",         // Stone 200
+                            "--color-input": "#FEFBF7",          // Very light beige
+                            "--color-background": "#FEFDFB",     // Off-White, almost beige
+                            "--color-foreground": "#44403C"      // Stone 700
+                        },
+                        "aqua_fresh": {
+                            "--bg-section-primary": "#E0FFFF",   // Light Cyan / Pale Aqua
+                            "--fg-section-primary": "#008080",   // Teal
+                            "--bg-section-secondary": "#F0FFFF", // Azure (very light blue)
+                            "--fg-section-secondary": "#20B2AA",   // Light Sea Green
+                            "--bg-section-accent": "#AFEEEE",    // Pale Turquoise
+                            "--fg-section-accent": "#008B8B",    // Dark Cyan
+                            "--color-primary": "#40E0D0",        // Turquoise
+                            "--color-primary-fg": "#004D40",     // Dark Teal for contrast
+                            "--color-secondary": "#7FFFD4",      // Aquamarine
+                            "--color-secondary-fg": "#006A4E",   // Darker Aquamarine Green
+                            "--color-accent": "#5F9EA0",         // Cadet Blue
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#5D9C9C",           // Muted Tealish Gray
+                            "--bg-muted": "#EAF6F6",             // Very Light Cyan/Gray
+                            "--muted-fg": "#2F4F4F",             // Dark Slate Gray
+                            "--color-border": "#B2DFDB",         // Pale Teal for borders
+                            "--color-input": "#F5FFFA",          // Mint Cream
+                            "--color-background": "#FFFFFF",     // White
+                            "--color-foreground": "#005F5F"      // Dark Teal/Cyan for text
+                        }
+                    };
 
-                            "sunset_glow": {
-                                "style-color-primary": "#ff6b6b",
-                                "style-color-primary-foreground": "#ffffff",
-                                "style-color-secondary": "#ffa07a",
-                                "style-color-secondary-foreground": "#2d2d2d",
-                                "style-color-accent": "#ffd166",
-                                "style-color-accent-foreground": "#2d2d2d",
-                                "style-color-muted": "#fff5ec",
-                                "style-color-muted-foreground": "#7f7f7f",
-                                "style-color-active-link": "#d62828",
-                                "style-color-active-link-foreground": "#ffffff",
-                                "style-color-background": "#fffaf5",
-                                "style-color-foreground": "#2b2b2b",
-                                "style-color-border": "#f2e8df",
-                                "style-color-input": "#fff1e5"
-                            },
-
-                            "arctic_frost": {
-                                "style-color-primary": "#0a84ff",
-                                "style-color-primary-foreground": "#ffffff",
-                                "style-color-secondary": "#5ac8fa",
-                                "style-color-secondary-foreground": "#1e1e1e",
-                                "style-color-accent": "#30d158",
-                                "style-color-accent-foreground": "#1e1e1e",
-                                "style-color-muted": "#f2f2f7",
-                                "style-color-muted-foreground": "#6c6c70",
-                                "style-color-active-link": "#0a84ff",
-                                "style-color-active-link-foreground": "#ffffff",
-                                "style-color-background": "#ffffff",
-                                "style-color-foreground": "#1d1d1f",
-                                "style-color-border": "#d1d1d6",
-                                "style-color-input": "#f2f2f7"
-                            },
-
-                            "desert_dune": {
-                                "style-color-primary": "#c2b280",
-                                "style-color-primary-foreground": "#2c2c2c",
-                                "style-color-secondary": "#e0c097",
-                                "style-color-secondary-foreground": "#3a2c1a",
-                                "style-color-accent": "#a97c50",
-                                "style-color-accent-foreground": "#ffffff",
-                                "style-color-muted": "#f6f1e7",
-                                "style-color-muted-foreground": "#857c6d",
-                                "style-color-active-link": "#7e5e3c",
-                                "style-color-active-link-foreground": "#ffffff",
-                                "style-color-background": "#fffaf4",
-                                "style-color-foreground": "#2a2a2a",
-                                "style-color-border": "#ddd2c2",
-                                "style-color-input": "#f9f4ef"
-                            },
-
-                            "midnight_ocean": {
-                                "style-color-primary": "#0f172a",
-                                "style-color-primary-foreground": "#e0f2fe",
-                                "style-color-secondary": "#1e293b",
-                                "style-color-secondary-foreground": "#cbd5e1",
-                                "style-color-accent": "#38bdf8",
-                                "style-color-accent-foreground": "#0f172a",
-                                "style-color-muted": "#334155",
-                                "style-color-muted-foreground": "#94a3b8",
-                                "style-color-active-link": "#2563eb",
-                                "style-color-active-link-foreground": "#ffffff",
-                                "style-color-background": "#0f172a",
-                                "style-color-foreground": "#f1f5f9",
-                                "style-color-border": "#1e293b",
-                                "style-color-input": "#1e293b"
-                            },
-
-                            "forest_moss": {
-                                "style-color-primary": "#0b4e24",
-                                "style-color-primary-foreground": "#f1f1f1",
-                                "style-color-secondary": "#17833e",
-                                "style-color-secondary-foreground": "#ffffff",
-                                "style-color-accent": "#1bb353",
-                                "style-color-accent-foreground": "#262729",
-                                "style-color-muted": "#f3f7f2",
-                                "style-color-muted-foreground": "#7f8083",
-                                "style-color-active-link": "#116530",
-                                "style-color-active-link-foreground": "#ffffff",
-                                "style-color-background": "#ffffff",
-                                "style-color-foreground": "#202221",
-                                "style-color-border": "#dce3db",
-                                "style-color-input": "#f3f7f2"
-                            },
-
-                            "rose_gold": {
-                                "style-color-primary": "#b76e79",
-                                "style-color-primary-foreground": "#ffffff",
-                                "style-color-secondary": "#eccac2",
-                                "style-color-secondary-foreground": "#3a2e2e",
-                                "style-color-accent": "#f7d6cb",
-                                "style-color-accent-foreground": "#2e2d2c",
-                                "style-color-muted": "#fbf4f1",
-                                "style-color-muted-foreground": "#806d69",
-                                "style-color-active-link": "#a14d5d",
-                                "style-color-active-link-foreground": "#ffffff",
-                                "style-color-background": "#fffdfc",
-                                "style-color-foreground": "#2a2a2a",
-                                "style-color-border": "#eedfdb",
-                                "style-color-input": "#faf4f2"
-                            },
-
-                            "lavender_haze": {
-                                "style-color-primary": "#8e44ad",
-                                "style-color-primary-foreground": "#ffffff",
-                                "style-color-secondary": "#dcd6f7",
-                                "style-color-secondary-foreground": "#2d2a4a",
-                                "style-color-accent": "#a29bfe",
-                                "style-color-accent-foreground": "#2e2d2c",
-                                "style-color-muted": "#f6f4fb",
-                                "style-color-muted-foreground": "#8a89a3",
-                                "style-color-active-link": "#6c5ce7",
-                                "style-color-active-link-foreground": "#ffffff",
-                                "style-color-background": "#ffffff",
-                                "style-color-foreground": "#1d1d26",
-                                "style-color-border": "#e5e3f3",
-                                "style-color-input": "#f3f0fa"
-                            },
-
-                            "neon_energy": {
-                                "style-color-primary": "#ff0055",
-                                "style-color-primary-foreground": "#ffffff",
-                                "style-color-secondary": "#00f2ff",
-                                "style-color-secondary-foreground": "#0d0d0d",
-                                "style-color-accent": "#ffee00",
-                                "style-color-accent-foreground": "#0d0d0d",
-                                "style-color-muted": "#f2f2f2",
-                                "style-color-muted-foreground": "#4d4d4d",
-                                "style-color-active-link": "#ff3cac",
-                                "style-color-active-link-foreground": "#ffffff",
-                                "style-color-background": "#ffffff",
-                                "style-color-foreground": "#111111",
-                                "style-color-border": "#e2e2e2",
-                                "style-color-input": "#f8f8f8"
-                            },
-
-                            "soft_creme": {
-                                "style-color-primary": "#f5e1da",
-                                "style-color-primary-foreground": "#3e3e3e",
-                                "style-color-secondary": "#f9f1ec",
-                                "style-color-secondary-foreground": "#4a4a4a",
-                                "style-color-accent": "#dfbfae",
-                                "style-color-accent-foreground": "#2f2f2f",
-                                "style-color-muted": "#faf6f3",
-                                "style-color-muted-foreground": "#898989",
-                                "style-color-active-link": "#e0c3b1",
-                                "style-color-active-link-foreground": "#3a3a3a",
-                                "style-color-background": "#ffffff",
-                                "style-color-foreground": "#1a1a1a",
-                                "style-color-border": "#e8e4e0",
-                                "style-color-input": "#fdfaf9"
-                            }
-
-                        };
-
-
-                    // Single source of truth for style control definitions
+                    // MODIFIED: stylesToLoad
                     const stylesToLoad = [
-                        { key: 'style-color-primary',               inputId: 'ssp-color-primary',              cssVar: '--color-primary',              default: '#0b4e24' },
-                        { key: 'style-color-primary-foreground',    inputId: 'ssp-color-primary-foreground',   cssVar: '--color-primary-foreground',   default: '#f1f1f1' },
-                        { key: 'style-color-secondary',             inputId: 'ssp-color-secondary',            cssVar: '--color-secondary',            default: '#17833e' },
-                        { key: 'style-color-secondary-foreground',  inputId: 'ssp-color-secondary-foreground', cssVar: '--color-secondary-foreground', default: '#FFFFFF' },
-                        { key: 'style-color-accent',                inputId: 'ssp-color-accent',               cssVar: '--color-accent',               default: '#1bb353' },
-                        { key: 'style-color-accent-foreground',     inputId: 'ssp-color-accent-foreground',    cssVar: '--color-accent-foreground',    default: '#262729' },
-                        { key: 'style-color-muted',                 inputId: 'ssp-color-muted',                cssVar: '--color-muted',                default: '#FAF8F2' },
-                        { key: 'style-color-muted-foreground',      inputId: 'ssp-color-muted-foreground',     cssVar: '--color-muted-foreground',     default: '#7f8083' },
-                        { key: 'style-color-active-link',           inputId: 'ssp-color-active-link',          cssVar: '--color-active-link',          default: '#5c5c5c' },
-                        { key: 'style-color-active-link-foreground',inputId: 'ssp-color-active-link-foreground',cssVar: '--color-active-link-foreground', default: '#FFFFFF' },
-                        { key: 'style-color-background',            inputId: 'ssp-color-background',           cssVar: '--color-background',           default: '#ffffff' },
-                        { key: 'style-color-foreground',            inputId: 'ssp-color-foreground',           cssVar: '--color-foreground',           default: '#000000' },
-                        { key: 'style-color-border',                inputId: 'ssp-color-border',               cssVar: '--color-border',               default: '#E5E7EB' },
-                        { key: 'style-color-input',                 inputId: 'ssp-color-input',                cssVar: '--color-input',                default: '#F9FAFB' },
-                        /*
-                        { key: 'style-heading-font-size',           inputId: 'heading-font-size-input',        cssVar: '--heading-font-size',        default: '1.5', unit: 'rem' },
-                        { key: 'style-body-font-size',              inputId: 'body-font-size-input',           cssVar: '--body-font-size',           default: '1',   unit: 'rem' },
-                        { key: 'style-button-font-size',            inputId: 'button-font-size-input',         cssVar: '--button-font-size',         default: '0.875', unit: 'rem' },
-                        */
-                        { key: 'style-body-font',                   inputId: 'body-font-select',               cssVar: '--font-primary',         default: 'Inter, sans-serif' }, // Changed key from font-primary
-                        { key: 'style-heading-font',                inputId: 'heading-font-select',            cssVar: '--font-secondary',      default: 'Inter, sans-serif' }  // Changed key from font-secondary
+                        { key: 'bg-section-primary',   inputId: 'ssp-bg-section-primary',   cssVar: '--bg-section-primary',   default: '#E0F2FE' },
+                        { key: 'fg-section-primary',   inputId: 'ssp-fg-section-primary',   cssVar: '--fg-section-primary',   default: '#0369A1' },
+                        { key: 'bg-section-secondary', inputId: 'ssp-bg-section-secondary', cssVar: '--bg-section-secondary', default: '#FEF3C7' },
+                        { key: 'fg-section-secondary', inputId: 'ssp-fg-section-secondary', cssVar: '--fg-section-secondary', default: '#92400E' },
+                        { key: 'bg-section-accent',    inputId: 'ssp-bg-section-accent',    cssVar: '--bg-section-accent',    default: '#ECFDF5' },
+                        { key: 'fg-section-accent',    inputId: 'ssp-fg-section-accent',    cssVar: '--fg-section-accent',    default: '#065F46' },
+
+                        { key: 'color-primary',        inputId: 'ssp-color-primary',        cssVar: '--color-primary',        default: '#3B82F6' },
+                        { key: 'color-primary-fg',     inputId: 'ssp-color-primary-fg',     cssVar: '--color-primary-fg',     default: '#ffffff' },
+                        { key: 'color-secondary',      inputId: 'ssp-color-secondary',      cssVar: '--color-secondary',      default: '#F59E0B' },
+                        { key: 'color-secondary-fg',   inputId: 'ssp-color-secondary-fg',   cssVar: '--color-secondary-fg',   default: '#000000' },
+                        { key: 'color-accent',         inputId: 'ssp-color-accent',         cssVar: '--color-accent',         default: '#10B981' },
+                        { key: 'color-accent-fg',      inputId: 'ssp-color-accent-fg',      cssVar: '--color-accent-fg',      default: '#ffffff' },
+
+                        { key: 'text-muted',           inputId: 'ssp-text-muted',           cssVar: '--text-muted',           default: '#6B7280' },
+                        { key: 'bg-muted',             inputId: 'ssp-bg-muted',             cssVar: '--bg-muted',             default: '#F3F4F6' },
+                        { key: 'muted-fg',             inputId: 'ssp-muted-fg',             cssVar: '--muted-fg',             default: '#1F2937' },
+
+                        // Keeping existing ones that don't directly map to new names but are good to have
+                        { key: 'color-border',         inputId: 'ssp-color-border',         cssVar: '--color-border',         default: '#E5E7EB' },
+                        { key: 'color-input',          inputId: 'ssp-color-input',          cssVar: '--color-input',          default: '#F9FAFB' },
+                        { key: 'page-bg',              inputId: 'ssp-page-bg',              cssVar: '--color-background',     default: '#ffffff' }, // Renamed for clarity
+                        { key: 'page-fg',              inputId: 'ssp-page-fg',              cssVar: '--color-foreground',     default: '#000000' }, // Renamed for clarity
+
+                        { key: 'style-body-font',      inputId: 'body-font-select',         cssVar: '--font-primary',         default: 'Inter, sans-serif' },
+                        { key: 'style-heading-font',   inputId: 'heading-font-select',      cssVar: '--font-secondary',       default: 'Inter, sans-serif' }
                     ];
+
 
                     // --- Helper: Show/Hide Modal ---
                     const showModal = (modal) => modal?.classList.remove('hidden');
@@ -808,7 +875,14 @@
                             paletteItem.dataset.paletteKey = paletteKey; paletteItem.setAttribute('aria-label', `Apply ${paletteKey.replace(/_/g, ' ')} palette`);
                             const name = document.createElement('div'); name.className = 'text-xs font-semibold text-gray-700'; name.textContent = paletteKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()); paletteItem.appendChild(name);
                             const swatchesContainer = document.createElement('div'); swatchesContainer.className = 'flex space-x-1';
-                            const keyColorsForPreview = [palette['style-color-primary'], palette['style-color-secondary'], palette['style-color-accent'], palette['style-color-background'], palette['style-color-foreground']].filter(Boolean).slice(0, 5);
+                            // MODIFIED: Use new variable names for palette preview swatches
+                            const keyColorsForPreview = [
+                                palette['--bg-section-primary'],
+                                palette['--fg-section-primary'],
+                                palette['--color-primary'],
+                                palette['--color-accent'],
+                                palette['--bg-muted']
+                            ].filter(Boolean).slice(0, 5);
                             keyColorsForPreview.forEach(color => { const swatch = document.createElement('div'); swatch.className = 'w-4 h-4 rounded-full border border-gray-200 shadow-sm'; swatch.style.backgroundColor = color; swatchesContainer.appendChild(swatch); });
                             paletteItem.appendChild(swatchesContainer); gridContainer.appendChild(paletteItem);
                         });
@@ -856,15 +930,17 @@
                                 paletteButton.classList.add('ring-2', 'ring-indigo-600', 'border-indigo-600', 'shadow-xl'); paletteButton.classList.remove('border-gray-300');
                                 const palette = predefinedPalettes[selectedPaletteKey];
                                 stylesToLoad.forEach(styleControl => {
-                                    if (palette[styleControl.key] && styleControl.inputId && styleControl.inputId.startsWith('ssp-color-')) {
-                                        const newValue = palette[styleControl.key]; const inputElement = document.getElementById(styleControl.inputId);
-                                        const cssVarName = styleControl.cssVar;
+                                    // MODIFIED: Use styleControl.cssVar to match keys in palette
+                                    if (palette[styleControl.cssVar] && styleControl.inputId && styleControl.inputId.startsWith('ssp-')) { // Check prefix to ensure it's one of our color inputs
+                                        const newValue = palette[styleControl.cssVar];
+                                        const inputElement = document.getElementById(styleControl.inputId);
+                                        const cssVarName = styleControl.cssVar; // Already have this
                                         if (inputElement && inputElement.type === 'color' && cssVarName) {
-                                            inputElement.value = newValue; applyAndSaveStyle(cssVarName, newValue, styleControl.key);
+                                            inputElement.value = newValue;
+                                            applyAndSaveStyle(cssVarName, newValue, styleControl.key); // Use styleControl.key for localStorage
                                         }
                                     }
                                 });
-                                //showToast(`Palette '${selectedPaletteKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}' applied!`, 'success');
                             });
                         }
                     } // End Style Settings Logic

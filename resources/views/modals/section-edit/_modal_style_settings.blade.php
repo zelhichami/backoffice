@@ -7,10 +7,12 @@
         </div>
         <div id="style-settings-tab-bar" class="flex border-b px-4 bg-gray-50 flex-shrink-0">
             <button type="button" data-target="style-colors-pane" class="style-tab-button tab-button active px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700 focus:outline-none">Colors</button>
-            <button type="button" data-target="style-fontfamily-pane" class="style-tab-button tab-button  px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700 focus:outline-none">Font Family</button>
+            <button type="button" data-target="style-fontfamily-pane" class="style-tab-button tab-button px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700 focus:outline-none">Font Family</button>
+            {{-- NEW TAB for Sizing --}}
+            <button type="button" data-target="style-sizing-pane" class="style-tab-button tab-button px-4 py-2 text-sm font-medium border-b-2 border-transparent hover:border-gray-300 hover:text-gray-700 focus:outline-none">Borders & Sizing</button>
         </div>
         <div class="p-6 overflow-y-auto flex-grow">
-            {{-- Colors Pane (including the palette grid and individual color pickers) --}}
+            {{-- Colors Pane --}}
             <div id="style-colors-pane" class="style-tab-pane active">
                 <div class="mb-6 border-b pb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Quick Palettes</label>
@@ -19,34 +21,6 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-x-6 gap-y-4">
-
-                    {{-- UI Colors + Foregrounds --}}
-                    <div class="space-y-1">
-                        <label for="ssp-color-primary" class="block text-xs font-medium text-gray-600">UI Primary</label>
-                        <input type="color" id="ssp-color-primary" data-css-var="--color-primary" data-storage-key="color-primary" value="#3B82F6" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-primary-fg" class="block text-xs font-medium text-gray-600">UI Primary FG</label>
-                        <input type="color" id="ssp-color-primary-fg" data-css-var="--color-primary-fg" data-storage-key="color-primary-fg" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-secondary" class="block text-xs font-medium text-gray-600">UI Secondary</label>
-                        <input type="color" id="ssp-color-secondary" data-css-var="--color-secondary" data-storage-key="color-secondary" value="#F59E0B" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-secondary-fg" class="block text-xs font-medium text-gray-600">UI Secondary FG</label>
-                        <input type="color" id="ssp-color-secondary-fg" data-css-var="--color-secondary-fg" data-storage-key="color-secondary-fg" value="#000000" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-accent" class="block text-xs font-medium text-gray-600">UI Accent</label>
-                        <input type="color" id="ssp-color-accent" data-css-var="--color-accent" data-storage-key="color-accent" value="#10B981" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-accent-fg" class="block text-xs font-medium text-gray-600">UI Accent FG</label>
-                        <input type="color" id="ssp-color-accent-fg" data-css-var="--color-accent-fg" data-storage-key="color-accent-fg" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-
-
                     {{-- Section Backgrounds + Foregrounds --}}
                     <div class="space-y-1">
                         <label for="ssp-bg-section-primary" class="block text-xs font-medium text-gray-600">Section Primary BG</label>
@@ -73,6 +47,31 @@
                         <input type="color" id="ssp-fg-section-accent" data-css-var="--fg-section-accent" data-storage-key="fg-section-accent" value="#065F46" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
 
+                    {{-- UI Colors + Foregrounds --}}
+                    <div class="space-y-1">
+                        <label for="ssp-color-primary" class="block text-xs font-medium text-gray-600">UI Primary</label>
+                        <input type="color" id="ssp-color-primary" data-css-var="--color-primary" data-storage-key="color-primary" value="#3B82F6" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="ssp-color-primary-fg" class="block text-xs font-medium text-gray-600">UI Primary FG</label>
+                        <input type="color" id="ssp-color-primary-fg" data-css-var="--color-primary-fg" data-storage-key="color-primary-fg" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="ssp-color-secondary" class="block text-xs font-medium text-gray-600">UI Secondary</label>
+                        <input type="color" id="ssp-color-secondary" data-css-var="--color-secondary" data-storage-key="color-secondary" value="#F59E0B" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="ssp-color-secondary-fg" class="block text-xs font-medium text-gray-600">UI Secondary FG</label>
+                        <input type="color" id="ssp-color-secondary-fg" data-css-var="--color-secondary-fg" data-storage-key="color-secondary-fg" value="#000000" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="ssp-color-accent" class="block text-xs font-medium text-gray-600">UI Accent</label>
+                        <input type="color" id="ssp-color-accent" data-css-var="--color-accent" data-storage-key="color-accent" value="#10B981" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="ssp-color-accent-fg" class="block text-xs font-medium text-gray-600">UI Accent FG</label>
+                        <input type="color" id="ssp-color-accent-fg" data-css-var="--color-accent-fg" data-storage-key="color-accent-fg" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                    </div>
 
                     {{-- Muted Colors --}}
                     <div class="space-y-1">
@@ -107,12 +106,14 @@
                     </div>
                 </div>
             </div>
+
             {{-- Font Family Pane --}}
             <div id="style-fontfamily-pane" class="style-tab-pane hidden space-y-4">
                 <div class="space-y-1">
-                    <label for="body-font-select" class="block text-xs font-medium text-gray-600">Body Font</label>
-                    <select id="body-font-select" data-css-var="--font-primary" data-storage-key="style-body-font" class="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <label for="heading-font-select" class="block text-xs font-medium text-gray-600">Heading Font</label>
+                    <select id="heading-font-select" data-css-var="--font-header" data-storage-key="style-heading-font" class="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
                         <option value="Inter, sans-serif">Inter (Default)</option>
+                        <option value="'Poppins', sans-serif">Poppins</option>
                         <option value="Arial, Helvetica, sans-serif">Arial</option>
                         <option value="Verdana, Geneva, sans-serif">Verdana</option>
                         <option value="'Times New Roman', Times, serif">Times New Roman</option>
@@ -122,9 +123,10 @@
                     </select>
                 </div>
                 <div class="space-y-1">
-                    <label for="heading-font-select" class="block text-xs font-medium text-gray-600">Heading Font</label>
-                    <select id="heading-font-select" data-css-var="--font-secondary" data-storage-key="style-heading-font" class="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <label for="body-font-select" class="block text-xs font-medium text-gray-600">Body Font</label>
+                    <select id="body-font-select" data-css-var="--font-body" data-storage-key="style-body-font" class="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
                         <option value="Inter, sans-serif">Inter (Default)</option>
+                        <option value="'Poppins', sans-serif">Poppins</option>
                         <option value="Arial, Helvetica, sans-serif">Arial</option>
                         <option value="Verdana, Geneva, sans-serif">Verdana</option>
                         <option value="'Times New Roman', Times, serif">Times New Roman</option>
@@ -132,6 +134,18 @@
                         <option value="'Courier New', Courier, monospace">Courier New</option>
                         <option value="'Lucida Console', Monaco, monospace">Lucida Console</option>
                     </select>
+                </div>
+            </div>
+
+            {{-- NEW PANE for Borders & Sizing --}}
+            <div id="style-sizing-pane" class="style-tab-pane hidden space-y-4">
+                <div class="space-y-1">
+                    <label for="ssp-button-radius" class="block text-xs font-medium text-gray-600">Button Border Radius (rem)</label>
+                    <input type="number" id="ssp-button-radius" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="e.g., 0.5" min="0" max="5" step="0.05" data-css-var="--button-border-raduis" data-storage-key="button-border-radius" data-unit="rem">
+                </div>
+                <div class="space-y-1">
+                    <label for="ssp-card-radius" class="block text-xs font-medium text-gray-600">Card Border Radius (rem)</label>
+                    <input type="number" id="ssp-card-radius" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="e.g., 0.5" min="0" max="5" step="0.05" data-css-var="--card-border-radius" data-storage-key="card-border-radius" data-unit="rem">
                 </div>
             </div>
         </div>

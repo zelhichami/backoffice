@@ -421,6 +421,31 @@
                             "--card-border-radius": "0.5rem",
                             "--color-border": "#E0D8CD",
                             "--color-input": "#FAF5EF"
+                        },
+                        "tech_sport_black": {
+                            "--color-background": "#FFFFFF",        // Clean white background
+                            "--color-foreground": "#111827",        // Very dark gray for main text (almost black)
+                            "--bg-section-primary": "#F3F4F6",      // Light gray, similar to a studio backdrop
+                            "--fg-section-primary": "#000000",        // Black for high contrast on light gray
+                            "--bg-section-secondary": "#FFFFFF",      // Clean white for secondary sections
+                            "--fg-section-secondary": "#1F2937",      // Dark gray for text
+                            "--bg-section-accent": "#ECFDF5",        // Very light green, inspired by the accent ring
+                            "--fg-section-accent": "#065F46",        // Dark green for text on the light green bg
+                            "--color-primary": "#22C55E",            // Vibrant green from the accent ring
+                            "--color-primary-fg": "#FFFFFF",          // White text on green buttons
+                            "--color-secondary": "#3B82F6",          // Bright blue from the digital display
+                            "--color-secondary-fg": "#FFFFFF",          // White text on blue elements
+                            "--color-accent": "#F59E0B",            // Gold/amber inspired by the attachment rings
+                            "--color-accent-fg": "#000000",          // Black text on gold elements for readability
+                            "--text-muted": "#6B7280",            // Medium gray for less important text
+                            "--bg-muted": "#E5E7EB",            // Lighter gray for muted backgrounds
+                            "--muted-fg": "#1F2937",            // Dark gray text on muted background
+                            "--font-primary": "'Inter', sans-serif",// Modern, clean sans-serif font
+                            "--font-secondary": "'Inter', sans-serif",
+                            "--button-border-raduis": "0.5rem",       // A modern, slightly rounded corner for buttons
+                            "--card-border-radius": "0.75rem",       // A slightly larger radius for cards
+                            "--color-border": "#D1D5DB",            // Standard light gray for borders
+                            "--color-input": "#F9FAFB"             // Very light gray for input fields
                         }
                     };
 

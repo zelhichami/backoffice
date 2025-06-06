@@ -446,6 +446,265 @@
                             "--card-border-radius": "0.75rem",       // A slightly larger radius for cards
                             "--color-border": "#D1D5DB",            // Standard light gray for borders
                             "--color-input": "#F9FAFB"             // Very light gray for input fields
+                        },
+                        "serene_green": {
+                            "--color-background": "#FBFDFB", // Very light green-tinted white
+                            "--color-foreground": "#14532D", // Dark Green
+                            "--bg-section-primary": "#F0FDF4", // Light Green
+                            "--fg-section-primary": "#14532D",
+                            "--bg-section-secondary": "#FEFCE8", // Light Yellow/Cream
+                            "--fg-section-secondary": "#422006",
+                            "--bg-section-accent": "#ECFDF5", // Pale Green
+                            "--fg-section-accent": "#047857",
+                            "--color-primary": "#22C55E", // Green 500
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#84CC16", // Lime 500
+                            "--color-secondary-fg": "#1A2E05",
+                            "--color-accent": "#A3A3A3", // Neutral 400 (Gray)
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#57534E", // Stone 600
+                            "--bg-muted": "#F5F5F4", // Stone 100
+                            "--muted-fg": "#44403C",
+                            "--font-primary": "'Inter', sans-serif",
+                            "--font-secondary": "'Inter', sans-serif",
+                            "--button-border-raduis": "0.375rem",
+                            "--card-border-radius": "0.75rem",
+                            "--color-border": "#E7E5E4",
+                            "--color-input": "#F7F9F7"
+                        },
+
+                        "sakura_blossom": {
+                            "--color-background": "#FFF9FB", // Soft Pink White
+                            "--color-foreground": "#4C0519", // Deep Rose
+                            "--bg-section-primary": "#FCE7F3", // Pink 100
+                            "--fg-section-primary": "#500724",
+                            "--bg-section-secondary": "#F5F5F5", // Neutral 100
+                            "--fg-section-secondary": "#262626",
+                            "--bg-section-accent": "#FDF2F8", // Pink 50
+                            "--fg-section-accent": "#831843",
+                            "--color-primary": "#DB2777", // Pink 600
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#9CA3AF", // Gray 400
+                            "--color-secondary-fg": "#1F2937",
+                            "--color-accent": "#F472B6", // Pink 400
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#881337", // Rose 800
+                            "--bg-muted": "#FDF2F8", // Pink 50
+                            "--muted-fg": "#500724",
+                            "--font-primary": "'Poppins', sans-serif",
+                            "--font-secondary": "'Poppins', sans-serif",
+                            "--button-border-raduis": "9999px", // Pill shaped buttons
+                            "--card-border-radius": "0.75rem",
+                            "--color-border": "#FBCFE8", // Pink 200
+                            "--color-input": "#FFF9FB"
+                        },
+
+                        "coffee_house": {
+                            "--color-background": "#FEFBF6", // Warm Off-white
+                            "--color-foreground": "#291507", // Dark Brown
+                            "--bg-section-primary": "#F0EBE3", // Beige
+                            "--fg-section-primary": "#3E2723",
+                            "--bg-section-secondary": "#E3D5C4", // Lighter Tan
+                            "--fg-section-secondary": "#3E2723",
+                            "--bg-section-accent": "#D1C4B5", // Muted Brown-Gray
+                            "--fg-section-accent": "#3E2723",
+                            "--color-primary": "#795548", // Brown
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#FF9800", // Orange
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#A1887F", // Brownish Gray
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#5D4037", // Darker Brown
+                            "--bg-muted": "#EFEBE9", // Light Brown-Gray
+                            "--muted-fg": "#3E2723",
+                            "--font-primary": "'Georgia', serif",
+                            "--font-secondary": "'Georgia', serif",
+                            "--button-border-raduis": "0.25rem",
+                            "--card-border-radius": "0.5rem",
+                            "--color-border": "#D7CCC8",
+                            "--color-input": "#F5F2EF"
+                        },
+
+                        "oceanic_blue_corp": {
+                            "--color-background": "#FFFFFF",
+                            "--color-foreground": "#0F172A", // Slate 900
+                            "--bg-section-primary": "#F0F9FF", // Sky 50
+                            "--fg-section-primary": "#075985", // Sky 800
+                            "--bg-section-secondary": "#F8FAFC", // Slate 50
+                            "--fg-section-secondary": "#0F172A",
+                            "--bg-section-accent": "#EFF6FF", // Blue 50
+                            "--fg-section-accent": "#1E40AF", // Blue 800
+                            "--color-primary": "#2563EB", // Blue 600
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#0EA5E9", // Sky 500
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#64748B", // Slate 500
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#475569", // Slate 600
+                            "--bg-muted": "#E2E8F0", // Slate 200
+                            "--muted-fg": "#1E293B", // Slate 800
+                            "--font-primary": "'Inter', sans-serif",
+                            "--font-secondary": "'Inter', sans-serif",
+                            "--button-border-raduis": "0.375rem",
+                            "--card-border-radius": "0.5rem",
+                            "--color-border": "#CBD5E1", // Slate 300
+                            "--color-input": "#F8FAFC"
+                        },
+
+                        "luxury_dark_gold": { // Dark Theme
+                            "--color-background": "#121212", // Very Dark Gray
+                            "--color-foreground": "#EAEAEA", // Light Gray Text
+                            "--bg-section-primary": "#1E1E1E", // Slightly lighter dark
+                            "--fg-section-primary": "#EAEAEA",
+                            "--bg-section-secondary": "#282828", // Medium dark gray
+                            "--fg-section-secondary": "#D4D4D4",
+                            "--bg-section-accent": "#3C3C3C", // Darker accent
+                            "--fg-section-accent": "#F5D18D", // Gold text on dark accent
+                            "--color-primary": "#D4AF37", // Gold
+                            "--color-primary-fg": "#121212", // Black text on gold
+                            "--color-secondary": "#COCOC0", // Silver
+                            "--color-secondary-fg": "#121212", // Black text on silver
+                            "--color-accent": "#B8860B", // Dark Goldenrod
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#A9A9A9", // Dark Gray
+                            "--bg-muted": "#333333",
+                            "--muted-fg": "#EAEAEA",
+                            "--font-primary": "'Times New Roman', serif",
+                            "--font-secondary": "'Times New Roman', serif",
+                            "--button-border-raduis": "0.125rem",
+                            "--card-border-radius": "0.25rem",
+                            "--color-border": "#444444",
+                            "--color-input": "#282828"
+                        },
+
+                        "summer_citrus": {
+                            "--color-background": "#FFFBEB", // Lemon Chiffon
+                            "--color-foreground": "#422006", // Dark brown for text
+                            "--bg-section-primary": "#FEF3C7", // Yellow 200
+                            "--fg-section-primary": "#78350F", // Amber 800
+                            "--bg-section-secondary": "#FFF7ED", // Orange 50
+                            "--fg-section-secondary": "#7C2D12", // Orange 900
+                            "--bg-section-accent": "#F0FDF4", // Green 50
+                            "--fg-section-accent": "#14532D", // Green 900
+                            "--color-primary": "#F59E0B", // Amber 500
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#FB923C", // Orange 400
+                            "--color-secondary-fg": "#451A03",
+                            "--color-accent": "#84CC16", // Lime 500
+                            "--color-accent-fg": "#1A2E05",
+                            "--text-muted": "#B45309", // Amber 700
+                            "--bg-muted": "#FEF9C3", // Yellow 100
+                            "--muted-fg": "#713F12", // Amber 900
+                            "--font-primary": "'Poppins', sans-serif",
+                            "--font-secondary": "'Poppins', sans-serif",
+                            "--button-border-raduis": "0.5rem",
+                            "--card-border-radius": "1rem",
+                            "--color-border": "#FDE68A", // Yellow 300
+                            "--color-input": "#FEFCE8"
+                        },
+
+                        "modern_slate": {
+                            "--color-background": "#FFFFFF",
+                            "--color-foreground": "#0F172A", // Slate 900
+                            "--bg-section-primary": "#F1F5F9", // Slate 100
+                            "--fg-section-primary": "#1E293B", // Slate 800
+                            "--bg-section-secondary": "#E2E8F0", // Slate 200
+                            "--fg-section-secondary": "#0F172A",
+                            "--bg-section-accent": "#0F172A", // Dark accent background
+                            "--fg-section-accent": "#F1F5F9", // Light accent foreground
+                            "--color-primary": "#1E293B", // Slate 800
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#64748B", // Slate 500
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#06B6D4", // Cyan 500
+                            "--color-accent-fg": "#FFFFFF",
+                            "--text-muted": "#475569", // Slate 600
+                            "--bg-muted": "#E2E8F0", // Slate 200
+                            "--muted-fg": "#1E293B",
+                            "--font-primary": "'Inter', sans-serif",
+                            "--font-secondary": "'Inter', sans-serif",
+                            "--button-border-raduis": "0.25rem",
+                            "--card-border-radius": "0.25rem",
+                            "--color-border": "#CBD5E1", // Slate 300
+                            "--color-input": "#F8FAFC" // Slate 50
+                        },
+
+                        "vintage_lavender": {
+                            "--color-background": "#F5F3FF", // Violet 50
+                            "--color-foreground": "#3730A3", // Indigo 800
+                            "--bg-section-primary": "#EDE9FE", // Violet 100
+                            "--fg-section-primary": "#4338CA", // Indigo 700
+                            "--bg-section-secondary": "#E0E7FF", // Indigo 100
+                            "--fg-section-secondary": "#312E81", // Indigo 900
+                            "--bg-section-accent": "#D1FAE5", // Green 100
+                            "--fg-section-accent": "#065F46", // Green 800
+                            "--color-primary": "#7C3AED", // Violet 600
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#A78BFA", // Violet 400
+                            "--color-secondary-fg": "#3730A3",
+                            "--color-accent": "#34D399", // Emerald 400
+                            "--color-accent-fg": "#022C22",
+                            "--text-muted": "#6D28D9", // Violet 700
+                            "--bg-muted": "#F5F3FF", // Violet 50
+                            "--muted-fg": "#4338CA",
+                            "--font-primary": "'Lora', serif",
+                            "--font-secondary": "'Lora', serif",
+                            "--button-border-raduis": "0.375rem",
+                            "--card-border-radius": "0.5rem",
+                            "--color-border": "#C7D2FE", // Indigo 200
+                            "--color-input": "#EEF2FF" // Indigo 50
+                        },
+
+                        "ruby_red_bold": {
+                            "--color-background": "#FFF1F2", // Rose 50
+                            "--color-foreground": "#500724", // Rose 950
+                            "--bg-section-primary": "#FFE4E6", // Rose 100
+                            "--fg-section-primary": "#881337", // Rose 900
+                            "--bg-section-secondary": "#F8FAFC", // Slate 50
+                            "--fg-section-secondary": "#1E293B", // Slate 800
+                            "--bg-section-accent": "#1F2937", // Slate 800 (Dark Accent)
+                            "--fg-section-accent": "#F1F5F9", // Slate 100 (Light Accent text)
+                            "--color-primary": "#BE123C", // Rose 700
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#E11D48", // Rose 600
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#334155", // Slate 700
+                            "--color-accent-fg": "#F1F5F9",
+                            "--text-muted": "#9F1239", // Rose 800
+                            "--bg-muted": "#FCE7F3", // Pink 100
+                            "--muted-fg": "#831843", // Pink 900
+                            "--font-primary": "'Poppins', sans-serif",
+                            "--font-secondary": "'Poppins', sans-serif",
+                            "--button-border-raduis": "0.5rem",
+                            "--card-border-radius": "0.5rem",
+                            "--color-border": "#FECDD3", // Rose 200
+                            "--color-input": "#FFF1F2"
+                        },
+
+                        "industrial_concrete": {
+                            "--color-background": "#FFFFFF",
+                            "--color-foreground": "#000000",
+                            "--bg-section-primary": "#F3F4F6", // Gray 100
+                            "--fg-section-primary": "#111827", // Gray 900
+                            "--bg-section-secondary": "#E5E7EB", // Gray 200
+                            "--fg-section-secondary": "#111827",
+                            "--bg-section-accent": "#D1D5DB", // Gray 300
+                            "--fg-section-accent": "#000000",
+                            "--color-primary": "#1F2937", // Gray 800
+                            "--color-primary-fg": "#FFFFFF",
+                            "--color-secondary": "#4B5563", // Gray 600
+                            "--color-secondary-fg": "#FFFFFF",
+                            "--color-accent": "#F9A8D4", // Pink 300 (A single pop of color)
+                            "--color-accent-fg": "#831843", // Dark Pink for text
+                            "--text-muted": "#6B7280", // Gray 500
+                            "--bg-muted": "#F9FAFB", // Gray 50
+                            "--muted-fg": "#1F2937",
+                            "--font-primary": "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                            "--font-secondary": "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                            "--button-border-raduis": "0.125rem", // Sharp corners
+                            "--card-border-radius": "0rem", // No radius for cards
+                            "--color-border": "#D1D5DB", // Gray 300
+                            "--color-input": "#F3F4F6"
                         }
                     };
 

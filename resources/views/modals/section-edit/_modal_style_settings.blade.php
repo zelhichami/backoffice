@@ -90,19 +90,11 @@
                     {{-- Other General Colors --}}
                     <div class="space-y-1">
                         <label for="ssp-page-bg" class="block text-xs font-medium text-gray-600">Page Background</label>
-                        <input type="color" id="ssp-page-bg" data-css-var="--color-background" data-storage-key="page-bg" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                        <input type="color" id="ssp-page-bg" data-css-var="--background" data-storage-key="page-bg" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
                     <div class="space-y-1">
                         <label for="ssp-page-fg" class="block text-xs font-medium text-gray-600">Page Foreground (Text)</label>
-                        <input type="color" id="ssp-page-fg" data-css-var="--color-foreground" data-storage-key="page-fg" value="#000000" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-border" class="block text-xs font-medium text-gray-600">Border</label>
-                        <input type="color" id="ssp-color-border" data-css-var="--color-border" data-storage-key="color-border" value="#E5E7EB" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-input" class="block text-xs font-medium text-gray-600">Input Background</label>
-                        <input type="color" id="ssp-color-input" data-css-var="--color-input" data-storage-key="color-input" value="#F9FAFB" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                        <input type="color" id="ssp-page-fg" data-css-var="--foreground" data-storage-key="page-fg" value="#000000" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
                 </div>
             </div>

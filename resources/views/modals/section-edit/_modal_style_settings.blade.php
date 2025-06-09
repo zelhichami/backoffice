@@ -94,7 +94,7 @@
                     </div>
                     <div class="space-y-1">
                         <label for="ssp-page-fg" class="block text-xs font-medium text-gray-600">Page Foreground (Text)</label>
-                        <input type="color" id="ssp-page-fg" data-css-var="--foreground" data-storage-key="page-fg" value="#000000" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                        <input type="color" id="ssp-page-fg" data-css-var="--fg" data-storage-key="page-fg" value="#000000" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
                 </div>
             </div>

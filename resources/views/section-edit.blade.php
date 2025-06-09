@@ -310,7 +310,7 @@
 
 
                         { key: 'page-bg',              inputId: 'ssp-page-bg',              cssVar: '--background',     default: '#ffffff' },
-                        { key: 'page-fg',              inputId: 'ssp-page-fg',              cssVar: '--foreground',     default: '#000000' },
+                        { key: 'page-fg',              inputId: 'ssp-page-fg',              cssVar: '--fg',     default: '#000000' },
 
                         { key: 'style-heading-font',   inputId: 'heading-font-select',      cssVar: '--font-header',       default: 'Inter, sans-serif' },
                         { key: 'style-body-font',      inputId: 'body-font-select',         cssVar: '--font-body',         default: 'Inter, sans-serif' },
@@ -324,7 +324,7 @@
                         // ... (previous palettes remain here)
                         "fashion_apparel": {
                             "--background": "#FEFCFA",
-                            "--foreground": "#000000",
+                            "--fg": "#000000",
                             "--bg-section-primary": "#E8E2D4",
                             "--fg-section-primary": "#000000",
                             "--bg-section-secondary": "#F5F0E8",
@@ -348,7 +348,7 @@
                         },
                         "beauty_makeup": {
                             "--background": "#FDF8F6",
-                            "--foreground": "#000000",
+                            "--fg": "#000000",
                             "--bg-section-primary": "#FFE4E1",
                             "--fg-section-primary": "#000000",
                             "--bg-section-secondary": "#F8E8E5",
@@ -372,7 +372,7 @@
                         },
                         "digital_products": {
                             "--background": "#F8FAFC",
-                            "--foreground": "#000000",
+                            "--fg": "#000000",
                             "--bg-section-primary": "#E0E7FF",
                             "--fg-section-primary": "#000000",
                             "--bg-section-secondary": "#F1F5F9",
@@ -396,7 +396,7 @@
                         },
                         "home_furniture": {
                             "--background": "#FEFAF7",
-                            "--foreground": "#000000",
+                            "--fg": "#000000",
                             "--bg-section-primary": "#F4E4C1",
                             "--fg-section-primary": "#000000",
                             "--bg-section-secondary": "#F9F3E9",
@@ -420,7 +420,7 @@
                         },
                         "tech_sport_black": {
                             "--background": "#FFFFFF",        // Clean white background
-                            "--foreground": "#111827",        // Very dark gray for main text (almost black)
+                            "--fg": "#111827",        // Very dark gray for main text (almost black)
                             "--bg-section-primary": "#F3F4F6",      // Light gray, similar to a studio backdrop
                             "--fg-section-primary": "#000000",        // Black for high contrast on light gray
                             "--bg-section-secondary": "#FFFFFF",      // Clean white for secondary sections
@@ -444,7 +444,7 @@
                         },
                         "serene_green": {
                             "--background": "#FBFDFB", // Very light green-tinted white
-                            "--foreground": "#14532D", // Dark Green
+                            "--fg": "#14532D", // Dark Green
                             "--bg-section-primary": "#F0FDF4", // Light Green
                             "--fg-section-primary": "#14532D",
                             "--bg-section-secondary": "#FEFCE8", // Light Yellow/Cream
@@ -468,7 +468,7 @@
 
                         "sakura_blossom": {
                             "--background": "#FFF9FB", // Soft Pink White
-                            "--foreground": "#4C0519", // Deep Rose
+                            "--fg": "#4C0519", // Deep Rose
                             "--bg-section-primary": "#FCE7F3", // Pink 100
                             "--fg-section-primary": "#500724",
                             "--bg-section-secondary": "#F5F5F5", // Neutral 100
@@ -491,7 +491,7 @@
                         },
                         "coffee_house": {
                             "--background": "#FEFBF6", // Warm Off-white
-                            "--foreground": "#291507", // Dark Brown
+                            "--fg": "#291507", // Dark Brown
                             "--bg-section-primary": "#F0EBE3", // Beige
                             "--fg-section-primary": "#3E2723",
                             "--bg-section-secondary": "#E3D5C4", // Lighter Tan
@@ -515,7 +515,7 @@
 
                         "oceanic_blue_corp": {
                             "--background": "#FFFFFF",
-                            "--foreground": "#0F172A", // Slate 900
+                            "--fg": "#0F172A", // Slate 900
                             "--bg-section-primary": "#F0F9FF", // Sky 50
                             "--fg-section-primary": "#075985", // Sky 800
                             "--bg-section-secondary": "#F8FAFC", // Slate 50
@@ -539,7 +539,7 @@
 
                         "luxury_dark_gold": { // Dark Theme
                             "--background": "#121212", // Very Dark Gray
-                            "--foreground": "#EAEAEA", // Light Gray Text
+                            "--fg": "#EAEAEA", // Light Gray Text
                             "--bg-section-primary": "#1E1E1E", // Slightly lighter dark
                             "--fg-section-primary": "#EAEAEA",
                             "--bg-section-secondary": "#282828", // Medium dark gray
@@ -563,7 +563,7 @@
 
                         "summer_citrus": {
                             "--background": "#FFFBEB", // Lemon Chiffon
-                            "--foreground": "#422006", // Dark brown for text
+                            "--fg": "#422006", // Dark brown for text
                             "--bg-section-primary": "#FEF3C7", // Yellow 200
                             "--fg-section-primary": "#78350F", // Amber 800
                             "--bg-section-secondary": "#FFF7ED", // Orange 50
@@ -587,7 +587,7 @@
 
                         "modern_slate": {
                             "--background": "#FFFFFF",
-                            "--foreground": "#0F172A", // Slate 900
+                            "--fg": "#0F172A", // Slate 900
                             "--bg-section-primary": "#F1F5F9", // Slate 100
                             "--fg-section-primary": "#1E293B", // Slate 800
                             "--bg-section-secondary": "#E2E8F0", // Slate 200
@@ -611,7 +611,7 @@
 
                         "vintage_lavender": {
                             "--background": "#F5F3FF", // Violet 50
-                            "--foreground": "#3730A3", // Indigo 800
+                            "--fg": "#3730A3", // Indigo 800
                             "--bg-section-primary": "#EDE9FE", // Violet 100
                             "--fg-section-primary": "#4338CA", // Indigo 700
                             "--bg-section-secondary": "#E0E7FF", // Indigo 100
@@ -634,7 +634,7 @@
                         },
                         "ruby_red_bold": {
                             "--background": "#FFF1F2", // Rose 50
-                            "--foreground": "#500724", // Rose 950
+                            "--fg": "#500724", // Rose 950
                             "--bg-section-primary": "#FFE4E6", // Rose 100
                             "--fg-section-primary": "#881337", // Rose 900
                             "--bg-section-secondary": "#F8FAFC", // Slate 50
@@ -658,7 +658,7 @@
 
                         "industrial_concrete": {
                             "--background": "#FFFFFF",
-                            "--foreground": "#000000",
+                            "--fg": "#000000",
                             "--bg-section-primary": "#F3F4F6", // Gray 100
                             "--fg-section-primary": "#111827", // Gray 900
                             "--bg-section-secondary": "#E5E7EB", // Gray 200

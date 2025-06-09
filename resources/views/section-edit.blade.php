@@ -312,8 +312,8 @@
                         { key: 'page-bg',              inputId: 'ssp-page-bg',              cssVar: '--color-background',     default: '#ffffff' },
                         { key: 'page-fg',              inputId: 'ssp-page-fg',              cssVar: '--color-foreground',     default: '#000000' },
 
-                        { key: 'style-body-font',      inputId: 'body-font-select',         cssVar: '--font-primary',         default: 'Inter, sans-serif' },
-                        { key: 'style-heading-font',   inputId: 'heading-font-select',      cssVar: '--font-secondary',       default: 'Inter, sans-serif' },
+                        { key: 'style-heading-font',   inputId: 'heading-font-select',      cssVar: '--font-header',       default: 'Inter, sans-serif' },
+                        { key: 'style-body-font',      inputId: 'body-font-select',         cssVar: '--font-body',         default: 'Inter, sans-serif' },
 
                         // NEWLY ADDED for border-radius
                         { key: 'button-border-radius', inputId: 'ssp-button-radius',        cssVar: '--button-border-raduis',   default: '0.5', unit: 'rem' },
@@ -562,7 +562,7 @@
                             "--fg-section-accent": "#F5D18D", // Gold text on dark accent
                             "--color-primary": "#D4AF37", // Gold
                             "--color-primary-fg": "#121212", // Black text on gold
-                            "--color-secondary": "#COCOC0", // Silver
+                            "--color-secondary": "#C0C0C0", // Silver
                             "--color-secondary-fg": "#121212", // Black text on silver
                             "--color-accent": "#B8860B", // Dark Goldenrod
                             "--color-accent-fg": "#FFFFFF",

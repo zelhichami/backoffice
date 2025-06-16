@@ -316,7 +316,7 @@
                         { key: 'style-body-font',      inputId: 'body-font-select',         cssVar: '--font-body',         default: 'Inter, sans-serif' },
 
                         // NEWLY ADDED for border-radius
-                        { key: 'button-border-radius', inputId: 'ssp-button-radius',        cssVar: '--button-border-raduis',   default: '0.5', unit: 'rem' },
+                        { key: 'button-border-radius', inputId: 'ssp-button-radius',        cssVar: '--button-border-radius',   default: '0.5', unit: 'rem' },
                         { key: 'card-border-radius',   inputId: 'ssp-card-radius',          cssVar: '--card-border-radius',     default: '0.5', unit: 'rem' }
                     ];
 
@@ -342,7 +342,7 @@
                             "--muted-fg": "#000000",
                             "--font-body": "'Poppins', sans-serif",
                             "--font-header": "'Poppins', sans-serif",
-                            "--button-border-raduis": "0.5rem",
+                            "--button-border-radius": "0.5rem",
                             "--card-border-radius": "0.5rem"
 
                         },
@@ -366,7 +366,7 @@
                             "--muted-fg": "#000000",
                             "--font-body": "'Poppins', sans-serif",
                             "--font-header": "'Poppins', sans-serif",
-                            "--button-border-raduis": "0.5rem",
+                            "--button-border-radius": "0.5rem",
                             "--card-border-radius": "0.5rem"
 
                         },
@@ -390,7 +390,7 @@
                             "--muted-fg": "#000000",
                             "--font-body": "'Poppins', sans-serif",
                             "--font-header": "'Poppins', sans-serif",
-                            "--button-border-raduis": "0.5rem",
+                            "--button-border-radius": "0.5rem",
                             "--card-border-radius": "0.5rem"
 
                         },
@@ -414,7 +414,7 @@
                             "--muted-fg": "#000000",
                             "--font-body": "'Poppins', sans-serif",
                             "--font-header": "'Poppins', sans-serif",
-                            "--button-border-raduis": "0.5rem",
+                            "--button-border-radius": "0.5rem",
                             "--card-border-radius": "0.5rem"
 
                         },
@@ -438,7 +438,7 @@
                             "--muted-fg": "#1F2937",            // Dark gray text on muted background
                             "--font-body": "'Inter', sans-serif",// Modern, clean sans-serif font
                             "--font-header": "'Inter', sans-serif",
-                            "--button-border-raduis": "0.5rem",       // A modern, slightly rounded corner for buttons
+                            "--button-border-radius": "0.5rem",       // A modern, slightly rounded corner for buttons
                             "--card-border-radius": "0.75rem"       // A slightly larger radius for cards
 
                         },
@@ -462,7 +462,7 @@
                             "--muted-fg": "#44403C",
                             "--font-body": "'Inter', sans-serif",
                             "--font-header": "'Inter', sans-serif",
-                            "--button-border-raduis": "0.375rem",
+                            "--button-border-radius": "0.375rem",
                             "--card-border-radius": "0.75rem"
                         },
 
@@ -486,7 +486,7 @@
                             "--muted-fg": "#500724",
                             "--font-body": "'Poppins', sans-serif",
                             "--font-header": "'Poppins', sans-serif",
-                            "--button-border-raduis": "9999px", // Pill shaped buttons
+                            "--button-border-radius": "9999px", // Pill shaped buttons
                             "--card-border-radius": "0.75rem"
                         },
                         "coffee_house": {
@@ -509,7 +509,7 @@
                             "--muted-fg": "#3E2723",
                             "--font-body": "'Georgia', serif",
                             "--font-header": "'Georgia', serif",
-                            "--button-border-raduis": "0.25rem",
+                            "--button-border-radius": "0.25rem",
                             "--card-border-radius": "0.5rem"
                         },
 
@@ -533,7 +533,7 @@
                             "--muted-fg": "#1E293B", // Slate 800
                             "--font-body": "'Inter', sans-serif",
                             "--font-header": "'Inter', sans-serif",
-                            "--button-border-raduis": "0.375rem",
+                            "--button-border-radius": "0.375rem",
                             "--card-border-radius": "0.5rem"
                         },
 
@@ -557,7 +557,7 @@
                             "--muted-fg": "#EAEAEA",
                             "--font-body": "'Times New Roman', serif",
                             "--font-header": "'Times New Roman', serif",
-                            "--button-border-raduis": "0.125rem",
+                            "--button-border-radius": "0.125rem",
                             "--card-border-radius": "0.25rem"
                         },
 
@@ -581,7 +581,7 @@
                             "--muted-fg": "#713F12", // Amber 900
                             "--font-body": "'Poppins', sans-serif",
                             "--font-header": "'Poppins', sans-serif",
-                            "--button-border-raduis": "0.5rem",
+                            "--button-border-radius": "0.5rem",
                             "--card-border-radius": "1rem"
                         },
 
@@ -605,7 +605,7 @@
                             "--muted-fg": "#1E293B",
                             "--font-body": "'Inter', sans-serif",
                             "--font-header": "'Inter', sans-serif",
-                            "--button-border-raduis": "0.25rem",
+                            "--button-border-radius": "0.25rem",
                             "--card-border-radius": "0.25rem"
                         },
 
@@ -629,7 +629,7 @@
                             "--muted-fg": "#4338CA",
                             "--font-body": "'Lora', serif",
                             "--font-header": "'Lora', serif",
-                            "--button-border-raduis": "0.375rem",
+                            "--button-border-radius": "0.375rem",
                             "--card-border-radius": "0.5rem"
                         },
                         "ruby_red_bold": {
@@ -652,7 +652,7 @@
                             "--muted-fg": "#831843", // Pink 900
                             "--font-body": "'Poppins', sans-serif",
                             "--font-header": "'Poppins', sans-serif",
-                            "--button-border-raduis": "0.5rem",
+                            "--button-border-radius": "0.5rem",
                             "--card-border-radius": "0.5rem"
                         },
 
@@ -676,7 +676,7 @@
                             "--muted-fg": "#1F2937",
                             "--font-body": "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
                             "--font-header": "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                            "--button-border-raduis": "0.125rem", // Sharp corners
+                            "--button-border-radius": "0.125rem", // Sharp corners
                             "--card-border-radius": "0rem"
                         }
                     };

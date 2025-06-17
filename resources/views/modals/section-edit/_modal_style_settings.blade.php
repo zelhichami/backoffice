@@ -136,7 +136,7 @@
             <div id="style-sizing-pane" class="style-tab-pane hidden space-y-4">
                 <div class="space-y-1">
                     <label for="ssp-button-radius" class="block text-xs font-medium text-gray-600">Button Border Radius (rem)</label>
-                    <input type="number" id="ssp-button-radius" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="e.g., 0.5" min="0" max="5" step="0.05" data-css-var="--button-border-raduis" data-storage-key="button-border-radius" data-unit="rem">
+                    <input type="number" id="ssp-button-radius" class="w-full p-2 border border-gray-300 rounded-md text-sm" placeholder="e.g., 0.5" min="0" max="5" step="0.05" data-css-var="--button-border-radius" data-storage-key="button-border-radius" data-unit="rem">
                 </div>
                 <div class="space-y-1">
                     <label for="ssp-card-radius" class="block text-xs font-medium text-gray-600">Card Border Radius (rem)</label>

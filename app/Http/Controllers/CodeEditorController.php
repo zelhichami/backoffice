@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Section;
+use App\Models\SectionVariable;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,43 +25,47 @@ class CodeEditorController extends Controller
 
     public function index()
     {
+
         $variables = $this->get_variables();
-        $user= Auth::user();
+        $user = Auth::user();
         $query = Section::query();
 
         switch ($user->role) {
-            case User::ROLE_INTEGRATOR :
+            case User::ROLE_INTEGRATOR:
                 // Show only this user's own sections
                 $query->where('user_id', $user->id);
                 break;
 
-            case User::ROLE_REVIEWER :
+            case User::ROLE_REVIEWER:
                 // Show sections that are pending review
-                $query->where('status', '!=',Section::STATUS_DRAFT);
+                $query->where('status', '!=', Section::STATUS_DRAFT);
                 break;
 
-          /*  case User::ROLE_PROMPT_ENGINEER :
-                // Show sections that are verified and waiting for prompt work
-                $query->where('status', Section::STATUS_VERIFIED);
+            // --- START: NEW LOGIC FOR PROMPT ENGINEER ---
+            case User::ROLE_PROMPT_ENGINEER:
+                // Show sections that are ready for prompting or have been prompted
+                $query->whereIn('status', [
+                    Section::STATUS_VERIFIED, // This status needs to be added
+                    Section::STATUS_PENDING_PROMPT, // This status needs to be added
+                    Section::STATUS_PROMPTED,       // This status needs to be added
+                    Section::STATUS_PENDING_VALIDATION,
+                    Section::STATUS_APPROVED,
+                    Section::STATUS_PUBLISHED
+                ]);
                 break;
-
-            case User::ROLE_ADMIN :
-                // Show sections pending admin validation
-                $query->where('status', Section::STATUS_PENDING_VALIDATION);
-                break;
-
-            case User::ROLE_SUPERADMIN :
-                // Superadmin sees all sections, no filter
-                break;*/
+            // --- END: NEW LOGIC FOR PROMPT ENGINEER ---
 
             default:
-                // Unknown role — no access
-                $query->whereNull('id'); // Always false condition
+                // For other roles like admin or if role is unknown, show all for now.
+                // Or apply specific logic, e.g., superadmin sees all.
+                // For this example, we'll let other roles see everything.
+                // if (!$user->is_superadmin) { $query->whereNull('id'); } // Example for locking down
+                break;
         }
 
-        $sections = $query->orderBy('updated_at', 'desc')->paginate(20);
+        $sections = $query->orderBy('created_at', 'desc')->paginate(20);
 
-        return view('sections-list', compact('sections','variables'));
+        return view('sections-list', compact('sections', 'variables'));
     }
 
 
@@ -153,12 +158,27 @@ class CodeEditorController extends Controller
                 $section->save();
             }
         }
+        if ($user->hasRole(User::ROLE_PROMPT_ENGINEER) ) {
+
+            if ($section->status == Section::STATUS_VERIFIED ) {
+                // Update the status field on the model to under review
+                $section->status = Section::STATUS_PENDING_PROMPT;
+                $section->save();
+            }
+
+            if ($section->status != Section::STATUS_PENDING_PROMPT AND $section->status != Section::STATUS_PROMPTED ) {
+                return redirect('/sections');
+            }
+
+        }
 
         // Use model accessors to get content
         $htmlContent = $section->html_content;
         $cssContent = $section->css_content;
         $jsContent = $section->js_content;
         $variables = $this->get_variables();
+        $sectionVariables = $section->variables()->orderBy('created_at','desc')->get(); // Assumes a 'variables' relationship on Section model
+        return view('section-edit', compact('section', 'htmlContent', 'cssContent', 'jsContent', 'variables', 'sectionVariables'));
 
         return view('section-edit', compact('section', 'htmlContent', 'cssContent', 'jsContent', 'variables'));
 
@@ -398,6 +418,7 @@ class CodeEditorController extends Controller
     {
         // Authorization Check: Ensure the logged-in user owns this section
         $user = Auth::user();
+        $section_status= $section->status;
 
         // Authorization Check
         if ($user->hasRole(User::ROLE_INTEGRATOR) ) {
@@ -405,7 +426,7 @@ class CodeEditorController extends Controller
                 return response()->json(['message' => 'Unauthorized action.'], 403);
             }
 
-            if($section->status != Section::STATUS_DRAFT && $section->status != Section::STATUS_READY && $section->status != Section::STATUS_REJECTED ){
+            if($section_status != Section::STATUS_DRAFT && $section_status != Section::STATUS_READY && $section_status != Section::STATUS_REJECTED ){
                 return response()->json(['message' => 'Unauthorized action.'], 403);
             }
             $allowedStatuses = [Section::STATUS_DRAFT, Section::STATUS_READY];
@@ -414,10 +435,19 @@ class CodeEditorController extends Controller
         // Authorization Check
         if ($user->hasRole(User::ROLE_REVIEWER) ) {
 
-            if($section->status != Section::STATUS_READY && $section->status != Section::STATUS_UNDER_REVIEW && $section->status != Section::STATUS_VERIFIED && $section->status != Section::STATUS_REJECTED ){
+            if($section_status != Section::STATUS_READY && $section_status != Section::STATUS_UNDER_REVIEW && $section_status != Section::STATUS_VERIFIED && $section_status != Section::STATUS_REJECTED ){
                 return response()->json(['message' => 'Unauthorized action.'], 403);
             }
             $allowedStatuses = [Section::STATUS_VERIFIED, Section::STATUS_REJECTED, Section::STATUS_UNDER_REVIEW];
+        }
+
+        // Authorization Check
+        if ($user->hasRole(User::ROLE_PROMPT_ENGINEER) ) {
+
+            if($section_status != Section::STATUS_PROMPTED && $section_status != Section::STATUS_PENDING_PROMPT && $section_status != Section::STATUS_PROMPT_REJECTED ){
+                return response()->json(['message' => 'Unauthorized action.'], 403);
+            }
+            $allowedStatuses = [Section::STATUS_PENDING_PROMPT, Section::STATUS_PROMPTED];
         }
 
 
@@ -834,6 +864,121 @@ class CodeEditorController extends Controller
             Log::error("Exception deleting asset '{$assetName}' for section {$section->id}: " . $e->getMessage());
             return response()->json(['message' => 'An error occurred while deleting the asset.'], 500);
         }
+    }
+
+
+    /**
+     * Show a single section variable as JSON.
+     */
+    public function showVariable(SectionVariable $variable): JsonResponse
+    {
+        // Authorization: Ensure the user can access the section this variable belongs to.
+        $user = Auth::user();
+        $section = $variable->section;
+
+        if ($user->hasRole(User::ROLE_INTEGRATOR) && $section->user_id !== $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        // Allow prompt engineers and reviewers to see it.
+        if (in_array($user->role, [User::ROLE_REVIEWER, User::ROLE_PROMPT_ENGINEER])) {
+            // No additional ownership check needed for these roles.
+        } else if ($user->role !== User::ROLE_INTEGRATOR) {
+            return response()->json(['message' => 'Unauthorized role.'], 403);
+        }
+
+
+        // Append the public URL for the image if it exists
+        if ($variable->type === 'image' && $variable->default_image_path) {
+            $variable->default_image_url = Storage::url($variable->default_image_path);
+        }
+
+        return response()->json($variable);
+    }
+
+    /**
+     * Store a new AI variable for a section.
+     */
+    public function storeVariable(Request $request, Section $section): JsonResponse
+    {
+        // Authorization: Ensure the prompt engineer can edit this section
+        if (!Auth::user()->hasRole(User::ROLE_PROMPT_ENGINEER) || !in_array($section->status, ['pending_prompt'])) {
+            return response()->json(['message' => 'Unauthorized action.'], 403);
+        }
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Z0-9_]+$/', Rule::unique('section_variables')->where('section_id', $section->id)],
+            'type' => ['required', Rule::in(['text', 'image'])],
+            'prompt' => ['required', 'string'],
+            'default_text_value' => ['nullable', 'string'],
+            'default_image' => ['nullable', 'image', 'max:2048'], // For default image uploads
+        ]);
+
+        $variableData = $validated;
+
+        if ($request->hasFile('default_image') && $validated['type'] === 'image') {
+            $path = $request->file('default_image')->store("sections_assets/{$section->id}/variable_defaults", 'public');
+            $variableData['default_image_path'] = $path;
+        }
+
+        $variable = $section->variables()->create($variableData);
+
+        return response()->json($variable, 201);
+    }
+
+    /**
+     * Update an existing AI variable.
+     */
+    public function updateVariable(Request $request, SectionVariable $variable): JsonResponse
+    {
+        // Authorization: Check if the user has access to the variable's section
+        $section = $variable->section;
+        if (!Auth::user()->hasRole(User::ROLE_PROMPT_ENGINEER) || !in_array($section->status, ['pending_prompt', 'prompted'])) {
+            return response()->json(['message' => 'Unauthorized action.'], 403);
+        }
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Z0-9_]+$/', Rule::unique('section_variables')->where('section_id', $variable->section_id)->ignore($variable->id)],
+            'type' => ['required', Rule::in(['text', 'image'])],
+            'prompt' => ['required', 'string'],
+            'default_text_value' => ['nullable', 'string'],
+            'default_image' => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        $variableData = $validated;
+
+        if ($request->hasFile('default_image') && $validated['type'] === 'image') {
+            // Delete old image if it exists
+            if ($variable->default_image_path) {
+                Storage::disk('public')->delete($variable->default_image_path);
+            }
+            $path = $request->file('default_image')->store("sections_assets/{$section->id}/variable_defaults", 'public');
+            $variableData['default_image_path'] = $path;
+        }
+
+        $variable->update($variableData);
+
+        return response()->json($variable);
+    }
+
+    /**
+     * Delete an AI variable.
+     */
+    public function destroyVariable(SectionVariable $variable): JsonResponse
+    {
+        // Authorization
+        $section = $variable->section;
+        if (!Auth::user()->hasRole(User::ROLE_PROMPT_ENGINEER) || !in_array($section->status, ['pending_prompt', 'prompted'])) {
+            return response()->json(['message' => 'Unauthorized action.'], 403);
+        }
+
+        // Delete the associated default image if it exists
+        if ($variable->type === 'image' && $variable->default_image_path) {
+            Storage::disk('public')->delete($variable->default_image_path);
+        }
+
+        $variable->delete();
+
+        return response()->json(['message' => 'Variable deleted successfully.']);
     }
 
 

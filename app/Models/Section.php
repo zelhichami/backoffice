@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 class Section extends Model
@@ -20,6 +21,7 @@ class Section extends Model
     const STATUS_PENDING_PROMPT = 'pending_prompt'; // Waiting for AI prompt work
     const STATUS_PROMPTED = 'prompted';             // Prompt engineer finished AI/Liquid integration
     const STATUS_PENDING_VALIDATION = 'pending_validation'; // Waiting for admin approval
+    const STATUS_PROMPT_REJECTED = 'prompt_rejected'; // Waiting for admin approval
     const STATUS_APPROVED = 'approved';             // Approved by admin, ready to publish
     const STATUS_PUBLISHED = 'published';           // Live on the platform
 
@@ -45,6 +47,23 @@ class Section extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the variables for the section.
+     */
+    public function variables(): HasMany
+    {
+        return $this->hasMany(SectionVariable::class);
+    }
+
+    /**
+     * Get the status logs for the section.
+     */
+    public function statusLogs(): HasMany
+    {
+        return $this->hasMany(SectionStatusLog::class);
+    }
+
 
     /**
      * Get the URL for the screenshot.
@@ -152,10 +171,6 @@ class Section extends Model
         return null;
     }
 
-    public function statusLogs()
-    {
-        return $this->hasMany(SectionStatusLog::class);
-    }
 
 
     protected static function booted()

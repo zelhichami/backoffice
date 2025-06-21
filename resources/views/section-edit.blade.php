@@ -41,6 +41,10 @@
         .asset-preview-item img, .asset-preview-item video { display: block; width: 100%; height: 100px; object-fit: cover; }
         .asset-preview-item .asset-delete-btn { position: absolute; top: 4px; right: 4px; background-color: rgba(0, 0, 0, 0.6); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; line-height: 18px; text-align: center; cursor: pointer; opacity: 0; transition: opacity 0.2s ease-in-out; }
         .asset-preview-item:hover .asset-delete-btn { opacity: 1; }
+        .form-input { width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;}
+        .form-error { color: #dc2626; font-size: 0.75rem; margin-top: 0.25rem; }
+
 
     </style>
 @endpush
@@ -64,16 +68,18 @@
                     <button id="status-badge-button" data-section-id="{{ $section->id }}" type="button" class=" py-2 px-4 :opacity-50 modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit rounded-lg border border-border shadow-sm inline-flex items-center"> <span id="status-badge-indicator" class="inline-block w-2 h-2 rounded-full mr-1.5"></span> <span id="status-badge-text"></span> <svg class="ml-1 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg> </button>
                     <div id="status-dropdown" class="hidden absolute left-0 mt-2 w-40 origin-top-left bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20"> <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                             @php
-                                if(auth()->user()->hasRole('integrator')){
+                                $userRole = auth()->user()->role;
+                                $statuses = [];
+                                if ($userRole === \App\Models\User::ROLE_INTEGRATOR) {
                                     $statuses = ['draft', 'ready'];
-                                }else{
-
-                                     $statuses = ['under_review','rejected', 'verified'];
+                                } elseif ($userRole === \App\Models\User::ROLE_REVIEWER) {
+                                    $statuses = ['under_review', 'rejected', 'verified'];
+                                } elseif ($userRole === \App\Models\User::ROLE_PROMPT_ENGINEER) {
+                                    $statuses = ['pending_prompt', 'prompted'];
                                 }
-
                             @endphp
                             @foreach($statuses as $statusOption)
-                                <button type="button" data-status="{{ $statusOption }}" class="status-option block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"> {{ ucfirst($statusOption) }} </button>
+                                <button type="button" data-status="{{ $statusOption }}" class="status-option block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"> {{ ucfirst(str_replace('_', ' ', $statusOption)) }} </button>
                             @endforeach </div> </div>
                 </div>
             </div>
@@ -98,12 +104,17 @@
                         <button type="button" data-target="css-editor-container" class="tab-btn tab-button">CSS</button>
                         <button type="button" data-target="js-editor-container" class="tab-btn tab-button">JavaScript</button>
                         <button type="button" data-target="assets-container" class="tab-btn tab-button">Assets</button>
+                        @if(!auth()->user()->hasRole(\App\Models\User::ROLE_INTEGRATOR))
+                            <button type="button" data-target="ai-variables-container" class="tab-btn tab-button">AI Variables</button>
+                        @endif
                     </div>
-                    {{-- Show Variables Button (Moved Here) --}}
-                    <button id="show-variables-btn" type="button" class="mr-2 my-1 py-1 px-3 text-xs text-[#006575] bg-[#ddecee] rounded-md border border-[#006575] hover:bg-[#f1f4f4] shadow-sm inline-flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /> </svg>
-                        Variables
-                    </button>
+                    @if ($userRole === \App\Models\User::ROLE_INTEGRATOR)
+                        {{-- Show Variables Button (Moved Here) --}}
+                        <button id="show-variables-btn" type="button" class="mr-2 my-1 py-1 px-3 text-xs text-[#006575] bg-[#ddecee] rounded-md border border-[#006575] hover:bg-[#f1f4f4] shadow-sm inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"> <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /> </svg>
+                            Variables
+                        </button>
+                    @endif
                 </div>
                 {{-- *** END: Wrapper *** --}}
 
@@ -139,6 +150,42 @@
                         </div>
                     </div>
 
+                    {{-- START: AI Variables Pane --}}
+                    @if(!auth()->user()->hasRole(\App\Models\User::ROLE_INTEGRATOR))
+                        <div id="ai-variables-container" class="editor-pane p-6 h-full overflow-y-auto hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-700">Section AI Variables</h3>
+                                <button id="create-variable-btn" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                    Create Variable
+                                </button>
+                            </div>
+                            <div id="variables-list-display" class="space-y-3">
+                                @if($sectionVariables->isEmpty())
+                                    <p id="no-variables-message" class="text-center text-gray-500 py-4">No AI variables created yet.</p>
+                                @else
+                                    @foreach($sectionVariables as $variable)
+                                        <div class="variable-list-item flex justify-between items-center p-3 border rounded-md bg-gray-50" data-variable-id="{{ $variable->id }}">
+                                            <div>
+                                                <p class="font-mono font-semibold text-gray-800">{{ $variable->name }}</p>
+                                                <span class="text-xs px-2 py-0.5 rounded-full {{ $variable->type === 'text' ? 'bg-indigo-100 text-indigo-800' : 'bg-pink-100 text-pink-800' }}">{{ $variable->type }}</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <button type="button" class="edit-variable-btn p-1 text-gray-500 hover:text-blue-600" title="Edit Variable">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                                </button>
+                                                <button type="button" class="delete-variable-btn p-1 text-gray-500 hover:text-red-600" title="Delete Variable">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                    {{-- END: AI Variables Pane --}}
+
                     {{-- Read-only overlay --}}
                     <div id="editor-readonly-overlay" class="editor-readonly-overlay hidden absolute inset-0 bg-gray-200 bg-opacity-30 z-10 cursor-not-allowed"></div>
                 </div>
@@ -149,6 +196,7 @@
             @include('modals.section-edit._modal_variables')
             @include('modals.section-edit._modal_status_confirm')
             @include('modals.section-edit._modal_style_settings')
+            @include('modals.section-edit._modal_ai_variables')
 
 
         </div>
@@ -258,6 +306,8 @@
                     const editorReadOnlyOverlay = document.getElementById('editor-readonly-overlay');
                     const statusConfirmModal = document.getElementById('status-confirm-modal');
                     const statusConfirmRequiredIdEl = document.getElementById('status-confirm-required-id');
+                    const statusConfirmNewStatus = document.querySelectorAll('.new-section-status');
+                    const statusConfirmNewSectionValue = document.getElementById('section_new_status_value');
                     const statusConfirmInput = document.getElementById('status-confirm-input');
                     const statusConfirmButton = document.getElementById('status-confirm-button');
                     const statusConfirmError = document.getElementById('status-confirm-error');
@@ -278,6 +328,7 @@
                     // --- Initial State & Data ---
                     const initialStatus = '{{ $section->status }}';
                     const sectionId = '{{ $section->id }}';
+                    const currentUserRole = '{{ auth()->user()->role }}';
                     let currentStatus = initialStatus;
                     let isStatusLoading = false;
                     let currentlyOpenDropdown = null;
@@ -368,315 +419,6 @@
                             "--button-border-radius": "0.5rem",
                             "--card-border-radius": "0.5rem"
 
-                        },
-                        "digital_products": {
-                            "--background": "#F8FAFC",
-                            "--fg": "#000000",
-                            "--bg-section-primary": "#E0E7FF",
-                            "--fg-section-primary": "#000000",
-                            "--bg-section-secondary": "#F1F5F9",
-                            "--fg-section-secondary": "#000000",
-                            "--bg-section-accent": "#DBEAFE",
-                            "--fg-section-accent": "#000000",
-                            "--color-primary": "#3B82F6",
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#1E40AF",
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#60A5FA",
-                            "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#64748B",
-                            "--bg-muted": "#E2E8F0",
-                            "--muted-fg": "#000000",
-                            "--font-body": "'Poppins', sans-serif",
-                            "--font-header": "'Poppins', sans-serif",
-                            "--button-border-radius": "0.5rem",
-                            "--card-border-radius": "0.5rem"
-
-                        },
-                        "home_furniture": {
-                            "--background": "#FEFAF7",
-                            "--fg": "#000000",
-                            "--bg-section-primary": "#F4E4C1",
-                            "--fg-section-primary": "#000000",
-                            "--bg-section-secondary": "#F9F3E9",
-                            "--fg-section-secondary": "#000000",
-                            "--bg-section-accent": "#E8D5B7",
-                            "--fg-section-accent": "#000000",
-                            "--color-primary": "#8B4513",
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#A0522D",
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#D2B48C",
-                            "--color-accent-fg": "#000000",
-                            "--text-muted": "#8B7765",
-                            "--bg-muted": "#F0E6D6",
-                            "--muted-fg": "#000000",
-                            "--font-body": "'Poppins', sans-serif",
-                            "--font-header": "'Poppins', sans-serif",
-                            "--button-border-radius": "0.5rem",
-                            "--card-border-radius": "0.5rem"
-
-                        },
-                        "tech_sport_black": {
-                            "--background": "#FFFFFF",        // Clean white background
-                            "--fg": "#111827",        // Very dark gray for main text (almost black)
-                            "--bg-section-primary": "#F3F4F6",      // Light gray, similar to a studio backdrop
-                            "--fg-section-primary": "#000000",        // Black for high contrast on light gray
-                            "--bg-section-secondary": "#FFFFFF",      // Clean white for secondary sections
-                            "--fg-section-secondary": "#1F2937",      // Dark gray for text
-                            "--bg-section-accent": "#ECFDF5",        // Very light green, inspired by the accent ring
-                            "--fg-section-accent": "#065F46",        // Dark green for text on the light green bg
-                            "--color-primary": "#22C55E",            // Vibrant green from the accent ring
-                            "--color-primary-fg": "#FFFFFF",          // White text on green buttons
-                            "--color-secondary": "#3B82F6",          // Bright blue from the digital display
-                            "--color-secondary-fg": "#FFFFFF",          // White text on blue elements
-                            "--color-accent": "#F59E0B",            // Gold/amber inspired by the attachment rings
-                            "--color-accent-fg": "#000000",          // Black text on gold elements for readability
-                            "--text-muted": "#6B7280",            // Medium gray for less important text
-                            "--bg-muted": "#E5E7EB",            // Lighter gray for muted backgrounds
-                            "--muted-fg": "#1F2937",            // Dark gray text on muted background
-                            "--font-body": "'Inter', sans-serif",// Modern, clean sans-serif font
-                            "--font-header": "'Inter', sans-serif",
-                            "--button-border-radius": "0.5rem",       // A modern, slightly rounded corner for buttons
-                            "--card-border-radius": "0.75rem"       // A slightly larger radius for cards
-
-                        },
-                        "serene_green": {
-                            "--background": "#FBFDFB", // Very light green-tinted white
-                            "--fg": "#14532D", // Dark Green
-                            "--bg-section-primary": "#F0FDF4", // Light Green
-                            "--fg-section-primary": "#14532D",
-                            "--bg-section-secondary": "#FEFCE8", // Light Yellow/Cream
-                            "--fg-section-secondary": "#422006",
-                            "--bg-section-accent": "#ECFDF5", // Pale Green
-                            "--fg-section-accent": "#047857",
-                            "--color-primary": "#22C55E", // Green 500
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#84CC16", // Lime 500
-                            "--color-secondary-fg": "#1A2E05",
-                            "--color-accent": "#A3A3A3", // Neutral 400 (Gray)
-                            "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#57534E", // Stone 600
-                            "--bg-muted": "#F5F5F4", // Stone 100
-                            "--muted-fg": "#44403C",
-                            "--font-body": "'Inter', sans-serif",
-                            "--font-header": "'Inter', sans-serif",
-                            "--button-border-radius": "0.375rem",
-                            "--card-border-radius": "0.75rem"
-                        },
-
-                        "sakura_blossom": {
-                            "--background": "#FFF9FB", // Soft Pink White
-                            "--fg": "#4C0519", // Deep Rose
-                            "--bg-section-primary": "#FCE7F3", // Pink 100
-                            "--fg-section-primary": "#500724",
-                            "--bg-section-secondary": "#F5F5F5", // Neutral 100
-                            "--fg-section-secondary": "#262626",
-                            "--bg-section-accent": "#FDF2F8", // Pink 50
-                            "--fg-section-accent": "#831843",
-                            "--color-primary": "#DB2777", // Pink 600
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#9CA3AF", // Gray 400
-                            "--color-secondary-fg": "#1F2937",
-                            "--color-accent": "#F472B6", // Pink 400
-                            "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#881337", // Rose 800
-                            "--bg-muted": "#FDF2F8", // Pink 50
-                            "--muted-fg": "#500724",
-                            "--font-body": "'Poppins', sans-serif",
-                            "--font-header": "'Poppins', sans-serif",
-                            "--button-border-radius": "9999px", // Pill shaped buttons
-                            "--card-border-radius": "0.75rem"
-                        },
-                        "coffee_house": {
-                            "--background": "#FEFBF6", // Warm Off-white
-                            "--fg": "#291507", // Dark Brown
-                            "--bg-section-primary": "#F0EBE3", // Beige
-                            "--fg-section-primary": "#3E2723",
-                            "--bg-section-secondary": "#E3D5C4", // Lighter Tan
-                            "--fg-section-secondary": "#3E2723",
-                            "--bg-section-accent": "#D1C4B5", // Muted Brown-Gray
-                            "--fg-section-accent": "#3E2723",
-                            "--color-primary": "#795548", // Brown
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#FF9800", // Orange
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#A1887F", // Brownish Gray
-                            "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#5D4037", // Darker Brown
-                            "--bg-muted": "#EFEBE9", // Light Brown-Gray
-                            "--muted-fg": "#3E2723",
-                            "--font-body": "'Georgia', serif",
-                            "--font-header": "'Georgia', serif",
-                            "--button-border-radius": "0.25rem",
-                            "--card-border-radius": "0.5rem"
-                        },
-
-                        "oceanic_blue_corp": {
-                            "--background": "#FFFFFF",
-                            "--fg": "#0F172A", // Slate 900
-                            "--bg-section-primary": "#F0F9FF", // Sky 50
-                            "--fg-section-primary": "#075985", // Sky 800
-                            "--bg-section-secondary": "#F8FAFC", // Slate 50
-                            "--fg-section-secondary": "#0F172A",
-                            "--bg-section-accent": "#EFF6FF", // Blue 50
-                            "--fg-section-accent": "#1E40AF", // Blue 800
-                            "--color-primary": "#2563EB", // Blue 600
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#0EA5E9", // Sky 500
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#64748B", // Slate 500
-                            "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#475569", // Slate 600
-                            "--bg-muted": "#E2E8F0", // Slate 200
-                            "--muted-fg": "#1E293B", // Slate 800
-                            "--font-body": "'Inter', sans-serif",
-                            "--font-header": "'Inter', sans-serif",
-                            "--button-border-radius": "0.375rem",
-                            "--card-border-radius": "0.5rem"
-                        },
-
-                        "luxury_dark_gold": { // Dark Theme
-                            "--background": "#121212", // Very Dark Gray
-                            "--fg": "#EAEAEA", // Light Gray Text
-                            "--bg-section-primary": "#1E1E1E", // Slightly lighter dark
-                            "--fg-section-primary": "#EAEAEA",
-                            "--bg-section-secondary": "#282828", // Medium dark gray
-                            "--fg-section-secondary": "#D4D4D4",
-                            "--bg-section-accent": "#3C3C3C", // Darker accent
-                            "--fg-section-accent": "#F5D18D", // Gold text on dark accent
-                            "--color-primary": "#D4AF37", // Gold
-                            "--color-primary-fg": "#121212", // Black text on gold
-                            "--color-secondary": "#C0C0C0", // Silver
-                            "--color-secondary-fg": "#121212", // Black text on silver
-                            "--color-accent": "#B8860B", // Dark Goldenrod
-                            "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#A9A9A9", // Dark Gray
-                            "--bg-muted": "#333333",
-                            "--muted-fg": "#EAEAEA",
-                            "--font-body": "'Times New Roman', serif",
-                            "--font-header": "'Times New Roman', serif",
-                            "--button-border-radius": "0.125rem",
-                            "--card-border-radius": "0.25rem"
-                        },
-
-                        "summer_citrus": {
-                            "--background": "#FFFBEB", // Lemon Chiffon
-                            "--fg": "#422006", // Dark brown for text
-                            "--bg-section-primary": "#FEF3C7", // Yellow 200
-                            "--fg-section-primary": "#78350F", // Amber 800
-                            "--bg-section-secondary": "#FFF7ED", // Orange 50
-                            "--fg-section-secondary": "#7C2D12", // Orange 900
-                            "--bg-section-accent": "#F0FDF4", // Green 50
-                            "--fg-section-accent": "#14532D", // Green 900
-                            "--color-primary": "#F59E0B", // Amber 500
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#FB923C", // Orange 400
-                            "--color-secondary-fg": "#451A03",
-                            "--color-accent": "#84CC16", // Lime 500
-                            "--color-accent-fg": "#1A2E05",
-                            "--text-muted": "#B45309", // Amber 700
-                            "--bg-muted": "#FEF9C3", // Yellow 100
-                            "--muted-fg": "#713F12", // Amber 900
-                            "--font-body": "'Poppins', sans-serif",
-                            "--font-header": "'Poppins', sans-serif",
-                            "--button-border-radius": "0.5rem",
-                            "--card-border-radius": "1rem"
-                        },
-
-                        "modern_slate": {
-                            "--background": "#FFFFFF",
-                            "--fg": "#0F172A", // Slate 900
-                            "--bg-section-primary": "#F1F5F9", // Slate 100
-                            "--fg-section-primary": "#1E293B", // Slate 800
-                            "--bg-section-secondary": "#E2E8F0", // Slate 200
-                            "--fg-section-secondary": "#0F172A",
-                            "--bg-section-accent": "#0F172A", // Dark accent background
-                            "--fg-section-accent": "#F1F5F9", // Light accent foreground
-                            "--color-primary": "#1E293B", // Slate 800
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#64748B", // Slate 500
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#06B6D4", // Cyan 500
-                            "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#475569", // Slate 600
-                            "--bg-muted": "#E2E8F0", // Slate 200
-                            "--muted-fg": "#1E293B",
-                            "--font-body": "'Inter', sans-serif",
-                            "--font-header": "'Inter', sans-serif",
-                            "--button-border-radius": "0.25rem",
-                            "--card-border-radius": "0.25rem"
-                        },
-
-                        "vintage_lavender": {
-                            "--background": "#F5F3FF", // Violet 50
-                            "--fg": "#3730A3", // Indigo 800
-                            "--bg-section-primary": "#EDE9FE", // Violet 100
-                            "--fg-section-primary": "#4338CA", // Indigo 700
-                            "--bg-section-secondary": "#E0E7FF", // Indigo 100
-                            "--fg-section-secondary": "#312E81", // Indigo 900
-                            "--bg-section-accent": "#D1FAE5", // Green 100
-                            "--fg-section-accent": "#065F46", // Green 800
-                            "--color-primary": "#7C3AED", // Violet 600
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#A78BFA", // Violet 400
-                            "--color-secondary-fg": "#3730A3",
-                            "--color-accent": "#34D399", // Emerald 400
-                            "--color-accent-fg": "#022C22",
-                            "--text-muted": "#6D28D9", // Violet 700
-                            "--bg-muted": "#F5F3FF", // Violet 50
-                            "--muted-fg": "#4338CA",
-                            "--font-body": "'Lora', serif",
-                            "--font-header": "'Lora', serif",
-                            "--button-border-radius": "0.375rem",
-                            "--card-border-radius": "0.5rem"
-                        },
-                        "ruby_red_bold": {
-                            "--background": "#FFF1F2", // Rose 50
-                            "--fg": "#500724", // Rose 950
-                            "--bg-section-primary": "#FFE4E6", // Rose 100
-                            "--fg-section-primary": "#881337", // Rose 900
-                            "--bg-section-secondary": "#F8FAFC", // Slate 50
-                            "--fg-section-secondary": "#1E293B", // Slate 800
-                            "--bg-section-accent": "#1F2937", // Slate 800 (Dark Accent)
-                            "--fg-section-accent": "#F1F5F9", // Slate 100 (Light Accent text)
-                            "--color-primary": "#BE123C", // Rose 700
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#E11D48", // Rose 600
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#334155", // Slate 700
-                            "--color-accent-fg": "#F1F5F9",
-                            "--text-muted": "#9F1239", // Rose 800
-                            "--bg-muted": "#FCE7F3", // Pink 100
-                            "--muted-fg": "#831843", // Pink 900
-                            "--font-body": "'Poppins', sans-serif",
-                            "--font-header": "'Poppins', sans-serif",
-                            "--button-border-radius": "0.5rem",
-                            "--card-border-radius": "0.5rem"
-                        },
-
-                        "industrial_concrete": {
-                            "--background": "#FFFFFF",
-                            "--fg": "#000000",
-                            "--bg-section-primary": "#F3F4F6", // Gray 100
-                            "--fg-section-primary": "#111827", // Gray 900
-                            "--bg-section-secondary": "#E5E7EB", // Gray 200
-                            "--fg-section-secondary": "#111827",
-                            "--bg-section-accent": "#D1D5DB", // Gray 300
-                            "--fg-section-accent": "#000000",
-                            "--color-primary": "#1F2937", // Gray 800
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#4B5563", // Gray 600
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#F9A8D4", // Pink 300 (A single pop of color)
-                            "--color-accent-fg": "#831843", // Dark Pink for text
-                            "--text-muted": "#6B7280", // Gray 500
-                            "--bg-muted": "#F9FAFB", // Gray 50
-                            "--muted-fg": "#1F2937",
-                            "--font-body": "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                            "--font-header": "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                            "--button-border-radius": "0.125rem", // Sharp corners
-                            "--card-border-radius": "0rem"
                         }
                     };
 
@@ -684,6 +426,210 @@
                     // --- Helper: Show/Hide Modal ---
                     const showModal = (modal) => modal?.classList.remove('hidden');
                     const hideModal = (modal) => modal?.classList.add('hidden');
+
+
+
+                    // START: AI VARIABLE MANAGEMENT SCRIPT
+                    const aiVariablesTab = document.querySelector('button[data-target="ai-variables-container"]');
+                    if (aiVariablesTab) {
+                        const createVariableBtn = document.getElementById('create-variable-btn');
+                        const variableModal = document.getElementById('variable-edit-modal');
+                        const variableForm = document.getElementById('variable-form');
+                        const variableModalTitle = document.getElementById('variable-modal-title');
+                        const variableFormMethod = document.getElementById('variable-form-method');
+                        const variableFormId = document.getElementById('variable-form-id');
+                        const variableNameInput = document.getElementById('variable-name');
+                        const variableTypeSelect = document.getElementById('variable-type');
+                        const variablePromptTextarea = document.getElementById('variable-prompt');
+                        const defaultTextContainer = document.getElementById('default-text-container');
+                        const defaultImageContainer = document.getElementById('default-image-container');
+                        const defaultTextInput = document.getElementById('variable-default-text');
+                        const defaultImageInput = document.getElementById('variable-default-image');
+                        const currentImagePreview = document.getElementById('current-default-image-preview');
+                        const variableListDisplay = document.getElementById('variables-list-display');
+                        const sectionId = '{{ $section->id }}';
+
+                        const clearFormErrors = () => {
+                            variableForm.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+                        };
+
+                        const toggleDefaultFields = () => {
+                            if (variableTypeSelect.value === 'text') {
+                                defaultTextContainer.classList.remove('hidden');
+                                defaultImageContainer.classList.add('hidden');
+                                defaultImageInput.value = '';
+                            } else {
+                                defaultTextContainer.classList.add('hidden');
+                                defaultImageContainer.classList.remove('hidden');
+                                defaultTextInput.value = '';
+                            }
+                        };
+
+                        const resetAndShowModalForCreate = () => {
+                            variableModalTitle.textContent = 'Create New AI Variable';
+                            variableForm.reset();
+                            clearFormErrors();
+                            variableFormMethod.value = 'POST';
+                            variableFormId.value = '';
+                            variableForm.action = `/section/${sectionId}/variables`;
+                            currentImagePreview.innerHTML = '';
+                            toggleDefaultFields();
+                            showModal(variableModal);
+                        };
+
+                        const populateAndShowModalForEdit = (variable) => {
+                            variableModalTitle.textContent = 'Edit AI Variable';
+                            variableForm.reset();
+                            clearFormErrors();
+                            variableFormMethod.value = 'PUT';
+                            variableForm.action = `/section/variables/${variable.id}`;
+
+                            variableNameInput.value = variable.name;
+                            variableTypeSelect.value = variable.type;
+                            variablePromptTextarea.value = variable.prompt || '';
+                            defaultTextInput.value = variable.default_text_value || '';
+
+                            toggleDefaultFields();
+
+                            if(variable.type === 'image' && variable.default_image_url) {
+                                currentImagePreview.innerHTML = `<p class="text-xs text-gray-600 mb-1">Current Image:</p><img src="${variable.default_image_url}" class="h-16 w-16 object-cover border rounded">`;
+                            } else {
+                                currentImagePreview.innerHTML = '';
+                            }
+
+                            showModal(variableModal);
+                        };
+
+                        const renderVariableListItem = (variable) => {
+                            const typeClass = variable.type === 'text' ? 'bg-indigo-100 text-indigo-800' : 'bg-pink-100 text-pink-800';
+                            return `
+                                <div class="variable-list-item flex justify-between items-center p-3 border rounded-md bg-gray-50" data-variable-id="${variable.id}">
+                                    <div>
+                                        <p class="font-mono font-semibold text-gray-800">${variable.name}</p>
+                                        <span class="text-xs px-2 py-0.5 rounded-full ${typeClass}">${variable.type}</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button type="button" class="edit-variable-btn p-1 text-gray-500 hover:text-blue-600" title="Edit Variable">
+                                            <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                        </button>
+                                        <button type="button" class="delete-variable-btn p-1 text-gray-500 hover:text-red-600" title="Delete Variable">
+                                            <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        };
+
+                        const addOrUpdateVariableInList = (variable) => {
+                            const existingItem = variableListDisplay.querySelector(`.variable-list-item[data-variable-id="${variable.id}"]`);
+                            const newItemHTML = renderVariableListItem(variable);
+                            if (existingItem) {
+                                existingItem.outerHTML = newItemHTML;
+                            } else {
+                                const noVarsMessage = document.getElementById('no-variables-message');
+                                if(noVarsMessage) noVarsMessage.remove();
+                                variableListDisplay.insertAdjacentHTML('beforeend', newItemHTML);
+                            }
+                        };
+
+                        if(createVariableBtn) createVariableBtn.addEventListener('click', resetAndShowModalForCreate);
+                        if(variableModal) {
+                            variableModal.querySelectorAll('.modal-close-btn, .modal-cancel-btn').forEach(btn => btn.addEventListener('click', () => hideModal(variableModal)));
+                            variableModal.addEventListener('click', (e) => { if (e.target === variableModal) hideModal(variableModal); });
+                        }
+                        if(variableTypeSelect) variableTypeSelect.addEventListener('change', toggleDefaultFields);
+
+                        if (variableNameInput) {
+                            variableNameInput.addEventListener('input', function() {
+                                this.value = this.value.toUpperCase();
+                            });
+                        }
+
+                        if(variableForm) {
+                            variableForm.addEventListener('submit', async (e) => {
+                                e.preventDefault();
+                                const submitBtn = document.getElementById('variable-form-submit-btn');
+                                submitBtn.disabled = true;
+                                submitBtn.textContent = 'Saving...';
+                                clearFormErrors();
+
+                                const formData = new FormData(variableForm);
+                                const url = variableForm.action;
+                                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                try {
+                                    const response = await fetch(url, {
+                                        method: 'POST',
+                                        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                                        body: formData,
+                                    });
+                                    const data = await response.json();
+                                    if (!response.ok) {
+                                        if (response.status === 422) {
+                                            Object.keys(data.errors).forEach(key => {
+                                                const errorKey = key.split('.')[0]; // Handle array inputs
+                                                const errorElement = document.getElementById(`variable-${errorKey.replace(/_/g, '-')}-error`);
+                                                if (errorElement) errorElement.textContent = data.errors[key][0];
+                                            });
+                                        }
+                                        throw new Error(data.message || 'Validation failed.');
+                                    }
+                                    showToast(data.message || 'Variable saved successfully!', 'success');
+                                    hideModal(variableModal);
+                                    addOrUpdateVariableInList(data);
+                                } catch (error) {
+                                    showToast(error.message, 'error');
+                                } finally {
+                                    submitBtn.disabled = false;
+                                    submitBtn.textContent = 'Save Variable';
+                                }
+                            });
+                        }
+
+                        if(variableListDisplay) {
+                            variableListDisplay.addEventListener('click', async (e) => {
+                                const editBtn = e.target.closest('.edit-variable-btn');
+                                const deleteBtn = e.target.closest('.delete-variable-btn');
+
+                                if (editBtn) {
+                                    const listItem = editBtn.closest('.variable-list-item');
+                                    const variableId = listItem.dataset.variableId;
+                                    try {
+                                        const response = await fetch(`/section/variables/${variableId}`);
+                                        if (!response.ok) throw new Error('Failed to fetch variable data.');
+                                        const variableData = await response.json();
+                                        populateAndShowModalForEdit(variableData);
+                                    } catch (error) {
+                                        showToast(error.message, 'error');
+                                    }
+                                }
+
+                                if (deleteBtn) {
+                                    if (!confirm('Are you sure? This will delete the variable permanently.')) return;
+                                    const listItem = deleteBtn.closest('.variable-list-item');
+                                    const variableId = listItem.dataset.variableId;
+                                    const url = `/section/variables/${variableId}`;
+                                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                    try {
+                                        const response = await fetch(url, {
+                                            method: 'DELETE',
+                                            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
+                                        });
+                                        const data = await response.json();
+                                        if (!response.ok) throw new Error(data.message);
+                                        showToast(data.message, 'success');
+                                        listItem.remove();
+                                        if (variableListDisplay.children.length === 0) {
+                                            variableListDisplay.innerHTML = `<p id="no-variables-message" class="text-center text-gray-500 py-4">No AI variables created yet.</p>`;
+                                        }
+                                    } catch (error) {
+                                        showToast(error.message, 'error');
+                                    }
+                                }
+                            });
+                        }
+                    }
 
                     const updatePreviewHeaderProductImage = () => { /* ... existing code ... */
                         const imageUrl = localStorage.getItem(PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY);
@@ -708,19 +654,31 @@
                         if(submitButton) submitButton.disabled = readOnly;
                     };
 
-                    const updateBadgeStyle = (status) => { /* ... existing code ... */
+
+                    const updateBadgeStyle = (status) => {
                         if (!statusBadgeButton || !statusBadgeText || !statusBadgeIndicator) return;
-                        statusBadgeText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                        statusBadgeText.textContent = (status || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                         const baseButtonClasses = ['py-2 px-4 :opacity-50 modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit rounded-lg border border-border shadow-sm inline-flex items-center'];
-                        const statusButtonClasses = { 'draft': 'bg-gray-100 text-gray-800', 'ready': 'bg-sky-100 text-sky-800 hover:bg-sky-200', 'rejected': 'bg-red-100 text-red-800 hover:bg-red-200','under_review': 'bg-orange-100 text-orange-800 hover:bg-orange-200' };
-                        const statusIndicatorClasses = { 'draft': 'bg-gray-400 hover:bg-gray-200', 'ready': 'bg-sky-500 hover:bg-sky-200', 'rejected': 'bg-red-500 hover:bg-red-200', 'under_review': 'bg-orange-500 hover:bg-orange-200' }; // Corrected hover for draft
-                        statusBadgeButton.className = baseButtonClasses.join(' ') + ' ' + (statusButtonClasses[status] || 'bg-green-100 text-green-800'); // Removed hover:bg-sky-200 from default
-                        statusBadgeIndicator.className = 'inline-block w-2 h-2 rounded-full mr-1.5 ' + (statusIndicatorClasses[status] || 'bg-green-400');
-                        @if(auth()->user()->hasRole('integrator'))
-                        toggleEditorInteractivity(status != 'draft');
-                        @else
-                        toggleEditorInteractivity(true);
-                        @endif
+                        const statusClasses = {
+                            'draft': { button: 'bg-gray-100 text-gray-800', indicator: 'bg-gray-400' },
+                            'ready': { button: 'bg-sky-100 text-sky-800 hover:bg-sky-200', indicator: 'bg-sky-500' },
+                            'rejected': { button: 'bg-red-100 text-red-800 hover:bg-red-200', indicator: 'bg-red-500' },
+                            'under_review': { button: 'bg-orange-100 text-orange-800 hover:bg-orange-200', indicator: 'bg-orange-500' },
+                            'verified': { button: 'bg-green-100 text-green-800', indicator: 'bg-green-500' },
+                            'pending_prompt': { button: 'bg-purple-100 text-purple-800 hover:bg-purple-200', indicator: 'bg-purple-500' },
+                            'prompted': { button: 'bg-teal-100 text-teal-800 hover:bg-teal-200', indicator: 'bg-teal-500' }
+                        };
+                        const currentClasses = statusClasses[status] || { button: 'bg-gray-100 text-gray-800', indicator: 'bg-gray-400' };
+                        statusBadgeButton.className = [...baseButtonClasses, currentClasses.button].join(' ');
+                        statusBadgeIndicator.className = 'inline-block w-2 h-2 rounded-full mr-1.5 ' + currentClasses.indicator;
+
+                        let isReadOnly = true;
+                        if (currentUserRole === '{{ \App\Models\User::ROLE_INTEGRATOR }}' && status === 'draft') {
+                            isReadOnly = false;
+                        } else if (currentUserRole === '{{ \App\Models\User::ROLE_PROMPT_ENGINEER }}' && ['pending_prompt'].includes(status)) {
+                            isReadOnly = false;
+                        }
+                        setTimeout(() => toggleEditorInteractivity(isReadOnly), 200);
                     };
 
                     if(statusBadgeButton) { updateBadgeStyle(initialStatus); }
@@ -755,12 +713,26 @@
                                     if (newStatus === 'ready' && currentStatus === 'draft') {
                                         if (statusConfirmModal && statusConfirmRequiredIdEl && statusConfirmInput && statusConfirmButton) {
                                             statusConfirmRequiredIdEl.textContent = sectionId;
+                                            statusConfirmNewStatus.forEach(text => { text.textContent = (newStatus || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())});
+                                            statusConfirmNewSectionValue.value= newStatus;
                                             statusConfirmInput.value = '';
                                             statusConfirmError?.classList.add('hidden');
                                             statusConfirmButton.disabled = true;
                                             showModal(statusConfirmModal);
                                         } else { console.error("Status confirmation modal elements not found."); }
-                                    } else { updateSectionStatus(sectionId, newStatus); }
+                                    }
+                                    if (newStatus === 'prompted' && currentStatus === 'pending_prompt') {
+                                        if (statusConfirmModal && statusConfirmRequiredIdEl && statusConfirmInput && statusConfirmButton) {
+                                            statusConfirmRequiredIdEl.textContent = sectionId;
+                                            statusConfirmNewStatus.forEach(text => { text.textContent = (newStatus || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())});
+                                            statusConfirmNewSectionValue.value= newStatus;
+                                            statusConfirmInput.value = '';
+                                            statusConfirmError?.classList.add('hidden');
+                                            statusConfirmButton.disabled = true;
+                                            showModal(statusConfirmModal);
+                                        } else { console.error("Status confirmation modal elements not found."); }
+                                    }
+                                    else { updateSectionStatus(sectionId, newStatus); }
                                 }
                             }
                         });
@@ -804,7 +776,7 @@
                         statusConfirmButton.addEventListener('click', () => {
                             if (statusConfirmInput.value.trim() === statusConfirmRequiredIdEl.textContent) {
                                 hideModal(statusConfirmModal);
-                                updateSectionStatus(sectionId, 'ready');
+                                updateSectionStatus(sectionId, statusConfirmNewSectionValue.value);
                             } else {
                                 statusConfirmError?.classList.remove('hidden');
                                 statusConfirmButton.disabled = true;
@@ -1192,6 +1164,7 @@
                     isDragging = false;
                     document.body.style.userSelect = ''; // Re-enable text selection
                 });
+
 
 
             </script>

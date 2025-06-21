@@ -1,12 +1,13 @@
 <div id="status-confirm-modal" class="modal fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full z-[70] flex items-center justify-center hidden p-4">
     <div class="modal-content relative mx-auto p-6 border w-full max-w-md shadow-lg rounded-md bg-white">
         <div class="flex justify-between items-center border-b pb-3 mb-4">
-            <h3 class="text-lg font-semibold text-gray-800">Confirm Status Change to 'Ready'</h3>
+            <h3 class="text-lg font-semibold text-gray-800">Confirm Status Change to '<span class="font-mono text-lg font-bold text-indigo-600 new-section-status" ></span>'</h3>
             <button type="button" class="modal-close-btn text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
         </div>
         <div class="mb-4">
-            <p class="text-sm text-gray-600 mb-3">Setting the status to 'Ready' will make the editor read-only. To confirm this change, please type the section ID below:</p>
+            <p class="text-sm text-gray-600 mb-3">Setting the status to '<span class="font-semibold new-section-status" ></span>' will make the editor read-only. To confirm this change, please type the section ID below:</p>
             <p class="text-center font-mono text-lg font-bold text-indigo-600 bg-indigo-50 p-2 rounded" id="status-confirm-required-id"></p>
+            <input type="hidden"  id="section_new_status_value" value="">
         </div>
         <div class="mb-4">
             <label for="status-confirm-input" class="block text-sm font-medium text-gray-700 mb-1">Enter Section ID</label>

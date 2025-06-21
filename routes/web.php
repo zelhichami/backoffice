@@ -51,6 +51,12 @@ Route::middleware('auth')->group(function () {
     Route::get('section/assets/{section}', [CodeEditorController::class, 'getAssets'])->name('getAssets');
     Route::delete('section/assets/{section}/{assetName}', [CodeEditorController::class, 'deleteAsset'])->name('deleteAsset');
 
+
+    Route::get('/section/variables/{variable}', [CodeEditorController::class, 'showVariable'])->name('section.variables.show');
+    Route::post('/section/{section}/variables', [CodeEditorController::class, 'storeVariable'])->name('section.variables.store');
+    Route::put('/section/variables/{variable}', [CodeEditorController::class, 'updateVariable'])->name('section.variables.update');
+    Route::delete('/section/variables/{variable}', [CodeEditorController::class, 'destroyVariable'])->name('section.variables.destroy');
+
 });
 
 require __DIR__.'/auth.php';

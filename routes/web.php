@@ -6,18 +6,15 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
+    Route::get('dashboard', [CodeEditorController::class, 'index'])->name('dashboard');
     Route::get('/', [CodeEditorController::class, 'index'])->name('sections.racine');
 
 // Section Listing (replaces old GET /editor)
@@ -56,6 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/section/{section}/variables', [CodeEditorController::class, 'storeVariable'])->name('section.variables.store');
     Route::put('/section/variables/{variable}', [CodeEditorController::class, 'updateVariable'])->name('section.variables.update');
     Route::delete('/section/variables/{variable}', [CodeEditorController::class, 'destroyVariable'])->name('section.variables.destroy');
+
+    Route::post('/section/dataset/{section}', [CodeEditorController::class, 'saveDataset'])->name('section.saveDataset');
+
 
 });
 

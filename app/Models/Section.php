@@ -38,6 +38,9 @@ class Section extends Model
         'name',
         'status',
         'screenshot_path',
+        'description',
+        'position',
+        'type',
     ];
 
     /**

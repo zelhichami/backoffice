@@ -106,6 +106,7 @@
                         <button type="button" data-target="assets-container" class="tab-btn tab-button">Assets</button>
                         @if(!auth()->user()->hasRole(\App\Models\User::ROLE_INTEGRATOR))
                             <button type="button" data-target="ai-variables-container" class="tab-btn tab-button">AI Variables</button>
+                            <button type="button" data-target="ai-dataset-container" class="tab-btn tab-button">AI Dataset</button>
                         @endif
                     </div>
                     @if ($userRole === \App\Models\User::ROLE_INTEGRATOR)
@@ -155,7 +156,7 @@
                         <div id="ai-variables-container" class="editor-pane p-6 h-full overflow-y-auto hidden">
                             <div class="flex justify-between items-center mb-4">
                                 <h3 class="text-lg font-semibold text-gray-700">Section AI Variables</h3>
-                                <button id="create-variable-btn" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
+                                <button id="create-variable-btn" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 disabled:opacity-50">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                                     Create Variable
                                 </button>
@@ -182,6 +183,51 @@
                                     @endforeach
                                 @endif
                             </div>
+                        </div>
+
+                        <div id="ai-dataset-container" class="editor-pane p-6 h-full overflow-y-auto hidden">
+                            <form id="section-dataset-form" class="mb-8" novalidate>
+                                @csrf
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-semibold text-gray-700">Section Dataset</h3>
+                                </div>
+                                <div class="space-y-4 p-4 border rounded-md bg-gray-50">
+                                    <div>
+                                        <label for="section-description" class="form-label">Description</label>
+                                        <textarea name="description" id="section-description" rows="3" class="form-input" placeholder="A brief description of the section's purpose and content.">{{ old('description', $section->description) }}</textarea>
+                                        <p id="section-description-error" class="form-error"></p>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="section-type" class="form-label">Section Type</label>
+                                            @php
+                                                $sectionTypes = ['Hero', 'Features', 'Testimonials', 'Call to Action (CTA)', 'FAQ', 'Pricing', 'Contact', 'About', 'Team', 'Gallery', 'Blog', 'Footer', 'Header', 'Product Grid', 'How It Works', 'Logos', 'Newsletter'];
+                                            @endphp
+                                            <select name="type" id="section-type" class="form-input">
+                                                <option value="">Select a type...</option>
+                                                @foreach($sectionTypes as $type)
+                                                    <option value="{{ \Illuminate\Support\Str::slug($type) }}" @selected(old('type', $section->type) == \Illuminate\Support\Str::slug($type))>
+                                                    {{ $type }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <p id="section-type-error" class="form-error"></p>
+                                        </div>
+                                        <div>
+                                            <label for="section-position" class="form-label">Position</label>
+                                            <input type="number" name="position" id="section-position" class="form-input" value="{{ old('position', $section->position) }}" placeholder="e.g., 1">
+                                            <p id="section-position-error" class="form-error"></p>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <h3 class="text-lg font-semibold text-gray-700"></h3>
+
+                                        <button type="submit" id="save-dataset-btn" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 disabled:opacity-50">
+                                            <span class="button-text">Save Dataset</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     @endif
                     {{-- END: AI Variables Pane --}}
@@ -427,7 +473,57 @@
                     const showModal = (modal) => modal?.classList.remove('hidden');
                     const hideModal = (modal) => modal?.classList.add('hidden');
 
+                    const datasetForm = document.getElementById('section-dataset-form');
+                    if(datasetForm) {
+                        datasetForm.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            const submitBtn = document.getElementById('save-dataset-btn');
+                            const buttonText = submitBtn.querySelector('.button-text');
+                            const originalButtonText = buttonText.textContent;
 
+                            submitBtn.disabled = true;
+                            buttonText.textContent = 'Saving...';
+
+                            // Clear previous errors
+                            datasetForm.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+
+                            const formData = new FormData(datasetForm);
+                            const url = `/section/dataset/${sectionId}`;
+                            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                            try {
+                                const response = await fetch(url, {
+                                    method: 'POST',
+                                    headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                                    body: formData,
+                                });
+
+                                const data = await response.json();
+
+                                if (!response.ok) {
+                                    if (response.status === 422 && data.errors) {
+                                        // Handle validation errors
+                                        Object.keys(data.errors).forEach(key => {
+                                            const errorElement = document.getElementById(`section-${key}-error`);
+                                            if (errorElement) {
+                                                errorElement.textContent = data.errors[key][0];
+                                            }
+                                        });
+                                        throw new Error('Please check the form for errors.');
+                                    }
+                                    throw new Error(data.message || 'An unknown error occurred.');
+                                }
+
+                                showToast(data.message || 'Dataset saved successfully!', 'success');
+
+                            } catch (error) {
+                                showToast(error.message, 'error');
+                            } finally {
+                                submitBtn.disabled = false;
+                                buttonText.textContent = originalButtonText;
+                            }
+                        });
+                    }
 
                     // START: AI VARIABLE MANAGEMENT SCRIPT
                     const aiVariablesTab = document.querySelector('button[data-target="ai-variables-container"]');
@@ -1106,7 +1202,7 @@
                                 /*if (assetName && confirm(`Are you sure you want to delete the asset "${assetName}"?`)) { // Added confirm
                                     await deleteAsset(assetName);
                                 }*/
-                                if (assetName)) { // Added confirm
+                                if (assetName) { // Added confirm
                                     await deleteAsset(assetName);
                                 }
 

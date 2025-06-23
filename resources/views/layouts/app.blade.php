@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs/loader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-
+    <link rel="icon" href="{{ asset('images/xp-favicon.png') }}" type="image/x-icon"/>
     {{-- Vite directives if you use Vite for assets --}}
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
@@ -36,28 +36,42 @@
 {{-- Use sidebarOpen consistent with your latest code --}}
 <div x-data="{ sidebarOpen: true }" class="flex h-screen min-h-screen">
 
-    <div :class="sidebarOpen ? 'w-64' : 'w-16'" class="bg-gray-900 text-white transition-all duration-300 h-full flex flex-col flex-shrink-0">
-        <button @click="sidebarOpen = !sidebarOpen" class="p-4 focus:outline-none self-end">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 transition-transform duration-300"
-                 :class="sidebarOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </button>
+    <div :class="sidebarOpen ? 'w-48' : 'w-16'" class="bg-gray-900 text-white transition-all duration-300 h-full flex flex-col flex-shrink-0 w-">
+
+        <div class="flex items-center justify-between gap-2 px-6 py-5.5 p-4">
+            <button @click="sidebarOpen = !sidebarOpen" :class="sidebarOpen ? 'block' : 'hidden'">
+                <img src="{{ asset('images/xpage-full-logo.png') }}" alt="Logo" class="h-5 w-auto">
+            </button>
+            <button  @click="sidebarOpen = !sidebarOpen" :class="!sidebarOpen ? 'block' : 'hidden'">
+                <img src="{{ asset('images/xp-favicon.png') }}" alt="Small Logo" class="h-5 w-auto" style="max-width: inherit;">
+            </button>
+
+            <button @click="sidebarOpen = !sidebarOpen" class=" focus:outline-none self-end" :class="sidebarOpen ? 'block' : 'hidden'">
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 transition-transform duration-300"
+                     :class="sidebarOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+
         {{--
             The <nav> element is now a flex column to allow pushing logout to the bottom.
             The main links are wrapped in a div.
         --}}
-        <nav class="flex flex-col flex-1 mt-4 ml-2 px-2 text-gray-700">
+        <nav class="flex flex-col flex-1 mt-8 ml-1 px-2 text-gray-700">
             <div class="space-y-3"> {{-- Wrapper for main navigation items --}}
+
                 <a href="/sections" class="nav-item flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-700">
-                    <svg fill="#000000" viewBox="0 0 24 24" id="file-code-3" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0 text-blue-500"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><polyline id="secondary" points="19 21 21 19 19 17" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></polyline><polyline id="secondary-2" data-name="secondary" points="15 17 13 19 15 21" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></polyline><path id="secondary-3" data-name="secondary" d="M7,13h6M7,9h6" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M9,21H4a1,1,0,0,1-1-1V4A1,1,0,0,1,4,3H15l2,2v8" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><polygon id="primary-2" data-name="primary" points="15 3 15 5 17 5 15 3" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></polygon></g></svg>
-                    <span x-show="sidebarOpen" x-transition>Sections</span>
+                    <svg fill="#000000" viewBox="0 0 24 24" id="file-code-3" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 flex-shrink-0 text-blue-500"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><polyline id="secondary" points="19 21 21 19 19 17" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></polyline><polyline id="secondary-2" data-name="secondary" points="15 17 13 19 15 21" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></polyline><path id="secondary-3" data-name="secondary" d="M7,13h6M7,9h6" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M9,21H4a1,1,0,0,1-1-1V4A1,1,0,0,1,4,3H15l2,2v8" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><polygon id="primary-2" data-name="primary" points="15 3 15 5 17 5 15 3" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></polygon></g></svg>
+                    <span class="text-sm" x-show="sidebarOpen" x-transition>Sections</span>
                 </a>
 
                 <a href="#" class="nav-item flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-700">
-                    <svg fill="#000000" width="199px" height="199px" viewBox="-2.4 -2.4 28.80 28.80" id="add-file-6" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0 text-blue-500"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M16,19h4m-2-2v4M8,13h6m0-4H8" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M12,21H5a1,1,0,0,1-1-1V4A1,1,0,0,1,5,3h9l4,4v6" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>
-                    <span x-show="sidebarOpen" x-transition>LandingPages</span>
+                    <svg fill="#000000" viewBox="0 0 24 24" id="add-file-6" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 flex-shrink-0 text-blue-500"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M16,19h4m-2-2v4M8,13h6m0-4H8" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M12,21H5a1,1,0,0,1-1-1V4A1,1,0,0,1,5,3h9l4,4v6" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>
+                    <span class="text-sm" x-show="sidebarOpen" x-transition>LandingPages</span>
                 </a>
                 {{-- You can add other main navigation links here --}}
             </div>
@@ -69,10 +83,9 @@
                    onclick="event.preventDefault(); this.closest('form').submit();"
                    class="nav-item flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-700 w-full text-left">
                     {{-- Logout Icon (Heroicons: outline/logout) --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
-                    <span x-show="sidebarOpen" x-transition>Log Out</span>
+
+                    <svg class="w-5 h-5" fill="#000000" viewBox="0 0 24 24" id="sign-out-alt-4" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><polyline id="secondary" points="6 15 3 12 6 9" style="fill: none; stroke: #b34de6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></polyline><line id="secondary-2" data-name="secondary" x1="3" y1="12" x2="9" y2="12" style="fill: none; stroke: #b34de6; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></line><path id="primary" d="M13,6H10A1,1,0,0,0,9,7V8" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary-2" data-name="primary" d="M9,16v1a1,1,0,0,0,1,1h3" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary-3" data-name="primary" d="M20.24,19.19l-6,1.5a1,1,0,0,1-1.24-1V4.28a1,1,0,0,1,1.24-1l6,1.5a1,1,0,0,1,.76,1V18.22A1,1,0,0,1,20.24,19.19Z" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>
+                    <span class="text-sm" x-show="sidebarOpen" x-transition>Log Out</span>
                 </a>
             </form>
         </nav>

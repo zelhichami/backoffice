@@ -1054,6 +1054,44 @@ class CodeEditorController extends Controller
         return response()->json(['message' => 'Variable deleted successfully.']);
     }
 
+    public function saveDataset(Request $request, Section $section): JsonResponse
+    {
+        // Authorization: Check if the user is allowed to edit this section's dataset.
+        $user = Auth::user();
 
+        // Allow the owner to edit if they are an integrator.
+        if ($user->hasRole(User::ROLE_INTEGRATOR)) {
+            return response()->json(['message' => 'Unauthorized action.'], 403);
+        }
+
+        // Allow prompt engineers to edit only if the section is in the correct state.
+        if ($user->hasRole(User::ROLE_PROMPT_ENGINEER) && !in_array($section->status, [Section::STATUS_PENDING_PROMPT, Section::STATUS_PROMPTED])) {
+            return response()->json(['message' => 'You can only edit the dataset for sections that are pending prompt or have been prompted.'], 403);
+        }
+
+        // Validate the incoming data.
+        $validated = $request->validate([
+            'description' => 'nullable|string|max:1000',
+            'type' => 'nullable|string|max:255',
+            'position' => 'nullable|integer',
+        ]);
+
+        try {
+            // Update the section with the validated data.
+            $section->update([
+                'description' => $validated['description'] ?? null,
+                'type' => $validated['type'] ?? null,
+                'position' => $validated['position'] ?? 0,
+            ]);
+
+            // Return a success response.
+            return response()->json(['message' => 'Section dataset saved successfully!']);
+
+        } catch (\Exception $e) {
+            // Log any errors and return an error response.
+            Log::error("Error saving dataset for section {$section->id}: " . $e->getMessage());
+            return response()->json(['message' => 'An error occurred while saving the dataset.'], 500);
+        }
+    }
 
 }

@@ -18,6 +18,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class CodeEditorController extends Controller
 {
@@ -545,9 +546,9 @@ class CodeEditorController extends Controller
     public function generatePreview(Request $request, Section $section): JsonResponse
     {
         // Authorization
-        if ($section->user_id !== Auth::id()) {
+       /* if ($section->user_id !== Auth::id()) {
             return response()->json(['message' => 'Unauthorized action.'], 403);
-        }
+        }*/
 
         $user = Auth::user();
         if (!$user) {
@@ -566,11 +567,81 @@ class CodeEditorController extends Controller
         $productId = $validated['productId'];
 
         try {
+            // Retrieve the section's HTML, CSS, and JS content
+            $htmlContent = $section->html_content ?? '';
+            $cssContent = $section->css_content ?? '';
+            $jsContent = $section->js_content ?? '';
 
-// Retrieve dynamic content
-            $htmlContent     = $section->html_content;
-            $cssContent      = $section->css_content;
-            $jsContent       = $section->js_content;
+            // --- New Single-Call AI Variable Processing ---
+            $aiVariables = $section->variables;
+            $promptsForAI = [];
+            $variableDefaults = [];
+
+            // Collect all prompts and default values
+            foreach ($aiVariables as $variable) {
+                $promptsForAI[$variable->name] = $variable->prompt;
+                $variableDefaults[$variable->name] = [
+                    'type' => $variable->type,
+                    'default_text' => $variable->default_text_value,
+                    'default_image' => $variable->default_image_path,
+                ];
+            }
+
+            $generatedValues = [];
+
+            if (!empty($promptsForAI)) {
+                // Construct a single prompt for the AI to get a JSON response
+                $promptMessages = [
+                    [
+                        'role' => 'system',
+                        'content' => 'You are a creative assistant for an e-commerce platform. Your task is to generate content based on the user\'s prompts. Please return the response as a single, valid JSON object. The keys of the JSON should be the variable names provided, and the values should be the generated content.'
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => 'Please generate content for the following variables: ' . json_encode($promptsForAI, JSON_PRETTY_PRINT)
+                    ]
+                ];
+
+                try {
+                    // Call the OpenAI API with JSON mode enabled
+                    $response = OpenAI::chat()->create([
+                        'model' => 'gpt-4o',
+                        'messages' => $promptMessages,
+                        'response_format' => ['type' => 'json_object'], // Enable JSON mode
+                    ]);
+
+                    $generatedValues = json_decode($response->choices[0]->message->content, true);
+
+                } catch (\Exception $e) {
+                    Log::error("OpenAI API call failed: " . $e->getMessage());
+                    // On API failure, we'll rely on the default values below
+                    $generatedValues = [];
+                }
+            }
+
+            // Replace placeholders with generated content or fallbacks
+            foreach ($aiVariables as $variable) {
+                $placeholder = "{{AI::{$variable->name}}}";
+                $content = '';
+
+                // Prioritize generated content, then fall back to defaults
+                if (isset($generatedValues[$variable->name])) {
+                    $content = $generatedValues[$variable->name];
+                } else {
+                    $defaults = $variableDefaults[$variable->name];
+                    $content = $defaults['type'] === 'text'
+                        ? ($defaults['default_text'] ?? '')
+                        : ($defaults['default_image'] ? Storage::url($defaults['default_image']) : '');
+                }
+
+                // Perform the replacement
+                if ($variable->type === 'image') {
+                    $htmlContent = str_replace($placeholder, "<img src=\"{$content}\" alt=\"{$variable->name}\">", $htmlContent);
+                } else {
+                    $htmlContent = str_replace($placeholder, $content, $htmlContent);
+                }
+            }
+            // --- End of AI Variable Processing ---
 
 // Load the layout template
             $layout_content = getAssetContent('layout_section');
@@ -621,7 +692,6 @@ class CodeEditorController extends Controller
             $apiUrlBase = rtrim(config('services.xpage.global_uri', ''), '/');
             $path = "/{$hostingId}/product/{$productId}/preview";
             $fullUrl = $apiUrlBase . $path;
-
 
             // Send the request
             $response = Http::withHeaders([
@@ -686,9 +756,10 @@ class CodeEditorController extends Controller
      */
     public function uploadAssets(Request $request, Section $section): JsonResponse
     {
-        // Authorization: Check if the authenticated user owns the section
-        if ($section->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized action.'], 403);
+        // Authorization: Check authenticated user
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], 401);
         }
 
         // Validation: Check for 'assets' array and validate each file
@@ -772,9 +843,10 @@ class CodeEditorController extends Controller
      */
     public function getAssets(Section $section): JsonResponse
     {
-        // Authorization: Check if the authenticated user owns the section
-        if ($section->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized action.'], 403);
+        // Authorization: Check authenticated user
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], 401);
         }
 
         $storageDisk = 'public'; // Use the public disk configured in filesystems.php
@@ -832,8 +904,9 @@ class CodeEditorController extends Controller
     public function deleteAsset(Section $section, string $assetName): JsonResponse
     {
         // Authorization
-        if ($section->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized action.'], 403);
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated.'], 401);
         }
 
         // Basic validation/sanitization for the filename (prevent directory traversal)
@@ -980,6 +1053,7 @@ class CodeEditorController extends Controller
 
         return response()->json(['message' => 'Variable deleted successfully.']);
     }
+
 
 
 }

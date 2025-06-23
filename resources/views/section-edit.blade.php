@@ -721,7 +721,7 @@
                                             showModal(statusConfirmModal);
                                         } else { console.error("Status confirmation modal elements not found."); }
                                     }
-                                    if (newStatus === 'prompted' && currentStatus === 'pending_prompt') {
+                                    else if (newStatus === 'prompted' && currentStatus === 'pending_prompt') {
                                         if (statusConfirmModal && statusConfirmRequiredIdEl && statusConfirmInput && statusConfirmButton) {
                                             statusConfirmRequiredIdEl.textContent = sectionId;
                                             statusConfirmNewStatus.forEach(text => { text.textContent = (newStatus || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())});
@@ -1103,9 +1103,13 @@
                         currentAssetsList.addEventListener('click', async (event) => {
                             if (event.target.classList.contains('asset-delete-btn')) {
                                 const assetName = event.target.dataset.assetName;
-                                if (assetName && confirm(`Are you sure you want to delete the asset "${assetName}"?`)) { // Added confirm
+                                /*if (assetName && confirm(`Are you sure you want to delete the asset "${assetName}"?`)) { // Added confirm
+                                    await deleteAsset(assetName);
+                                }*/
+                                if (assetName)) { // Added confirm
                                     await deleteAsset(assetName);
                                 }
+
                             }
                         });
                     }

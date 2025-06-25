@@ -662,7 +662,7 @@ class CodeEditorController extends Controller
         } catch (\Exception $e) {
             Log::error("Exception generating preview for section {$section->id}: " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 200);
-        /
+        }
     }
 
 

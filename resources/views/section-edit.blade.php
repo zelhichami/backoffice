@@ -201,7 +201,7 @@
                                         <div>
                                             <label for="section-type" class="form-label">Section Type</label>
                                             @php
-                                                $sectionTypes = ['Header', 'Nav Bar', 'Hero Section', 'As Seen In', 'Benefits', 'Product Offer', 'UGC', 'How to Use', 'Comparison', 'Before/After', 'Reviews', 'FAQ', 'Guarantee', 'Footer'];
+                                                $sectionTypes = ['HEADER','NAVBAR', 'HERO', 'BENEFITS_ICONS', 'BENEFITS_BLOCKS_IMAGES', 'BENEFITS_LONG_DESCRIPTION', 'FEATURED_BRANDS', 'PRODUCT_OFFER', 'UGC_VIDEOS', 'HOW_TO_USE', 'COMPARISON_TABLE', 'BEFORE_AFTER', 'REVIEWS','FAQ', 'GUARANTEE_SECTION', 'FOOTER'];
                                             @endphp
                                             <select name="type" id="section-type" class="form-input">
                                                 <option value="">Select a type...</option>

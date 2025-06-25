@@ -201,7 +201,7 @@
                                         <div>
                                             <label for="section-type" class="form-label">Section Type</label>
                                             @php
-                                                $sectionTypes = ['Hero', 'Features', 'Testimonials', 'Call to Action (CTA)', 'FAQ', 'Pricing', 'Contact', 'About', 'Team', 'Gallery', 'Blog', 'Footer', 'Header', 'Product Grid', 'How It Works', 'Logos', 'Newsletter'];
+                                                $sectionTypes = ['Header', 'Nav Bar', 'Hero Section', 'As Seen In', 'Benefits', 'Product Offer', 'UGC', 'How to Use', 'Comparison', 'Before/After', 'Reviews', 'FAQ', 'Guarantee', 'Footer'];
                                             @endphp
                                             <select name="type" id="section-type" class="form-input">
                                                 <option value="">Select a type...</option>
@@ -637,7 +637,7 @@
 
                         if (variableNameInput) {
                             variableNameInput.addEventListener('input', function() {
-                                this.value = this.value.toUpperCase();
+                                //this.value = this.value.toUpperCase();
                             });
                         }
 

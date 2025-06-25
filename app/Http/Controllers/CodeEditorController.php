@@ -573,74 +573,18 @@ class CodeEditorController extends Controller
             $jsContent = $section->js_content ?? '';
 
             // --- New Single-Call AI Variable Processing ---
-            $aiVariables = $section->variables;
-            $promptsForAI = [];
-            $variableDefaults = [];
 
-            // Collect all prompts and default values
-            foreach ($aiVariables as $variable) {
-                $promptsForAI[$variable->name] = $variable->prompt;
-                $variableDefaults[$variable->name] = [
+            $contextVariables = [];
+            foreach ($section->variables as $variable) {
+                $contextVariables[] = [
+                    'name' => $variable->name,
                     'type' => $variable->type,
-                    'default_text' => $variable->default_text_value,
-                    'default_image' => $variable->default_image_path,
+                    'prompt' => $variable->prompt
                 ];
             }
 
-            $generatedValues = [];
 
-            if (!empty($promptsForAI)) {
-                // Construct a single prompt for the AI to get a JSON response
-                $promptMessages = [
-                    [
-                        'role' => 'system',
-                        'content' => 'You are a creative assistant for an e-commerce platform. Your task is to generate content based on the user\'s prompts. Please return the response as a single, valid JSON object. The keys of the JSON should be the variable names provided, and the values should be the generated content.'
-                    ],
-                    [
-                        'role' => 'user',
-                        'content' => 'Please generate content for the following variables: ' . json_encode($promptsForAI, JSON_PRETTY_PRINT)
-                    ]
-                ];
 
-                try {
-                    // Call the OpenAI API with JSON mode enabled
-                    $response = OpenAI::chat()->create([
-                        'model' => 'gpt-4o',
-                        'messages' => $promptMessages,
-                        'response_format' => ['type' => 'json_object'], // Enable JSON mode
-                    ]);
-
-                    $generatedValues = json_decode($response->choices[0]->message->content, true);
-
-                } catch (\Exception $e) {
-                    Log::error("OpenAI API call failed: " . $e->getMessage());
-                    // On API failure, we'll rely on the default values below
-                    $generatedValues = [];
-                }
-            }
-
-            // Replace placeholders with generated content or fallbacks
-            foreach ($aiVariables as $variable) {
-                $placeholder = "{{AI::{$variable->name}}}";
-                $content = '';
-
-                // Prioritize generated content, then fall back to defaults
-                if (isset($generatedValues[$variable->name])) {
-                    $content = $generatedValues[$variable->name];
-                } else {
-                    $defaults = $variableDefaults[$variable->name];
-                    $content = $defaults['type'] === 'text'
-                        ? ($defaults['default_text'] ?? '')
-                        : ($defaults['default_image'] ? Storage::url($defaults['default_image']) : '');
-                }
-
-                // Perform the replacement
-                if ($variable->type === 'image') {
-                    $htmlContent = str_replace($placeholder, "<img src=\"{$content}\" alt=\"{$variable->name}\">", $htmlContent);
-                } else {
-                    $htmlContent = str_replace($placeholder, $content, $htmlContent);
-                }
-            }
             // --- End of AI Variable Processing ---
 
 // Load the layout template
@@ -693,12 +637,11 @@ class CodeEditorController extends Controller
             $path = "/{$hostingId}/product/{$productId}/preview";
             $fullUrl = $apiUrlBase . $path;
 
-            // Send the request
             $response = Http::withHeaders([
                 'X-Signature' => $signature,
             ])->attach(
                 'file', $layout_content, $fileName
-            )->post($fullUrl);
+            )->post($fullUrl, ['context' => json_encode($contextVariables)]);
 
 
             if ($response->failed()) {
@@ -719,7 +662,7 @@ class CodeEditorController extends Controller
         } catch (\Exception $e) {
             Log::error("Exception generating preview for section {$section->id}: " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 200);
-        }
+        /
     }
 
 
@@ -979,7 +922,7 @@ class CodeEditorController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Z0-9_]+$/', Rule::unique('section_variables')->where('section_id', $section->id)],
+            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Za-z0-9_]+$/', Rule::unique('section_variables')->where('section_id', $section->id)],
             'type' => ['required', Rule::in(['text', 'image'])],
             'prompt' => ['required', 'string'],
             'default_text_value' => ['nullable', 'string'],
@@ -1010,7 +953,7 @@ class CodeEditorController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Z0-9_]+$/', Rule::unique('section_variables')->where('section_id', $variable->section_id)->ignore($variable->id)],
+            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Za-z0-9_]+$/', Rule::unique('section_variables')->where('section_id', $variable->section_id)->ignore($variable->id)],
             'type' => ['required', Rule::in(['text', 'image'])],
             'prompt' => ['required', 'string'],
             'default_text_value' => ['nullable', 'string'],

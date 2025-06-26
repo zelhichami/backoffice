@@ -266,6 +266,47 @@
                     } else { /* console.warn(`Control with ID ${style.inputId} not found for loading.`); */ }
                 });
             }
+            // NEW: Custom Palette JSON Logic
+            const customPaletteTextarea = document.getElementById('custom-palette-json');
+            const applyCustomPaletteBtn = document.getElementById('apply-custom-palette-btn');
+
+            if(applyCustomPaletteBtn) {
+                applyCustomPaletteBtn.addEventListener('click', () => {
+                    try {
+                        const jsonText = customPaletteTextarea.value;
+                        const customPalette = JSON.parse(jsonText);
+
+                        if (typeof customPalette !== 'object' || customPalette === null) {
+                            throw new Error('Invalid palette format. Must be a JSON object.');
+                        }
+
+                        // Apply the custom palette
+                        Object.entries(customPalette).forEach(([key, value]) => {
+                            // We only apply if the key is a valid CSS variable name
+                            if (key.startsWith('--')) {
+                                const styleDef = stylesToLoad.find(s => s.cssVar === key);
+                                if (styleDef) {
+                                    const control = document.getElementById(styleDef.inputId);
+                                    if (control) {
+                                        // Handle different control types
+                                        if(control.type === 'number' && styleDef.unit) {
+                                            control.value = parseFloat(value) || 0;
+                                        } else {
+                                            control.value = value;
+                                        }
+                                    }
+                                    applyAndSaveStyle(key, value, styleDef.key);
+                                }
+                            }
+                        });
+
+                        showToast('Custom palette applied!', 'success');
+                    } catch (e) {
+                        showToast('Error applying custom palette: ' + e.message, 'error');
+                        console.error("Custom palette error:", e);
+                    }
+                });
+            }
 
             function renderPaletteGrid() { /* ... existing code ... */
                 const gridContainer = document.getElementById('ssp-palette-grid'); if (!gridContainer) return; gridContainer.innerHTML = '';

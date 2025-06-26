@@ -160,6 +160,12 @@ class CodeEditorController extends Controller
         if ($user->hasRole(User::ROLE_PROMPT_ENGINEER) ) {
 
             if ($section->status == Section::STATUS_VERIFIED ) {
+                $htmlPath = $section->getAssetPath('html');
+                $backupHtmlPath = "sections_assets/{$section->id}/index.html.bak";
+                $storageDisk = 'public';
+                if (Storage::disk($storageDisk)->exists($htmlPath)) {
+                    Storage::disk($storageDisk)->copy($htmlPath, $backupHtmlPath);
+                }
                 // Update the status field on the model to under review
                 $section->status = Section::STATUS_PENDING_PROMPT;
                 $section->save();
@@ -1026,4 +1032,37 @@ class CodeEditorController extends Controller
         }
     }
 
+
+
+    /**
+     * Rollback the HTML content from the backup file.
+     *
+     * @param Section $section
+     * @return JsonResponse
+     */
+    public function rollback(Section $section): JsonResponse
+    {
+        $user = Auth::user();
+
+        // Authorization Check
+        if (!$user->hasRole(User::ROLE_PROMPT_ENGINEER)) {
+            return response()->json(['message' => 'Unauthorized action.'], 403);
+        }
+
+        $htmlPath = $section->getAssetPath('html');
+        $backupHtmlPath = "sections_assets/{$section->id}/index.html.bak";
+        $storageDisk = 'public';
+
+        if (!Storage::disk($storageDisk)->exists($backupHtmlPath)) {
+            return response()->json(['message' => 'No backup found to restore.'], 404);
+        }
+
+        try {
+            Storage::disk($storageDisk)->copy($backupHtmlPath, $htmlPath);
+            return response()->json(['message' => 'HTML content has been rolled back successfully!']);
+        } catch (\Exception $e) {
+            Log::error("Error rolling back HTML for section {$section->id}: " . $e->getMessage());
+            return response()->json(['message' => 'Failed to rollback HTML content.'], 500);
+        }
+    }
 }

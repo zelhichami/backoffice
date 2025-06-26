@@ -28,6 +28,8 @@
                             <img src="{{ $section->screenshot_url }}" alt="Screenshot of {{ $section->name }}" class="w-full h-40 object-cover">
                             <div class="p-4 pb-2">
                                 <h3 class="text-lg font-semibold text-gray-800 truncate" title="{{ $section->name }}">{{ $section->name }}</h3>
+                                <p class="text-xs text-gray-500 mt-1">Status: {{ ucwords(str_replace('_', ' ', $section->status)) }}</p>
+
                             </div>
                         </a>
                         {{-- Info and Actions Row --}}

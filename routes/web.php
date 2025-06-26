@@ -63,6 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('landing-pages', [LandingPageController::class, 'index'])->name('landing-pages.index');
     Route::post('landing-pages/preview', [LandingPageController::class, 'preview'])->name('landing-pages.preview');
 
+    // --- ROLLBACK ROUTE ---
+    Route::post('/section/rollback/{section}', [CodeEditorController::class, 'rollback'])->name('section.rollback');
 
 
 });

@@ -83,11 +83,24 @@
                             @endforeach </div> </div>
                 </div>
             </div>
+
             {{-- Right Side: Buttons --}}
             <div class="flex items-center space-x-4">
-                <button id="preview-section-btn" type="button" data-section-id="{{ $section->id }}" class="py-2 px-4 :opacity-50 modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit bg-gray-100 text-grey-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm inline-flex items-center"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2"> <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> </svg> <span class="button-text">Preview</span> </button>
-                <button id="submit-button" type="button" data-section-id="{{ $section->id }}" class=" py-2 px-4 :opacity-50 modal-cancel-btn !text-sm !py-1.5 !px-3 !w-fit bg-gray-700 text-white rounded-lg border border-border hover:bg-gray-600 shadow-sm inline-flex items-center"> <svg fill="#000000" viewBox="0 0 24 24" id="plus" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="primary" d="M5,12H19M12,5V19" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg> <span class="button-text">Save</span> </button>
+                @if(auth()->user()->hasRole(\App\Models\User::ROLE_PROMPT_ENGINEER) && in_array($section->status, [\App\Models\Section::STATUS_PENDING_PROMPT, \App\Models\Section::STATUS_PROMPTED]))
+                    <button id="rollback-button" type="button" data-section-id="{{ $section->id }}" class="py-2 px-4 :opacity-50 modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit bg-yellow-100 text-yellow-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                        </svg>
+                        Rollback
+                    </button>
+                @endif
+                {{-- Right Side: Buttons --}}
+                <div class="flex items-center space-x-4">
+                    <button id="preview-section-btn" type="button" data-section-id="{{ $section->id }}" class="py-2 px-4 :opacity-50 modal-cancel-btn !text-xs !py-1.5 !px-3 !w-fit bg-gray-100 text-grey-700 rounded-lg border border-border hover:bg-gray-200 shadow-sm inline-flex items-center"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2"> <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> </svg> <span class="button-text">Preview</span> </button>
+                    <button id="submit-button" type="button" data-section-id="{{ $section->id }}" class=" py-2 px-4 :opacity-50 modal-cancel-btn !text-sm !py-1.5 !px-3 !w-fit bg-gray-700 text-white rounded-lg border border-border hover:bg-gray-600 shadow-sm inline-flex items-center"> <svg fill="#000000" viewBox="0 0 24 24" id="plus" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="primary" d="M5,12H19M12,5V19" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg> <span class="button-text">Save</span> </button>
+                </div>
             </div>
+
         </div>
 
         {{-- Main Content Area - Editor Only --}}
@@ -378,6 +391,7 @@
                     const styleSettingsTabPanes = styleSettingsModal?.querySelectorAll('.style-tab-pane');
                     const previewHeaderProductImage = document.getElementById('preview-header-product-image');
                     const paletteGrid = document.getElementById('ssp-palette-grid');
+                    const rollbackButton = document.getElementById('rollback-button');
 
                     // --- Initial State & Data ---
                     const initialStatus = '{{ $section->status }}';
@@ -480,6 +494,38 @@
                     // --- Helper: Show/Hide Modal ---
                     const showModal = (modal) => modal?.classList.remove('hidden');
                     const hideModal = (modal) => modal?.classList.add('hidden');
+
+                    // --- ROLLBACK BUTTON ---
+                    if (rollbackButton) {
+                        rollbackButton.addEventListener('click', async () => {
+                            if (confirm('Are you sure you want to rollback to the last saved HTML version?')) {
+                                const rollbackUrl = `/section/rollback/${sectionId}`;
+                                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                try {
+                                    const response = await fetch(rollbackUrl, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Accept': 'application/json',
+                                            'X-CSRF-TOKEN': csrfToken
+                                        }
+                                    });
+
+                                    const data = await response.json();
+                                    if (!response.ok) {
+                                        throw new Error(data.message || 'An unknown error occurred during rollback.');
+                                    }
+                                    showToast(data.message, 'success');
+                                    // Optionally, reload the page or update the editor content
+                                    window.location.reload();
+                                } catch (error) {
+                                    showToast(`Error: ${error.message}`, 'error');
+                                }
+                            }
+                        });
+                    }
+
 
                     const datasetForm = document.getElementById('section-dataset-form');
                     if(datasetForm) {

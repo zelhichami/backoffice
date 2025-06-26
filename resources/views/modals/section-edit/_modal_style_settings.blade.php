@@ -20,6 +20,16 @@
                         {{-- Palette items will be dynamically inserted here by JavaScript --}}
                     </div>
                 </div>
+                {{-- NEW: Custom JSON Palette Section --}}
+                <div class="border-t pt-6 dark:border-gray-700">
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Custom Palette</h4>
+                    <div>
+                        <label for="custom-palette-json" class="form-label text-sm">Paste your JSON palette here:</label>
+                        <textarea id="custom-palette-json" rows="8" class="form-input mt-1 w-full text-xs font-mono bg-gray-50 dark:bg-gray-700 dark:text-gray-300" placeholder='{ "--color-primary": "#ff0000", "--color-primary-fg": "#ffffff", ... }'></textarea>
+                        <button id="apply-custom-palette-btn" type="button" class="mt-2 py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm">Apply Custom Palette</button>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-2 gap-x-6 gap-y-4">
 
                     {{-- UI Colors + Foregrounds --}}

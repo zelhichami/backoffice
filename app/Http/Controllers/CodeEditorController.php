@@ -11,14 +11,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
-use OpenAI\Laravel\Facades\OpenAI;
+use App\Services\ClaudeService;
 
 class CodeEditorController extends Controller
 {
@@ -222,15 +220,6 @@ class CodeEditorController extends Controller
 
 
             $newHtmlCode = $validated['html_code'] ?? null;
-
-            /*$newHtmlCode = preg_replace_callback(
-                '/(src|href)=["\'](?!https?:\/\/|\/\/|data:|#|\{\{)([^"\'}]+)["\']/',
-                function ($matches) use ($assetUrl) {
-                    $filename = basename($matches[2]); // Get only the filename
-                    return $matches[1] . '="' . rtrim($assetUrl, '/') . '/' . $filename . '"';
-                },
-                $html
-            );*/
 
              // Get standard path: sections_assets/{id}/index.html
             $htmlPath = $section->getAssetPath('html');

@@ -113,6 +113,60 @@ You are a section converter that transforms static HTML/Liquid code into configu
 
 YOUR ONLY JOB:
 1. Take the provided HTML/Liquid code exactly as-is
+2. Identify static content (text, links)
+3. Replace static content with template variables
+4. Generate a JSON schema for the variables
+5. DO NOT change any styling, classes, structure, or functionality
+6. DO NOT change img src and alt just static text
+
+CONVERSION RULES:
+- Text content: {% xpage-text variable: "descriptiveName" %}
+- Keep ALL existing classes, IDs, and structure unchanged
+- Keep ALL JavaScript functionality unchanged
+- Keep ALL CSS custom properties unchanged
+
+JSON SCHEMA FORMAT:
+{
+    "type": "SECTION_NAME",
+    "description": "Brief description of what this section does",
+    "variables": [
+        {
+            "name": "variableName",
+            "prompt": "Human-readable description for content creators",
+            "type": "TEXT"
+        }
+    ]
+}
+
+SECTION NAMES:
+HERO, BENEFITS_ICONS, TESTIMONIALS, FAQ, FEATURED_BRANDS, HEADER, NAVBAR, PRODUCT_OFFER, UGC_VIDEOS, HOW_TO_USE, COMPARISON_TABLE, BEFORE_AFTER, REVIEWS, GUARANTEE_SECTION, FOOTER, BENEFITS_BLOCKS_IMAGES, BENEFITS_LONG_DESCRIPTION
+
+VARIABLE NAMING:
+- Use descriptive, camelCase names
+- For links, add "Url" suffix for href variables
+- Group related variables logically (feature1Title, feature1Description, feature1Icon)
+
+IMPORTANT: Never modify the styling, layout, or functionality. Only replace static content with variables.
+IMPORTANT: Default values that are context related should never be provided, the sections should be compatible with any product, additionally when default value is provided the prompt won't work, so for context related value, the default value should be null, and for static things that are not dependent on the context you choose if you want them to be generated (prompt only) or static (default value only)
+
+When you replace links, set the default_value as the old link value and keep the prompt empty.
+
+Return the response in this exact JSON format:
+{
+    "converted_html": "...",
+    "schema": {...}
+}
+PROMPT;
+    }
+
+
+    private function getSystemPromptFull(): string
+    {
+        return <<<PROMPT
+You are a section converter that transforms static HTML/Liquid code into configurable templates.
+
+YOUR ONLY JOB:
+1. Take the provided HTML/Liquid code exactly as-is
 2. Identify static content (text, images, links)
 3. Replace static content with template variables
 4. Generate a JSON schema for the variables

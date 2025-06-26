@@ -56,6 +56,8 @@ class SectionConverterController extends Controller
                     ]
                 );
             }
+
+
         }
 
         return response()->json(['success' => true, 'message' => 'Section prompted successfully!']);

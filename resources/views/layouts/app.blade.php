@@ -69,7 +69,7 @@
                     <span class="text-sm" x-show="sidebarOpen" x-transition>Sections</span>
                 </a>
 
-                <a href="#" class="nav-item flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-700">
+                <a href="{{ route('landing-pages.index') }}" class="nav-item flex items-center gap-3 px-2 py-2 rounded hover:bg-gray-700">
                     <svg fill="#000000" viewBox="0 0 24 24" id="add-file-6" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 flex-shrink-0 text-blue-500"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M16,19h4m-2-2v4M8,13h6m0-4H8" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M12,21H5a1,1,0,0,1-1-1V4A1,1,0,0,1,5,3h9l4,4v6" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>
                     <span class="text-sm" x-show="sidebarOpen" x-transition>LandingPages</span>
                 </a>

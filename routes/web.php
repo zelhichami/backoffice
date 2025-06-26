@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CodeEditorController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionConverterController;
 use Illuminate\Support\Facades\Route;
@@ -56,8 +57,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/section/variables/{variable}', [CodeEditorController::class, 'destroyVariable'])->name('section.variables.destroy');
 
     Route::post('/section/dataset/{section}', [CodeEditorController::class, 'saveDataset'])->name('section.saveDataset');
-    Route::post('/section/prompt/{section}', [SectionConverterController::class, 'convert'])->name('section.prompt');;
-    //Route::post('/section/prompt/{section}', [CodeEditorController::class, 'promptSection'])->name('section.prompt');
+    Route::post('/section/prompt/{section}', [SectionConverterController::class, 'convert'])->name('section.prompt');
+
+
+    Route::get('landing-pages', [LandingPageController::class, 'index'])->name('landing-pages.index');
+    Route::post('landing-pages/preview', [LandingPageController::class, 'preview'])->name('landing-pages.preview');
+
 
 
 });

@@ -780,14 +780,14 @@
                     }
 
                     const promptButton = document.getElementById('prompt-section-btn');
-                    const loadingSpinner = document.getElementById('prompt-loading-spinner');
+                    //const loadingSpinner = document.getElementById('prompt-loading-spinner');
                     const buttonText = promptButton.querySelector('span');
 
                     promptButton.addEventListener('click', function() {
 
                         // --- UI feedback: Show loading state ---
                         buttonText.textContent = 'Prompting...';
-                        loadingSpinner.classList.remove('hidden');
+                        //loadingSpinner.classList.remove('hidden');
                         promptButton.disabled = true;
 
                         // --- Make the API call to the backend ---
@@ -814,6 +814,7 @@
                                     window.location.reload();
                                 } else {
                                     // Handle server-side failures
+                                    console.error('Error prompting section:', data.message);
                                     throw new Error(data.message || 'An unknown error occurred.');
                                 }
                             })
@@ -824,7 +825,7 @@
                             .finally(() => {
                                 // --- UI feedback: Restore button state ---
                                 buttonText.textContent = 'Prompt this Section';
-                                loadingSpinner.classList.add('hidden');
+                                //loadingSpinner.classList.add('hidden');
                                 promptButton.disabled = false;
                             });
                     });
@@ -1339,33 +1340,35 @@
                     if (localStorage.getItem(PREVIEW_PRODUCT_STORAGE_KEY)) {
                         updatePreviewHeaderProductImage();
                     }
+
+                    const modal = document.getElementById("style-settings-modal");
+                    const header = document.getElementById("style-modal-header");
+
+                    let isDragging = false;
+                    let offsetX, offsetY;
+
+                    header.addEventListener("mousedown", (e) => {
+                        isDragging = true;
+                        offsetX = e.clientX - modal.offsetLeft;
+                        offsetY = e.clientY - modal.offsetTop;
+                        document.body.style.userSelect = 'none'; // Prevent text selection while dragging
+                    });
+
+                    document.addEventListener("mousemove", (e) => {
+                        if (isDragging) {
+                            modal.style.left = (e.clientX - offsetX) + "px";
+                            modal.style.top = (e.clientY - offsetY) + "px";
+                        }
+                    });
+
+                    document.addEventListener("mouseup", () => {
+                        isDragging = false;
+                        document.body.style.userSelect = ''; // Re-enable text selection
+                    });
+
                 });
 
 
-                const modal = document.getElementById("style-settings-modal");
-                const header = document.getElementById("style-modal-header");
-
-                let isDragging = false;
-                let offsetX, offsetY;
-
-                header.addEventListener("mousedown", (e) => {
-                    isDragging = true;
-                    offsetX = e.clientX - modal.offsetLeft;
-                    offsetY = e.clientY - modal.offsetTop;
-                    document.body.style.userSelect = 'none'; // Prevent text selection while dragging
-                });
-
-                document.addEventListener("mousemove", (e) => {
-                    if (isDragging) {
-                        modal.style.left = (e.clientX - offsetX) + "px";
-                        modal.style.top = (e.clientY - offsetY) + "px";
-                    }
-                });
-
-                document.addEventListener("mouseup", () => {
-                    isDragging = false;
-                    document.body.style.userSelect = ''; // Re-enable text selection
-                });
 
 
 

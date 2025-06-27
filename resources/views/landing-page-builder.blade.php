@@ -94,6 +94,7 @@
                         <div class="p-4">
                             <h3 class="text-md font-semibold text-gray-800 truncate" title="{{ $section->name }}">{{ $section->name }}</h3>
                             <p class="text-xs text-gray-500 mt-1">Status: {{ ucwords(str_replace('_', ' ', $section->status)) }}</p>
+                            <p class="text-xs text-gray-500 mt-1">ID: {{ ucwords(str_replace('_', ' ', $section->id)) }}</p>
                         </div>
                     </div>
                 @endforeach

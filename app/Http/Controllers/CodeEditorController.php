@@ -1106,18 +1106,70 @@ class CodeEditorController extends Controller
             }
 
             $base64Image = 'data:image/jpeg;base64,' . base64_encode($imageContent);
-            $prompt = "You are a top-level design assistant generating a complete color token set for a landing page based solely on a provided product image. Your job is to extract harmonious, accessible, and brand-aligned colors that follow the design logic and token structure outlined below.\n\n🎯 OBJECTIVE:\nExtract and generate a design system color palette from the product image that follows strict branding logic, contrast rules, and token structure. Output must be used directly in a CSS theme or design system.\n\n📥 INPUT:\nA product image (PNG or JPG)\n\nLight mode (default)\n\nUse your best design judgment to select Primary and Accent colors based on the product packaging, contents, and theme.\n\n\n🔁 LOGIC RULES:\n🎨 COLOR DEFINITIONS\nPrimary Color:\n\nMain brand color from the product\n\nUsed for: CTA background, header, icons, price (if dark), headline (on light bg)\n\nAccent Color:\n\nHarmonizes with primary color\n\nUsed in background sections and secondary UI visuals\n\n🎨 SECTION BACKGROUND COLORS\n--bg-section-primary: Very light tint of --color-primary\n\n--bg-section-accent: Very light tint of --color-accent\n\nLight mode → tints toward white\n\nDark mode → shades toward black\n\n( --text-muted) Text muted → must be like fg but more lighter in the light mode, and more darker in the dark mode\n( --bg-muted) bg muted → must be like bg but more lighter in the dark mode, and more darker in the light mode \n\n--fg-section-* must ensure WCAG AA contrast with their bg.\n\n🎯 FOREGROUND PAIRING RULES\nIf --bg-section-primary is used → --fg-section-primary = color-primary but it should be more darker in the light mode and more lighter in the dark mode\n\nIf --bg-section-accent is used → --fg-section-accent = color-accent but it should be more darker in the light mode and more lighter in the dark mode\n\nIf --color-primary or --color-accent used as full backgrounds → foreground must be white or high-contrast light version\n\n\n🧠 ACCESSIBILITY RULES\n\nIf the accent color is not matching with the primary color ( and you as Color pallet expert ) ignore that accent color and bring or propose another color that will match with the primary color\n\nThe section primary fg\n\nAll text colors must meet 5:1 contrast minimum with their backgrounds\n\nNever use low-contrast primary/accent pairings\n\nFallback to #000000 or #FFFFFF where needed for clarity\n\n🔧 COMPONENT TOKENS\n--color-primary-soft: Optional, use for icon backgrounds (20–30% opacity tint)\n\nCTA, stars, icons = always use --color-primary\n\nSecondary use of --color-accent = visual variety (never overuse)\n\n📤 OUTPUT FORMAT:\nReturn the result strictly in this JSON structure:\n\n{\n  \"--color-primary\": \"#HEX\",\n  \"--color-primary-fg\": \"#HEX\",\n  \"--color-accent\": \"#HEX\",\n  \"--color-accent-fg\": \"#HEX\",\n  \"--bg-section-primary\": \"#HEX\",\n  \"--fg-section-primary\": \"#HEX\",\n  \"--bg-section-accent\": \"#HEX\",\n  \"--fg-section-accent\": \"#HEX\",\n  \"--background\": \"#HEX\",\n  \"--fg\": \"#HEX\",\n  \"--text-muted\": \"#HEX\",\n  \"--bg-muted\": \"#HEX\",\n  \"--font-body\": \"'Poppins', sans-serif\",\n  \"--font-header\": \"'Poppins', sans-serif\",\n  \"--button-border-radius\": \"0.5rem\",\n  \"--card-border-radius\": \"0.5rem\"\n}";
+            //$prompt = "You are a top-level design assistant generating a complete color token set for a landing page based solely on a provided product image. Your job is to extract harmonious, accessible, and brand-aligned colors that follow the design logic and token structure outlined below.\n\n🎯 OBJECTIVE:\nExtract and generate a design system color palette from the product image that follows strict branding logic, contrast rules, and token structure. Output must be used directly in a CSS theme or design system.\n\n📥 INPUT:\nA product image (PNG or JPG)\n\nLight mode (default)\n\nUse your best design judgment to select Primary and Accent colors based on the product packaging, contents, and theme.\n\n\n🔁 LOGIC RULES:\n🎨 COLOR DEFINITIONS\nPrimary Color:\n\nMain brand color from the product\n\nUsed for: CTA background, header, icons, price (if dark), headline (on light bg)\n\nAccent Color:\n\nHarmonizes with primary color\n\nUsed in background sections and secondary UI visuals\n\n🎨 SECTION BACKGROUND COLORS\n--bg-section-primary: Very light tint of --color-primary\n\n--bg-section-accent: Very light tint of --color-accent\n\nLight mode → tints toward white\n\nDark mode → shades toward black\n\n( --text-muted) Text muted → must be like fg but more lighter in the light mode, and more darker in the dark mode\n( --bg-muted) bg muted → must be like bg but more lighter in the dark mode, and more darker in the light mode \n\n--fg-section-* must ensure WCAG AA contrast with their bg.\n\n🎯 FOREGROUND PAIRING RULES\nIf --bg-section-primary is used → --fg-section-primary = color-primary but it should be more darker in the light mode and more lighter in the dark mode\n\nIf --bg-section-accent is used → --fg-section-accent = color-accent but it should be more darker in the light mode and more lighter in the dark mode\n\nIf --color-primary or --color-accent used as full backgrounds → foreground must be white or high-contrast light version\n\n\n🧠 ACCESSIBILITY RULES\n\nIf the accent color is not matching with the primary color ( and you as Color pallet expert ) ignore that accent color and bring or propose another color that will match with the primary color\n\nThe section primary fg\n\nAll text colors must meet 5:1 contrast minimum with their backgrounds\n\nNever use low-contrast primary/accent pairings\n\nFallback to #000000 or #FFFFFF where needed for clarity\n\n🔧 COMPONENT TOKENS\n--color-primary-soft: Optional, use for icon backgrounds (20–30% opacity tint)\n\nCTA, stars, icons = always use --color-primary\n\nSecondary use of --color-accent = visual variety (never overuse)\n\n📤 OUTPUT FORMAT:\nReturn the result strictly in this JSON structure:\n\n{\n  \"--color-primary\": \"#HEX\",\n  \"--color-primary-fg\": \"#HEX\",\n  \"--color-accent\": \"#HEX\",\n  \"--color-accent-fg\": \"#HEX\",\n  \"--bg-section-primary\": \"#HEX\",\n  \"--fg-section-primary\": \"#HEX\",\n  \"--bg-section-accent\": \"#HEX\",\n  \"--fg-section-accent\": \"#HEX\",\n  \"--background\": \"#HEX\",\n  \"--fg\": \"#HEX\",\n  \"--text-muted\": \"#HEX\",\n  \"--bg-muted\": \"#HEX\",\n  \"--font-body\": \"'Poppins', sans-serif\",\n  \"--font-header\": \"'Poppins', sans-serif\",\n  \"--button-border-radius\": \"0.5rem\",\n  \"--card-border-radius\": \"0.5rem\"\n}";
 
+            $prompt_system = "You are a top-level AI design assistant. Your job is to extract a clean, accessible, and brand-aligned color token set from a provided product image. You must strictly follow the token structure, contrast rules, and output format specified by the user. Always prioritize visual harmony, WCAG accessibility, and CSS-compatibility. Output only the JSON color tokens, nothing else.";
+            $prompt_user = <<<EOT
+Generate a complete, accessible, and harmonious color token set for a landing page based on the uploaded product image. Use your best design judgment to identify the primary brand color and a complementary accent color based on the product packaging, content, or theme.
+
+Apply the following rules:
+
+OBJECTIVE:
+Extract a color palette that is brand-aligned and visually balanced, suitable for light mode UI. Follow accessibility standards, especially WCAG contrast ratios. Your output will be used directly in a CSS theme or design system.
+
+COLOR RULES:
+--bg-primary: The main brand color.
+--bg-accent: A complementary color that harmonizes with --bg-primary.
+--bg-section-primary: A very light tint of --bg-primary (for section backgrounds).
+--bg-section-accent: A very light tint of --bg-accent (for secondary sections).
+--fg-section-primary: A darker version of --bg-primary (for text on --bg-section-primary).
+--fg-section-accent: A darker version of --bg-accent (for text on --bg-section-accent).
+--bg-muted: A variant of --bg that is slightly darker for light mode.
+--fg-muted: A variant of --fg that is slightly lighter for light mode.
+
+Ensure that:
+- All text meets at least 5:1 contrast with its background.
+- If the chosen accent color does not match the primary, replace it with a better fit.
+- Use white or high-contrast light text on full --bg-primary or --bg-accent sections.
+
+OUTPUT FORMAT:
+Return the result strictly in this JSON format:
+
+{
+  "--bg": "#HEX",
+  "--fg": "#HEX",
+  "--bg-primary": "#HEX",
+  "--fg-primary": "#HEX",
+  "--bg-accent": "#HEX",
+  "--fg-accent": "#HEX",
+  "--bg-section-primary": "#HEX",
+  "--fg-section-primary": "#HEX",
+  "--bg-section-accent": "#HEX",
+  "--fg-section-accent": "#HEX",
+  "--bg-muted": "#HEX",
+  "--fg-muted": "#HEX",
+  "--font-body": "'Poppins', sans-serif",
+  "--font-header": "'Poppins', sans-serif",
+  "--button-border-radius": "0.5rem",
+  "--card-border-radius": "0.5rem"
+}
+EOT;
             $promptMessages = [
                 [
                     'role' => 'system',
-                    'content' => $prompt
+                    'content' => $prompt_system
                 ],
                 [
                     'role' => 'user',
                     'content' => [
-                        ['type' => 'text', 'text' => "generate palette based on this product image, make sur to focus product colors not other objects"],
-                        ['type' => 'image_url', 'image_url' => ['url' => $base64Image]],
+                        [
+                            'type' => 'text',
+                            'text' => $prompt_user
+                        ],
+                        [
+                            'type' => 'image_url',
+                            'image_url' => ['url' => $base64Image]
+                        ],
                     ]
                 ]
             ];

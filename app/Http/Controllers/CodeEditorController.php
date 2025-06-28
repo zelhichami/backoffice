@@ -1173,7 +1173,7 @@ If --color-primary or --color-accent used as full backgrounds → foreground mus
 
 -Fallback to #000000 or #FFFFFF where needed for clarity
 
--When generating landing pages for eCommerce stores, apply dark mode themes by default for product categories that naturally align with darker aesthetics (e.g., Gaming, Tech Gadgets, Nightwear, Music Gear, Luxury Accessories). Use design best practices to determine if a category visually benefits from a dark theme.
+-When generating landing pages for eCommerce stores, apply dark mode themes by default for product categories that naturally align with darker aesthetics (Gaming, Tech & Gadgets, Nightwear & Lingerie, Music Equipment & DJ Gear, Luxury Watches & Accessories, Fitness Supplements, Tattoo Supplies, LED/Neon Products, Black/Streetwear Fashion, Home Theater & Audio, Dark Cosmetics (e.g., eyeliner, nail polish), Adult Products, and Esports Merchandise). Use design best practices to determine if a category visually benefits from a dark theme.
 For these specific categories, ensure that 60% of all generated versions (i.e., 6 out of every 10) use a dark mode color palette. The remaining 40% can be light or alternate themes to provide variety and support A/B testing.
 
 🔧 COMPONENT TOKENS

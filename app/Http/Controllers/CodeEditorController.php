@@ -1155,8 +1155,8 @@ Dark mode → shades toward black
 --fg-section-* must ensure WCAG AA contrast with their bg.
 
 🎯 FOREGROUND PAIRING RULES
-If --bg-section-primary is used → --fg-section-primary = color-primary but it should be more darker in the light mode to (80% of the max) and more lighter in the dark mode to max (80% of the max) ( to avoid unread text)
-If --bg-section-accent is used → --fg-section-accent = color-accent but it should be more darker to max (80% of the max) in the light mode and more lighter to max in the dark mode (80% of the max) ( to avoid unread text)
+If --bg-section-primary is used → --fg-section-primary = color-primary but it should be more darker in the light mode to (at least 96% toward black) and more lighter in the dark mode to max (at least 96% toward white) ( to avoid unread text)
+If --bg-section-accent is used → --fg-section-accent = color-accent but it should be more darker to max (96% of the max) in the light mode and more lighter to max in the dark mode (96% of the max) ( to avoid unread text)
 
 If --color-primary or --color-accent used as full backgrounds → foreground must be white or high-contrast light version
 

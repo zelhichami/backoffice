@@ -1175,8 +1175,12 @@ If --color-primary or --color-accent used as full backgrounds → foreground mus
 
 -Fallback to #000000 or #FFFFFF where needed for clarity
 
--Inverse to dark mode themes ( Full Sections will be black) by default for product categories that naturally align with darker aesthetics (Gaming, Tech & Gadgets, Nightwear & Lingerie, Music Equipment & DJ Gear, Luxury Watches & Accessories, Fitness Supplements, Tattoo Supplies, LED/Neon Products, Black/Streetwear Fashion, Home Theater & Audio, Dark Cosmetics (e.g., eyeliner, nail polish), Adult Products, and Esports Merchandise, Full dark products itselfs). Use design best practices to determine if a category visually benefits from a dark theme.
-For these specific categories, ensure that 90% of all generated versions (i.e., 9 out of every 10) use a dark mode color palette. The remaining 10% can be light or alternate themes to provide variety and support A/B testing.
+-For product categories that visually benefit from dark aesthetics (e.g., Gaming, Tech & Gadgets, Nightwear, Music Equipment, Luxury Watches, Fitness Supplements, Tattoo Supplies, Neon/LED, Streetwear, Home Audio, Dark Cosmetics, Adult Products, and all primarily black-colored products), apply a complete dark mode transformation. This means:
+--background, --bg-section-primary, --bg-section-accent, --bg-muted, and all other background tokens must shift to dark tones (e.g., deep black, charcoal, soft dark neutrals).
+--fg, --fg-section-*, and all foreground tokens must shift to light tones (e.g., white, light gray) with WCAG AA contrast.
+This is not limited to making --color-primary black — instead, the entire color palette must invert into a dark theme mode.
+Color harmony and accessibility must still be maintained — backgrounds should use tints/shades of the primary and accent, but based on dark foundations.
+For these products, 90% of generated versions must default to full dark mode, not just a dark primary. Only 10% may be light mode for testing.
 
 
 🔧 COMPONENT TOKENS
@@ -1207,7 +1211,6 @@ Return the result strictly in this JSON structure:
   "--button-border-radius": "0.5rem",
   "--card-border-radius": "0.5rem"
 }
-
 EOT;
 
             $prompt_user_new = <<<EOT

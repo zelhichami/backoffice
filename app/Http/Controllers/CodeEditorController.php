@@ -1110,6 +1110,99 @@ class CodeEditorController extends Controller
 
             $prompt_system = "You are a top-level AI design assistant. Your job is to extract a clean, accessible, and brand-aligned color token set from a provided product image. You must strictly follow the token structure, contrast rules, and output format specified by the user. Always prioritize visual harmony, WCAG accessibility, and CSS-compatibility. Output only the JSON color tokens, nothing else.";
             $prompt_user = <<<EOT
+🧠 Prompt to Generate AI-Compatible Color Tokens for a Landing Page
+
+You are a top-level design assistant generating a complete color token set for a landing page based solely on a provided product image. Your job is to extract harmonious, accessible, and brand-aligned colors that follow the design logic and token structure outlined below.
+
+🎯 OBJECTIVE:
+Extract and generate a design system color palette from the product image that follows strict branding logic, contrast rules, and token structure. Output must be used directly in a CSS theme or design system.
+
+📥 INPUT:
+A product image (PNG or JPG)
+
+Light mode (default)
+
+Use your best design judgment to select Primary and Accent colors based on the product packaging, contents, and theme.
+
+
+🔁 LOGIC RULES:
+🎨 COLOR DEFINITIONS
+Primary Color:
+
+Main brand color from the product
+
+Used for: CTA background, header, icons, price (if dark), headline (on light bg)
+
+Accent Color:
+
+Harmonizes with primary color
+
+Used in background sections and secondary UI visuals
+
+🎨 SECTION BACKGROUND COLORS
+--bg-section-primary: Very light tint of --color-primary
+
+--bg-section-accent: Very light tint of --color-accent
+
+Light mode → tints toward white
+
+Dark mode → shades toward black
+
+( --text-muted) Text muted → must be like fg but more lighter in the light mode, and more darker in the dark mode
+( --bg-muted) bg muted → must be like bg but more lighter in the dark mode, and more darker in the light mode
+
+--fg-section-* must ensure WCAG AA contrast with their bg.
+
+🎯 FOREGROUND PAIRING RULES
+If --bg-section-primary is used → --fg-section-primary = color-primary but it should be more darker in the light mode and more lighter in the dark mode
+
+If --bg-section-accent is used → --fg-section-accent = color-accent but it should be more darker in the light mode and more lighter in the dark mode
+
+If --color-primary or --color-accent used as full backgrounds → foreground must be white or high-contrast light version
+
+🧠 ACCESSIBILITY RULES
+
+If the accent color is not matching with the primary color ( and you as Color pallet expert ) ignore that accent color and bring or propose another color that will match with the primary color
+
+The section primary fg
+
+All text colors must meet 5:1 contrast minimum with their backgrounds
+
+Never use low-contrast primary/accent pairings
+
+Fallback to #000000 or #FFFFFF where needed for clarity
+
+🔧 COMPONENT TOKENS
+--color-primary-soft: Optional, use for icon backgrounds (20–30% opacity tint)
+
+CTA, stars, icons = always use --color-primary
+
+Secondary use of --color-accent = visual variety (never overuse)
+
+📤 OUTPUT FORMAT:
+Return the result strictly in this JSON structure:
+
+{
+  "--color-primary": "#HEX",
+  "--color-primary-fg": "#HEX",
+  "--color-accent": "#HEX",
+  "--color-accent-fg": "#HEX",
+  "--bg-section-primary": "#HEX",
+  "--fg-section-primary": "#HEX",
+  "--bg-section-accent": "#HEX",
+  "--fg-section-accent": "#HEX",
+  "--background": "#HEX",
+  "--fg": "#HEX",
+  "--text-muted": "#HEX",
+  "--bg-muted": "#HEX",
+  "--font-body": "'Poppins', sans-serif",
+  "--font-header": "'Poppins', sans-serif",
+  "--button-border-radius": "0.5rem",
+  "--card-border-radius": "0.5rem"
+}
+EOT;
+
+            $prompt_user_new = <<<EOT
 Generate a complete, accessible, and harmonious color token set for a landing page based on the uploaded product image. Use your best design judgment to identify the primary brand color and a complementary accent color based on the product packaging, content, or theme.
 
 Apply the following rules:

@@ -1111,7 +1111,6 @@ class CodeEditorController extends Controller
 
             $prompt_system = "You are a top-level AI design assistant. Your job is to extract a clean, accessible, and brand-aligned color token set from a provided product image. You must strictly follow the token structure, contrast rules, and output format specified by the user. Always prioritize visual harmony, WCAG accessibility, and CSS-compatibility. Output only the JSON color tokens, nothing else.";
             $prompt_user = <<<EOT
-
 🧠 Prompt to Generate AI-Compatible Color Tokens for a Landing Page
 
 You are a top-level design assistant generating a complete color token set for a landing page based solely on a provided product image. Your job is to extract harmonious, accessible, and brand-aligned colors that follow the design logic and token structure outlined below.
@@ -1175,12 +1174,9 @@ If --color-primary or --color-accent used as full backgrounds → foreground mus
 
 -Fallback to #000000 or #FFFFFF where needed for clarity
 
--For product categories that visually benefit from dark aesthetics (e.g., Gaming, Tech & Gadgets, Nightwear, Music Equipment, Luxury Watches, Fitness Supplements, Tattoo Supplies, Neon/LED, Streetwear, Home Audio, Dark Cosmetics, Adult Products, and all primarily black-colored products), apply a complete dark mode transformation. This means:
---background, --bg-section-primary, --bg-section-accent, --bg-muted, and all other background tokens must shift to dark tones (e.g., deep black, charcoal, soft dark neutrals).
---fg, --fg-section-*, and all foreground tokens must shift to light tones (e.g., white, light gray) with WCAG AA contrast.
-This is not limited to making --color-primary black — instead, the entire color palette must invert into a dark theme mode.
-Color harmony and accessibility must still be maintained — backgrounds should use tints/shades of the primary and accent, but based on dark foundations.
-For these products, 90% of generated versions must default to full dark mode, not just a dark primary. Only 10% may be light mode for testing.
+For dark-themed products (e.g., Gaming, Tech, Nightwear, Streetwear, etc. — including any black-colored product), apply a full dark mode layout: all backgrounds must shift to dark tones, and all foregrounds to light tones with proper WCAG contrast.
+Do not set --color-primary to a shade that blends with the background. Instead, use a distinct, brand-aligned primary color (for CTAs, icons, headers) to ensure visual separation and clarity.
+90% of generations must default to this full dark mode; only 10% may test light themes.
 
 
 🔧 COMPONENT TOKENS

@@ -1,7 +1,7 @@
 <div id="preview-display-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-90 overflow-hidden h-full w-full z-[60] flex items-center justify-center hidden">
     <div class="modal-content relative w-full h-full max-w-full max-h-full bg-white rounded-lg shadow-xl flex flex-col">
-        <div class="flex border-b border-b-gray-300 justify-between items-center p-3 sm:p-4 border-b flex-shrink-0 bg-gray-100 relative">
-            <h3 class="text-sm font-semibold text-gray-900">Section Preview</h3>
+        <div class="flex border-b border-b-gray-300 justify-between items-center p-2 border-b flex-shrink-0 bg-gray-100 relative">
+            <h3 class="text-sm font-semibold text-gray-900">xPage Preview</h3>
             <div class="absolute left-1/2 -translate-x-1/2 flex items-center space-x-2">
                 <button data-width="100%" class="device-btn flex items-center justify-center gap-1 text-gray-800  px-2 py-2 bg-gray-300 rounded hover:bg-gray-400 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"  viewBox="0 0 24 24" id="monitor"><path fill="currentColor" d="M19,3H5A3,3,0,0,0,2,6v8a3,3,0,0,0,3,3h6v2H7a1,1,0,0,0,0,2H17a1,1,0,0,0,0-2H13V17h6a3,3,0,0,0,3-3V6A3,3,0,0,0,19,3Zm1,11a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V6A1,1,0,0,1,5,5H19a1,1,0,0,1,1,1Z"></path></svg>

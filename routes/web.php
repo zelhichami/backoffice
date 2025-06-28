@@ -4,6 +4,7 @@ use App\Http\Controllers\CodeEditorController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionConverterController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -67,6 +68,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/palette/generate', [CodeEditorController::class, 'generatePalette'])->name('palette.generate');
 
+    // Settings Routes
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [SettingsController::class, 'save'])->name('settings.save');
 });
 
 require __DIR__.'/auth.php';

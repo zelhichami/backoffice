@@ -1162,8 +1162,8 @@ If --color-primary or --color-accent used as full backgrounds → foreground mus
 
 🧠 ACCESSIBILITY RULES
 
--Primary/accent Color Suitability Rule: The selected --color-primary and --color-accent must be a strong, versatile color suitable for repeated use across core UI elements (headers, CTA buttons, icons, etc.). It must ensure high legibility, support tonal variations (light/dark tints), and maintain visual balance. Avoid using overly luminous, metallic, or symbolic colors like gold (#FFD700), silver, neon shades, or highly reflective tones as primary colors — these are best reserved for highlights or accents. The primary color should reflect the brand's essence without overpowering or fatiguing the eye, and it must pass WCAG contrast standards in both its default and tinted forms.
-
+-All colors must be clear, usable, and brand-appropriate — never overly fancy or visually aggressive. Avoid all neon, metallic, or ultra-bright tones (e.g., #F00000, #00FF00, #00FFFF, #FFD700, #FFFF00, etc.). These are disallowed across the entire palette — including primary, accent, section backgrounds, and text — as they harm readability and brand trust.
+Use only balanced, web-safe hues that support tints, shades, and accessibility contrast (WCAG 2.1 AA+). Colors must always serve usability, not just visual punch. Keep visual tone elegant, functional, and easy on the eyes.
 -If the accent color is not matching with the primary color ( and you as Color pallet expert ) ignore that accent color and bring or propose another color that will match with the primary color
 
 -The section primary fg

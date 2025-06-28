@@ -17,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 use App\Services\ClaudeService;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class CodeEditorController extends Controller
 {
@@ -1064,5 +1065,58 @@ class CodeEditorController extends Controller
             Log::error("Error rolling back HTML for section {$section->id}: " . $e->getMessage());
             return response()->json(['message' => 'Failed to rollback HTML content.'], 500);
         }
+    }
+
+    public function generatePalette(Request $request): JsonResponse
+    {
+        $request->validate([
+            'image_url' => 'required|url',
+        ]);
+
+        //try {
+            $imageUrl = $request->input('image_url');
+
+            // Download the image content
+            $imageContent = Http::get($imageUrl)->body();
+            if (!$imageContent) {
+                return response()->json(['message' => 'Failed to fetch image from URL.'], 400);
+            }
+
+            $base64Image = 'data:image/jpeg;base64,' . base64_encode($imageContent);
+            $prompt = "You are a top-level design assistant generating a complete color token set for a landing page based solely on a provided product image. Your job is to extract harmonious, accessible, and brand-aligned colors that follow the design logic and token structure outlined below.\n\n🎯 OBJECTIVE:\nExtract and generate a design system color palette from the product image that follows strict branding logic, contrast rules, and token structure. Output must be used directly in a CSS theme or design system.\n\n📥 INPUT:\nA product image (PNG or JPG)\n\nLight mode (default)\n\nUse your best design judgment to select Primary and Accent colors based on the product packaging, contents, and theme.\n\n\n🔁 LOGIC RULES:\n🎨 COLOR DEFINITIONS\nPrimary Color:\n\nMain brand color from the product\n\nUsed for: CTA background, header, icons, price (if dark), headline (on light bg)\n\nAccent Color:\n\nHarmonizes with primary color\n\nUsed in background sections and secondary UI visuals\n\n🎨 SECTION BACKGROUND COLORS\n--bg-section-primary: Very light tint of --color-primary\n\n--bg-section-accent: Very light tint of --color-accent\n\nLight mode → tints toward white\n\nDark mode → shades toward black\n\n( --text-muted) Text muted → must be like fg but more lighter in the light mode, and more darker in the dark mode\n( --bg-muted) bg muted → must be like bg but more lighter in the dark mode, and more darker in the light mode \n\n--fg-section-* must ensure WCAG AA contrast with their bg.\n\n🎯 FOREGROUND PAIRING RULES\nIf --bg-section-primary is used → --fg-section-primary = color-primary but it should be more darker in the light mode and more lighter in the dark mode\n\nIf --bg-section-accent is used → --fg-section-accent = color-accent but it should be more darker in the light mode and more lighter in the dark mode\n\nIf --color-primary or --color-accent used as full backgrounds → foreground must be white or high-contrast light version\n\n\n🧠 ACCESSIBILITY RULES\n\nIf the accent color is not matching with the primary color ( and you as Color pallet expert ) ignore that accent color and bring or propose another color that will match with the primary color\n\nThe section primary fg\n\nAll text colors must meet 5:1 contrast minimum with their backgrounds\n\nNever use low-contrast primary/accent pairings\n\nFallback to #000000 or #FFFFFF where needed for clarity\n\n🔧 COMPONENT TOKENS\n--color-primary-soft: Optional, use for icon backgrounds (20–30% opacity tint)\n\nCTA, stars, icons = always use --color-primary\n\nSecondary use of --color-accent = visual variety (never overuse)\n\n📤 OUTPUT FORMAT:\nReturn the result strictly in this JSON structure:\n\n{\n  \"--color-primary\": \"#HEX\",\n  \"--color-primary-fg\": \"#HEX\",\n  \"--color-accent\": \"#HEX\",\n  \"--color-accent-fg\": \"#HEX\",\n  \"--bg-section-primary\": \"#HEX\",\n  \"--fg-section-primary\": \"#HEX\",\n  \"--bg-section-accent\": \"#HEX\",\n  \"--fg-section-accent\": \"#HEX\",\n  \"--background\": \"#HEX\",\n  \"--fg\": \"#HEX\",\n  \"--text-muted\": \"#HEX\",\n  \"--bg-muted\": \"#HEX\",\n  \"--font-body\": \"'Poppins', sans-serif\",\n  \"--font-header\": \"'Poppins', sans-serif\",\n  \"--button-border-radius\": \"0.5rem\",\n  \"--card-border-radius\": \"0.5rem\"\n}";
+
+            $promptMessages = [
+                [
+                    'role' => 'system',
+                    'content' => $prompt
+                ],
+                [
+                    'role' => 'user',
+                    'content' => [
+                        ['type' => 'text', 'text' => $prompt],
+                        ['type' => 'image_url', 'image_url' => ['url' => $base64Image]],
+                    ]
+                ]
+            ];
+            $result = OpenAI::chat()->create([
+                'model' => 'gpt-4o',
+                'messages' => $promptMessages,
+                'response_format' => ['type' => 'json_object'], // Enable JSON mode
+                'max_tokens' => 1000,
+            ]);
+            $palette = json_decode($result->choices[0]->message->content, true);
+
+
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return response()->json(['message' => 'Failed to parse AI response.', 'raw_response' => $result->choices[0]->message->content], 500);
+            }
+
+            return response()->json($palette);
+
+        /*} catch (\Exception $e) {
+            Log::error('OpenAI Palette Generation Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to generate palette.'], 500);
+        }*/
     }
 }

@@ -392,6 +392,8 @@
                     const previewHeaderProductImage = document.getElementById('preview-header-product-image');
                     const paletteGrid = document.getElementById('ssp-palette-grid');
                     const rollbackButton = document.getElementById('rollback-button');
+                    const generatePaletteBtn = document.getElementById('generate-palette-btn');
+
 
                     // --- Initial State & Data ---
                     const initialStatus = '{{ $section->status }}';
@@ -411,21 +413,16 @@
 
                         { key: 'color-primary',        inputId: 'ssp-color-primary',        cssVar: '--color-primary',        default: '#3B82F6' },
                         { key: 'color-primary-fg',     inputId: 'ssp-color-primary-fg',     cssVar: '--color-primary-fg',     default: '#ffffff' },
-                        { key: 'color-secondary',      inputId: 'ssp-color-secondary',      cssVar: '--color-secondary',      default: '#F59E0B' },
-                        { key: 'color-secondary-fg',   inputId: 'ssp-color-secondary-fg',   cssVar: '--color-secondary-fg',   default: '#000000' },
                         { key: 'color-accent',         inputId: 'ssp-color-accent',         cssVar: '--color-accent',         default: '#10B981' },
                         { key: 'color-accent-fg',      inputId: 'ssp-color-accent-fg',      cssVar: '--color-accent-fg',      default: '#ffffff' },
 
                         { key: 'bg-section-primary',   inputId: 'ssp-bg-section-primary',   cssVar: '--bg-section-primary',   default: '#E0F2FE' },
                         { key: 'fg-section-primary',   inputId: 'ssp-fg-section-primary',   cssVar: '--fg-section-primary',   default: '#0369A1' },
-                        { key: 'bg-section-secondary', inputId: 'ssp-bg-section-secondary', cssVar: '--bg-section-secondary', default: '#FEF3C7' },
-                        { key: 'fg-section-secondary', inputId: 'ssp-fg-section-secondary', cssVar: '--fg-section-secondary', default: '#92400E' },
                         { key: 'bg-section-accent',    inputId: 'ssp-bg-section-accent',    cssVar: '--bg-section-accent',    default: '#ECFDF5' },
                         { key: 'fg-section-accent',    inputId: 'ssp-fg-section-accent',    cssVar: '--fg-section-accent',    default: '#065F46' },
 
                         { key: 'text-muted',           inputId: 'ssp-text-muted',           cssVar: '--text-muted',           default: '#6B7280' },
                         { key: 'bg-muted',             inputId: 'ssp-bg-muted',             cssVar: '--bg-muted',             default: '#F3F4F6' },
-                        { key: 'muted-fg',             inputId: 'ssp-muted-fg',             cssVar: '--muted-fg',             default: '#1F2937' },
 
 
                         { key: 'page-bg',              inputId: 'ssp-page-bg',              cssVar: '--background',     default: '#ffffff' },
@@ -440,54 +437,25 @@
                     ];
 
                     const predefinedPalettes = {
-                        "fashion_apparel": {
-                            "--background": "#EFEFEF",
-                            "--fg": "#000000",
-                            "--bg-section-primary": "#F4E4C1",
-                            "--fg-section-primary": "#000000",
-                            "--bg-section-secondary": "#F9F3E9",
-                            "--fg-section-secondary": "#000000",
-                            "--bg-section-accent": "#E8D5B7",
-                            "--fg-section-accent": "#000000",
-                            "--color-primary": "#8B4513",
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#A0522D",
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#D2B48C",
-                            "--color-accent-fg": "#000000",
-                            "--text-muted": "#8B7765",
-                            "--bg-muted": "#F0E6D6",
-                            "--muted-fg": "#000000",
+                        "default": {
+                            "--color-primary": "#0f0f0f",
+                            "--color-primary-fg": "#ffffff",
+                            "--color-accent": "#dcdcdc",
+                            "--color-accent-fg": "#1a1a1a",
+                            "--bg-section-primary": "#f7f7f7",
+                            "--fg-section-primary": "#121212",
+                            "--bg-section-accent": "#efefef",
+                            "--fg-section-accent": "#1a1a1a",
+                            "--background": "#ffffff",
+                            "--fg": "#111111",
+                            "--text-muted": "#777777",
+                            "--bg-muted": "#f3f3f3",
                             "--font-body": "'Poppins', sans-serif",
                             "--font-header": "'Poppins', sans-serif",
                             "--button-border-radius": "0.5rem",
                             "--card-border-radius": "0.5rem"
-
-                        },
-                        "beauty_makeup": {
-                            "--background": "#FDF8F6",
-                            "--fg": "#000000",
-                            "--bg-section-primary": "#FFE4E1",
-                            "--fg-section-primary": "#000000",
-                            "--bg-section-secondary": "#F8E8E5",
-                            "--fg-section-secondary": "#000000",
-                            "--bg-section-accent": "#FFCCCB",
-                            "--fg-section-accent": "#000000",
-                            "--color-primary": "#E91E63",
-                            "--color-primary-fg": "#FFFFFF",
-                            "--color-secondary": "#D81B60",
-                            "--color-secondary-fg": "#FFFFFF",
-                            "--color-accent": "#FF6B9D",
-                            "--color-accent-fg": "#FFFFFF",
-                            "--text-muted": "#8D6E6E",
-                            "--bg-muted": "#F5E6E8",
-                            "--muted-fg": "#000000",
-                            "--font-body": "'Poppins', sans-serif",
-                            "--font-header": "'Poppins', sans-serif",
-                            "--button-border-radius": "0.5rem",
-                            "--card-border-radius": "0.5rem"
-
                         }
+
                     };
 
 
@@ -620,7 +588,57 @@
                         });
                     }
 
+                    if (generatePaletteBtn) {
+                        generatePaletteBtn.addEventListener('click', async () => {
+                            // Get the selected product's image URL
+                            const imageUrl = localStorage.getItem(PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY);
 
+                            if (!imageUrl) {
+                                showToast('Please select a product with an image.', 'error');
+                                return;
+                            }
+
+                            const generateUrl = '{{ route("palette.generate") }}';
+                            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                            generatePaletteBtn.disabled = true;
+                            generatePaletteBtn.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+                            try {
+                                const response = await fetch(generateUrl, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken
+                                    },
+                                    body: JSON.stringify({ image_url: imageUrl })
+                                });
+
+                                if (!response.ok) {
+                                    const errorData = await response.json();
+                                    throw new Error(errorData.message || 'Failed to generate palette.');
+                                }
+
+                                const palette = await response.json();
+                                const customPaletteTextarea = document.getElementById('custom-palette-json');
+                                const applyCustomPaletteBtn = document.getElementById('apply-custom-palette-btn');
+
+                                if (customPaletteTextarea && applyCustomPaletteBtn) {
+                                    customPaletteTextarea.value = JSON.stringify(palette, null, 2);
+                                    applyCustomPaletteBtn.click();
+                                    showToast('Palette generated and applied successfully!', 'success');
+                                }
+
+                            } catch (error) {
+                                console.error('Palette Generation Error:', error);
+                                showToast(`Error: ${error.message}`, 'error');
+                            } finally {
+                                generatePaletteBtn.disabled = false;
+                                generatePaletteBtn.innerHTML = '<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" ><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.624l.259 1.035.259-1.035a3.375 3.375 0 00-2.456-2.456L14.25 18l1.035.259a3.375 3.375 0 002.456 2.456z" /></svg>';
+                            }
+                        });
+                    }
 
 
                     // START: AI VARIABLE MANAGEMENT SCRIPT

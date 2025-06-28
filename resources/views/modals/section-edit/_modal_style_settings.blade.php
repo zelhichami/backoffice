@@ -14,27 +14,18 @@
         <div class="p-6 overflow-y-auto flex-grow">
             {{-- Colors Pane --}}
             <div id="style-colors-pane" class="style-tab-pane active">
-                <div class="mb-6 border-b pb-4">
+                {{--<div class="mb-6 border-b pb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Quick Palettes</label>
                     <div id="ssp-palette-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                        {{-- Palette items will be dynamically inserted here by JavaScript --}}
+                        --}}{{-- Palette items will be dynamically inserted here by JavaScript --}}{{--
                     </div>
-                </div>
-                {{-- NEW: Custom JSON Palette Section --}}
-                <div class="border-t pt-6 dark:border-gray-700">
-                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Custom Palette</h4>
-                    <div>
-                        <label for="custom-palette-json" class="form-label text-sm">Paste your JSON palette here:</label>
-                        <textarea id="custom-palette-json" rows="8" class="form-input mt-1 w-full text-xs font-mono bg-gray-50 dark:bg-gray-700 dark:text-gray-300" placeholder='{ "--color-primary": "#ff0000", "--color-primary-fg": "#ffffff", ... }'></textarea>
-                        <button id="apply-custom-palette-btn" type="button" class="mt-2 py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm">Apply Custom Palette</button>
-                    </div>
-                </div>
+                </div>--}}
 
-                <div class="grid grid-cols-2 gap-x-6 gap-y-4">
+                <div class="grid grid-cols-2 gap-x-6 gap-y-2">
 
                     {{-- UI Colors + Foregrounds --}}
                     <div class="space-y-1">
-                        <label for="ssp-color-primary" class="block text-xs font-medium text-gray-600">Color Primary</label>
+                        <label for="ssp-color-primary" class="block text-xs font-medium text-gray-600">Color Primary BG</label>
                         <input type="color" id="ssp-color-primary" data-css-var="--color-primary" data-storage-key="color-primary" value="#3B82F6" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
                     <div class="space-y-1">
@@ -42,15 +33,7 @@
                         <input type="color" id="ssp-color-primary-fg" data-css-var="--color-primary-fg" data-storage-key="color-primary-fg" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
                     <div class="space-y-1">
-                        <label for="ssp-color-secondary" class="block text-xs font-medium text-gray-600">Color Secondary</label>
-                        <input type="color" id="ssp-color-secondary" data-css-var="--color-secondary" data-storage-key="color-secondary" value="#F59E0B" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-secondary-fg" class="block text-xs font-medium text-gray-600">Color Secondary FG</label>
-                        <input type="color" id="ssp-color-secondary-fg" data-css-var="--color-secondary-fg" data-storage-key="color-secondary-fg" value="#000000" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-color-accent" class="block text-xs font-medium text-gray-600">Color Accent</label>
+                        <label for="ssp-color-accent" class="block text-xs font-medium text-gray-600">Color Accent BG</label>
                         <input type="color" id="ssp-color-accent" data-css-var="--color-accent" data-storage-key="color-accent" value="#10B981" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
                     <div class="space-y-1">
@@ -68,14 +51,7 @@
                         <label for="ssp-fg-section-primary" class="block text-xs font-medium text-gray-600">Section Primary FG</label>
                         <input type="color" id="ssp-fg-section-primary" data-css-var="--fg-section-primary" data-storage-key="fg-section-primary" value="#0369A1" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
-                    <div class="space-y-1">
-                        <label for="ssp-bg-section-secondary" class="block text-xs font-medium text-gray-600">Section Secondary BG</label>
-                        <input type="color" id="ssp-bg-section-secondary" data-css-var="--bg-section-secondary" data-storage-key="bg-section-secondary" value="#FEF3C7" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-fg-section-secondary" class="block text-xs font-medium text-gray-600">Section Secondary FG</label>
-                        <input type="color" id="ssp-fg-section-secondary" data-css-var="--fg-section-secondary" data-storage-key="fg-section-secondary" value="#92400E" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
+
                     <div class="space-y-1">
                         <label for="ssp-bg-section-accent" class="block text-xs font-medium text-gray-600">Section Accent BG</label>
                         <input type="color" id="ssp-bg-section-accent" data-css-var="--bg-section-accent" data-storage-key="bg-section-accent" value="#ECFDF5" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
@@ -88,26 +64,31 @@
 
                     {{-- Muted Colors --}}
                     <div class="space-y-1">
-                        <label for="ssp-text-muted" class="block text-xs font-medium text-gray-600">Muted Text</label>
-                        <input type="color" id="ssp-text-muted" data-css-var="--text-muted" data-storage-key="text-muted" value="#6B7280" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="ssp-bg-muted" class="block text-xs font-medium text-gray-600">Muted Background</label>
+                        <label for="ssp-bg-muted" class="block text-xs font-medium text-gray-600">Muted BG</label>
                         <input type="color" id="ssp-bg-muted" data-css-var="--bg-muted" data-storage-key="bg-muted" value="#F3F4F6" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
                     <div class="space-y-1">
-                        <label for="ssp-muted-fg" class="block text-xs font-medium text-gray-600">Muted Foreground</label>
-                        <input type="color" id="ssp-muted-fg" data-css-var="--muted-fg" data-storage-key="muted-fg" value="#1F2937" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                        <label for="ssp-muted-fg" class="block text-xs font-medium text-gray-600">Muted FG</label>
+                        <input type="color" id="ssp-text-muted" data-css-var="--text-muted" data-storage-key="text-muted" value="#6B7280" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
 
                     {{-- Other General Colors --}}
                     <div class="space-y-1">
-                        <label for="ssp-page-bg" class="block text-xs font-medium text-gray-600">Page Background</label>
+                        <label for="ssp-page-bg" class="block text-xs font-medium text-gray-600">Page BG</label>
                         <input type="color" id="ssp-page-bg" data-css-var="--background" data-storage-key="page-bg" value="#ffffff" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
                     </div>
                     <div class="space-y-1">
-                        <label for="ssp-page-fg" class="block text-xs font-medium text-gray-600">Page Foreground</label>
+                        <label for="ssp-page-fg" class="block text-xs font-medium text-gray-600">Page FG</label>
                         <input type="color" id="ssp-page-fg" data-css-var="--fg" data-storage-key="page-fg" value="#000000" class="h-8 w-14 border border-gray-300 rounded cursor-pointer">
+                    </div>
+                </div>
+                {{-- NEW: Custom JSON Palette Section --}}
+                <div class="pt-2 dark:border-gray-100">
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-800 mb-2">Custom Palette</h4>
+                    <div>
+                        <label for="custom-palette-json" class="form-label text-sm">Paste your JSON palette here:</label>
+                        <textarea id="custom-palette-json" rows="8" class="form-input mt-1 w-full text-xs font-mono bg-gray-100" placeholder='{ "--color-primary": "#ff0000", "--color-primary-fg": "#ffffff", ... }'></textarea>
+                        <button id="apply-custom-palette-btn" type="button" class="mb-4  py-2 px-4 :opacity-50 modal-cancel-btn !text-sm !py-1.5 !px-3 !w-fit bg-gray-700 text-white rounded-lg border border-border hover:bg-gray-600 shadow-sm inline-flex items-center">Apply</button>
                     </div>
                 </div>
             </div>

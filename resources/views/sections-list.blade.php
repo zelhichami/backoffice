@@ -1,19 +1,79 @@
 @extends('layouts.app')
 
 @section('content')
-    {{-- Removed Alpine x-data from main div --}}
     <div class="p-12">
 
         {{-- Page Header --}}
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-semibold text-gray-700">My Sections</h1>
-            {{-- Added ID for create button --}}
             @if(auth()->user()->hasRole(\App\Models\User::ROLE_INTEGRATOR))
                 <button id="create-section-btn" class=" py-2 px-4 :opacity-50 modal-cancel-btn !text-sm !py-1.5 !px-3 !w-fit bg-gray-700 text-white rounded-lg border border-border hover:bg-gray-600 shadow-sm inline-flex items-center">
                     <svg fill="#000000" viewBox="0 0 24 24" id="file-new" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M18,15v6m3-3H15" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M10,20H4a1,1,0,0,1-1-1V4A1,1,0,0,1,4,3h9.59a1,1,0,0,1,.7.29l3.42,3.42a1,1,0,0,1,.29.7V11" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>
                     Create
                 </button>
             @endif
+        </div>
+
+        {{-- Search and Filters --}}
+        <div class="mb-6 bg-white p-4 rounded-lg shadow">
+            <form id="filter-form" action="{{ route('sections.index') }}" method="GET" class="w-full">
+                <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-3">
+
+                    {{-- Search Input --}}
+                    <div class="w-full md:w-1/3 flex-grow relative">
+                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </span>
+                        <input type="text" name="search" id="search-input" placeholder="Search by ID or Name..." class="py-2 px-4 pl-10 pr-4  :opacity-50 !text-sm w-full border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" value="{{ request('search') }}">
+                    </div>
+
+                    {{-- Status Filter --}}
+                    <div class="w-full md:w-auto">
+                        <select name="status" id="status-filter" class="py-2 px-4 :opacity-50 !text-sm !py-1.5 !px-3 !w-fit border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                            <option value="">All Statuses</option>
+                            @foreach(\App\Models\Section::STATUSES as $status)
+                                <option value="{{ $status }}" @if(request('status') === $status) selected @endif>{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Type Filter --}}
+                    <div class="w-full md:w-auto">
+                        <select name="type" id="type-filter" class="py-2 px-4 :opacity-50 !text-sm !py-1.5 !px-3 !w-fit border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                            <option value="">All Types</option>
+                            @foreach(\App\Models\Section::TYPES as $type)
+                                <option value="{{ $type }}" @if(request('type') === $type) selected @endif>{{ $type }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- User Filter --}}
+                    @if(auth()->user()->role !== \App\Models\User::ROLE_INTEGRATOR)
+                        <div class="w-full md:w-auto">
+                            <select name="user" id="user-filter" class="py-2 px-4 :opacity-50 !text-sm !py-1.5 !px-3 !w-fit border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
+                                <option value="">All Users</option>
+                                @foreach(\App\Models\User::where('role','=',\App\Models\User::ROLE_INTEGRATOR)->get() as $user)
+                                    <option value="{{ $user->id }}" @if(request('user') == $user->id) selected @endif>{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+
+                    {{-- Action Buttons --}}
+                    <div class="flex items-center space-x-2">
+                        <button type="submit" class=" py-2 px-4 :opacity-50 !text-sm !py-1.5 !px-3 !w-fit bg-gray-700 text-white rounded-lg border border-border hover:bg-gray-600 shadow-sm inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                            <span class="hidden md:inline">Search</span>
+                        </button>
+                        <a href="{{ route('sections.index') }}" class="py-2 px-4 :opacity-50 !text-sm !py-1.5 !px-3 !w-fit inline-flex items-center justify-center w-full md:w-auto px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
+                            <span class="hidden md:inline">Clear</span>
+                            <span class="md:hidden">Clear Filters</span>
+                        </a>
+                    </div>
+                </div>
+            </form>
         </div>
 
 
@@ -338,4 +398,3 @@
 
     </script>
 @endpush
-

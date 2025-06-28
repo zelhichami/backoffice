@@ -23,12 +23,35 @@ class CodeEditorController extends Controller
 {
 
 
-    public function index()
+
+    public function index(Request $request)
     {
 
         $variables = $this->get_variables();
         $user = Auth::user();
         $query = Section::query();
+
+        // Search
+        if ($request->has('search') && $request->input('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('id', 'like', "%{$searchTerm}%")
+                    ->orWhere('name', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        // Filters
+        if ($request->has('status') && $request->input('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->has('type') && $request->input('type')) {
+            $query->where('type', $request->input('type'));
+        }
+
+        if ($request->has('user') && $request->input('user')) {
+            $query->where('user_id', $request->input('user'));
+        }
 
         switch ($user->role) {
             case User::ROLE_INTEGRATOR:
@@ -1073,7 +1096,7 @@ class CodeEditorController extends Controller
             'image_url' => 'required|url',
         ]);
 
-        //try {
+        try {
             $imageUrl = $request->input('image_url');
 
             // Download the image content
@@ -1114,9 +1137,11 @@ class CodeEditorController extends Controller
 
             return response()->json($palette);
 
-        /*} catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('OpenAI Palette Generation Error: ' . $e->getMessage());
             return response()->json(['message' => 'Failed to generate palette.'], 500);
-        }*/
+        }
     }
+
+
 }

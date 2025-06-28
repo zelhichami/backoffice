@@ -25,6 +25,24 @@ class Section extends Model
     const STATUS_APPROVED = 'approved';             // Approved by admin, ready to publish
     const STATUS_PUBLISHED = 'published';           // Live on the platform
 
+    const STATUSES = [
+        self::STATUS_DRAFT,
+        self::STATUS_READY,
+        self::STATUS_UNDER_REVIEW,
+        self::STATUS_REJECTED,
+        self::STATUS_VERIFIED,
+        self::STATUS_PENDING_PROMPT,
+        self::STATUS_PROMPTED,
+        self::STATUS_PENDING_VALIDATION,
+        self::STATUS_PROMPT_REJECTED,
+        self::STATUS_APPROVED,
+        self::STATUS_PUBLISHED,
+    ];
+
+    const TYPES = [
+        'HEADER','NAVBAR', 'HERO', 'BENEFITS_ICONS', 'BENEFITS_BLOCKS_IMAGES', 'BENEFITS_LONG_DESCRIPTION', 'FEATURED_BRANDS', 'PRODUCT_OFFER', 'UGC_VIDEOS', 'HOW_TO_USE', 'COMPARISON_TABLE', 'BEFORE_AFTER', 'REVIEWS','FAQ', 'GUARANTEE_SECTION', 'FOOTER'
+    ];
+
 
     /**
      * The attributes that are mass assignable.
@@ -94,7 +112,7 @@ class Section extends Model
 
         // Determine filename based on type
         $filename = match ($type) {
-            'html' => 'index.html',
+        'html' => 'index.html',
             'css' => 'style.css',
             'js' => 'script.js',
             default => null, // Handle unknown types

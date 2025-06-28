@@ -5,7 +5,7 @@
 
         {{-- Page Header --}}
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-semibold text-gray-700">My Sections</h1>
+            <h1 class="text-xl font-semibold text-gray-700">xPage Sections</h1>
             @if(auth()->user()->hasRole(\App\Models\User::ROLE_INTEGRATOR))
                 <button id="create-section-btn" class=" py-2 px-4 :opacity-50 modal-cancel-btn !text-sm !py-1.5 !px-3 !w-fit bg-gray-700 text-white rounded-lg border border-border hover:bg-gray-600 shadow-sm inline-flex items-center">
                     <svg fill="#000000" viewBox="0 0 24 24" id="file-new" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M18,15v6m3-3H15" style="fill: none; stroke: #2ca9bc; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M10,20H4a1,1,0,0,1-1-1V4A1,1,0,0,1,4,3h9.59a1,1,0,0,1,.7.29l3.42,3.42a1,1,0,0,1,.29.7V11" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>

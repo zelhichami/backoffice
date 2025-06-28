@@ -844,56 +844,59 @@
                     }
 
                     const promptButton = document.getElementById('prompt-section-btn');
-                    //const loadingSpinner = document.getElementById('prompt-loading-spinner');
-                    const buttonText = promptButton.querySelector('span');
+                    if(promptButton){
+                        const buttonText = promptButton.querySelector('span');
 
-                    promptButton.addEventListener('click', function() {
+                        //const loadingSpinner = document.getElementById('prompt-loading-spinner');
 
-                        // --- UI feedback: Show loading state ---
-                        buttonText.textContent = 'Prompting...';
-                        //loadingSpinner.classList.remove('hidden');
-                        promptButton.disabled = true;
 
-                        // --- Make the API call to the backend ---
-                        fetch(`/section/prompt/${sectionId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            },
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    // Try to get more specific error from backend
-                                    return response.json().then(err => {
-                                        throw new Error(err.message || 'Network response was not ok.');
-                                    });
-                                }
-                                return response.json();
+                        promptButton.addEventListener('click', function() {
+
+                            // --- UI feedback: Show loading state ---
+                            buttonText.textContent = 'Prompting...';
+                            //loadingSpinner.classList.remove('hidden');
+                            promptButton.disabled = true;
+
+                            // --- Make the API call to the backend ---
+                            fetch(`/section/prompt/${sectionId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                },
                             })
-                            .then(data => {
-                                if (data.success) {
-                                    //alert('Section prompted successfully! The page will now reload to show updated variables.');
-                                    // Reload the page to see the new variable values
-                                    window.location.reload();
-                                } else {
-                                    // Handle server-side failures
-                                    console.error('Error prompting section:', data.message);
-                                    throw new Error(data.message || 'An unknown error occurred.');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error prompting section:', error);
-                                alert('An error occurred: ' + error.message);
-                            })
-                            .finally(() => {
-                                // --- UI feedback: Restore button state ---
-                                buttonText.textContent = 'Prompt this Section';
-                                //loadingSpinner.classList.add('hidden');
-                                promptButton.disabled = false;
-                            });
-                    });
-
+                                .then(response => {
+                                    if (!response.ok) {
+                                        // Try to get more specific error from backend
+                                        return response.json().then(err => {
+                                            throw new Error(err.message || 'Network response was not ok.');
+                                        });
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    if (data.success) {
+                                        //alert('Section prompted successfully! The page will now reload to show updated variables.');
+                                        // Reload the page to see the new variable values
+                                        window.location.reload();
+                                    } else {
+                                        // Handle server-side failures
+                                        console.error('Error prompting section:', data.message);
+                                        throw new Error(data.message || 'An unknown error occurred.');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error prompting section:', error);
+                                    alert('An error occurred: ' + error.message);
+                                })
+                                .finally(() => {
+                                    // --- UI feedback: Restore button state ---
+                                    buttonText.textContent = 'Prompt this Section';
+                                    //loadingSpinner.classList.add('hidden');
+                                    promptButton.disabled = false;
+                                });
+                        });
+                    }
                     const updatePreviewHeaderProductImage = () => { /* ... existing code ... */
                         const imageUrl = localStorage.getItem(PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY);
                         if (previewHeaderProductImage) {
@@ -1431,10 +1434,6 @@
                     });
 
                 });
-
-
-
-
 
             </script>
     @endpush

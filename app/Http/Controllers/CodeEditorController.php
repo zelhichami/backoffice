@@ -1141,9 +1141,9 @@ Harmonizes with primary color
 Used in background sections and secondary UI visuals
 
 🎨 SECTION BACKGROUND COLORS
---bg-section-primary: Very very light (80% of the min) tint of --color-primary
+--bg-section-primary: Very light tint of --color-primary
 
---bg-section-accent: Very very (80% of the min) light tint of --color-accent
+--bg-section-accent: Very light tint of --color-accent
 
 Light mode → tints toward white
 
@@ -1155,25 +1155,23 @@ Dark mode → shades toward black
 --fg-section-* must ensure WCAG AA contrast with their bg.
 
 🎯 FOREGROUND PAIRING RULES
-If --bg-section-primary is used → --fg-section-primary = color-primary but it should be more darker in the light mode to (80% of the max) and more lighter in the dark mode to max (80% of the max) ( to avoid unread text)
-If --bg-section-accent is used → --fg-section-accent = color-accent but it should be more darker to max (80% of the max) in the light mode and more lighter to max in the dark mode (80% of the max) ( to avoid unread text)
+If --bg-section-primary is used → --fg-section-primary = color-primary but it should be more darker in the light mode and more lighter in the dark mode
+
+If --bg-section-accent is used → --fg-section-accent = color-accent but it should be more darker in the light mode and more lighter in the dark mode
 
 If --color-primary or --color-accent used as full backgrounds → foreground must be white or high-contrast light version
 
 🧠 ACCESSIBILITY RULES
 
--All colors must be clear, usable, and brand-appropriate — never overly fancy or visually aggressive. Avoid all neon, metallic, or ultra-bright tones (e.g., #F00000, #00FF00, #00FFFF, #FFD700, #FFFF00, etc.). These are disallowed across the entire palette — including primary, accent, section backgrounds, and text — as they harm readability and brand trust.
-Use only balanced, web-safe hues that support tints, shades, and accessibility contrast (WCAG 2.1 AA+). Colors must always serve usability, not just visual punch. Keep visual tone elegant, functional, and easy on the eyes.
--If the accent color is not matching with the primary color ( and you as Color pallet expert ) ignore that accent color and bring or propose another color that will match with the primary color
+If the accent color is not matching with the primary color ( and you as Color pallet expert ) ignore that accent color and bring or propose another color that will match with the primary color
 
--The section primary fg
+The section primary fg
 
--All text colors must meet 5:1 contrast minimum with their backgrounds
+All text colors must meet 5:1 contrast minimum with their backgrounds
 
--Never use low-contrast primary/accent pairings
+Never use low-contrast primary/accent pairings
 
--Fallback to #000000 or #FFFFFF where needed for clarity
-
+Fallback to #000000 or #FFFFFF where needed for clarity
 
 🔧 COMPONENT TOKENS
 --color-primary-soft: Optional, use for icon backgrounds (20–30% opacity tint)

@@ -68,6 +68,7 @@ class CodeEditorController extends Controller
             case User::ROLE_PROMPT_ENGINEER:
                 // Show sections that are ready for prompting or have been prompted
                 $query->whereIn('status', [
+                    Section::STATUS_READY,
                     Section::STATUS_VERIFIED, // This status needs to be added
                     Section::STATUS_PENDING_PROMPT, // This status needs to be added
                     Section::STATUS_PROMPTED,       // This status needs to be added

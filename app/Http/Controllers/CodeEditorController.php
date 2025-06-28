@@ -1174,9 +1174,10 @@ If --color-primary or --color-accent used as full backgrounds → foreground mus
 
 -Fallback to #000000 or #FFFFFF where needed for clarity
 
-For dark-themed products (e.g., Gaming, Tech, Nightwear, Streetwear, etc. — including any black-colored product), apply a full dark mode layout: all backgrounds must shift to dark tones, and all foregrounds to light tones with proper WCAG contrast.
-Do not set --color-primary to a shade that blends with the background. Instead, use a distinct, brand-aligned primary color (for CTAs, icons, headers) to ensure visual separation and clarity.
-90% of generations must default to this full dark mode; only 10% may test light themes.
+-Apply dark mode themes by default for product categories that naturally align with darker aesthetics (Gaming, Tech & Gadgets, Nightwear & Lingerie, Music Equipment & DJ Gear, Luxury Watches & Accessories, Fitness Supplements, Tattoo Supplies, LED/Neon Products, Black/Streetwear Fashion, Home Theater & Audio, Dark Cosmetics (e.g., eyeliner, nail polish), Adult Products, and Esports Merchandise, Full dark products itselfs). Use design best practices to determine if a category visually benefits from a dark theme.
+For these specific categories, ensure that 90% of all generated versions (i.e., 9 out of every 10) use a dark mode color palette. The remaining 10% can be light or alternate themes to provide variety and support A/B testing.
+And what I mean by product, is all the background are black, so full black landing page, not only the primary color
+
 
 
 🔧 COMPONENT TOKENS

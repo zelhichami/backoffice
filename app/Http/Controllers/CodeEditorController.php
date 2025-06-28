@@ -1141,9 +1141,9 @@ Harmonizes with primary color
 Used in background sections and secondary UI visuals
 
 🎨 SECTION BACKGROUND COLORS
---bg-section-primary: Very light tint of --color-primary
+--bg-section-primary: Very very light (80% of the min) tint of --color-primary
 
---bg-section-accent: Very light tint of --color-accent
+--bg-section-accent: Very very (80% of the min) light tint of --color-accent
 
 Light mode → tints toward white
 

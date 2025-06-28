@@ -1093,7 +1093,7 @@ class CodeEditorController extends Controller
                 [
                     'role' => 'user',
                     'content' => [
-                        ['type' => 'text', 'text' => $prompt],
+                        ['type' => 'text', 'text' => "generate palette based on this product image, make sur to focus product colors not other objects"],
                         ['type' => 'image_url', 'image_url' => ['url' => $base64Image]],
                     ]
                 ]

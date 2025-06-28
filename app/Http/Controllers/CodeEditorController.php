@@ -1111,6 +1111,7 @@ class CodeEditorController extends Controller
 
             $prompt_system = "You are a top-level AI design assistant. Your job is to extract a clean, accessible, and brand-aligned color token set from a provided product image. You must strictly follow the token structure, contrast rules, and output format specified by the user. Always prioritize visual harmony, WCAG accessibility, and CSS-compatibility. Output only the JSON color tokens, nothing else.";
             $prompt_user = <<<EOT
+
 🧠 Prompt to Generate AI-Compatible Color Tokens for a Landing Page
 
 You are a top-level design assistant generating a complete color token set for a landing page based solely on a provided product image. Your job is to extract harmonious, accessible, and brand-aligned colors that follow the design logic and token structure outlined below.
@@ -1174,9 +1175,9 @@ If --color-primary or --color-accent used as full backgrounds → foreground mus
 
 -Fallback to #000000 or #FFFFFF where needed for clarity
 
--Apply dark mode themes by default for product categories that naturally align with darker aesthetics (Gaming, Tech & Gadgets, Nightwear & Lingerie, Music Equipment & DJ Gear, Luxury Watches & Accessories, Fitness Supplements, Tattoo Supplies, LED/Neon Products, Black/Streetwear Fashion, Home Theater & Audio, Dark Cosmetics (e.g., eyeliner, nail polish), Adult Products, and Esports Merchandise, Full dark products itselfs). Use design best practices to determine if a category visually benefits from a dark theme.
+-Inverse to dark mode themes ( Full Sections will be black) by default for product categories that naturally align with darker aesthetics (Gaming, Tech & Gadgets, Nightwear & Lingerie, Music Equipment & DJ Gear, Luxury Watches & Accessories, Fitness Supplements, Tattoo Supplies, LED/Neon Products, Black/Streetwear Fashion, Home Theater & Audio, Dark Cosmetics (e.g., eyeliner, nail polish), Adult Products, and Esports Merchandise, Full dark products itselfs). Use design best practices to determine if a category visually benefits from a dark theme.
 For these specific categories, ensure that 90% of all generated versions (i.e., 9 out of every 10) use a dark mode color palette. The remaining 10% can be light or alternate themes to provide variety and support A/B testing.
-And what I mean by product, is all the background are black, so full black landing page, not only the primary color
+
 
 🔧 COMPONENT TOKENS
 --color-primary-soft: Optional, use for icon backgrounds (20–30% opacity tint)
@@ -1206,6 +1207,7 @@ Return the result strictly in this JSON structure:
   "--button-border-radius": "0.5rem",
   "--card-border-radius": "0.5rem"
 }
+
 EOT;
 
             $prompt_user_new = <<<EOT

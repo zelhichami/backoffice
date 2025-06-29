@@ -23,7 +23,7 @@ class SettingsController extends Controller
     public function save(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
-            'palette_prompt' => 'nullable|string|max:1000',
+            'palette_prompt' => 'nullable|string',
         ]);
 
         foreach ($validatedData as $key => $value) {

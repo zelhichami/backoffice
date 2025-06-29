@@ -592,6 +592,7 @@
                         generatePaletteBtn.addEventListener('click', async () => {
                             // Get the selected product's image URL
                             const imageUrl = localStorage.getItem(PREVIEW_PRODUCT_IMAGE_URL_STORAGE_KEY);
+                            const palettePromptUser = document.getElementById('palette-prompt').value;
 
                             if (!imageUrl) {
                                 showToast('Please select a product with an image.', 'error');
@@ -612,7 +613,7 @@
                                         'Accept': 'application/json',
                                         'X-CSRF-TOKEN': csrfToken
                                     },
-                                    body: JSON.stringify({ image_url: imageUrl })
+                                    body: JSON.stringify({ image_url: imageUrl, prompt_user: palettePromptUser })
                                 });
 
                                 if (!response.ok) {

@@ -309,6 +309,8 @@
                         return;
                     }
 
+                    const palettePromptUser = document.getElementById('palette-prompt').value;
+
                     const generateUrl = '{{ route("palette.generate") }}';
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -323,7 +325,7 @@
                                 'Accept': 'application/json',
                                 'X-CSRF-TOKEN': csrfToken
                             },
-                            body: JSON.stringify({ image_url: imageUrl })
+                            body: JSON.stringify({ image_url: imageUrl , prompt_user: palettePromptUser })
                         });
 
                         if (!response.ok) {

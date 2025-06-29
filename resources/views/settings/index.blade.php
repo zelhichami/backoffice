@@ -17,7 +17,7 @@
                     <label for="palette_prompt" class="block text-sm font-medium text-gray-700 mb-2">Global Palette Prompt</label>
                     <p class="text-xs text-gray-500 mb-2">This prompt will be used as the default for generating color palettes for all sections.</p>
                     <textarea id="palette_prompt" name="palette_prompt"
-                              class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
+                              class=" min-h-[33rem] max-h-[40rem] w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500"
                               rows="4"
                               placeholder="e.g., 'A professional and trustworthy palette for a financial services company'">{{ $settings['palette_prompt'] ?? '' }}</textarea>
                 </div>

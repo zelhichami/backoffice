@@ -1209,7 +1209,7 @@ EOT;
 
         } catch (\Exception $e) {
             Log::error('OpenAI Palette Generation Error: ' . $e->getMessage());
-            return response()->json(['message' => 'Failed to generate palette.'], 500);
+            return response()->json(["message" => "Failed to generate palette:". $e->getMessage()], 500);
         }
     }
 

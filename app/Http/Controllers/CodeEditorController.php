@@ -1196,7 +1196,7 @@ EOT;
                 'messages' => $promptMessages,
                 'response_format' => ['type' => 'json_object'], // Enable JSON mode
                 'max_tokens' => 1000,
-                'temperature' => 0,
+                'temperature' => 0.2,
                 'top_p' => 1.0
             ]);
             $palette = json_decode($result->choices[0]->message->content, true);

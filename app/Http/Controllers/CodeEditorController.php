@@ -1203,7 +1203,7 @@ EOT;
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 //return response()->json(['message' => 'Failed to parse AI response.', 'raw_response' => $result->choices[0]->message->content], 500);
-                return response()->json(['message' => $result], 500);
+                return response()->json(['message' => $result->choices[0]], 500);
             }
 
             return response()->json($palette);

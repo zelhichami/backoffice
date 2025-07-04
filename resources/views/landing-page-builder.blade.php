@@ -140,21 +140,21 @@
             // MODIFIED: stylesToLoad - Added border-radius variables
             const stylesToLoad = [
 
-                { key: 'color-primary',        inputId: 'ssp-color-primary',        cssVar: '--color-primary',        default: '#3B82F6' },
-                { key: 'color-primary-fg',     inputId: 'ssp-color-primary-fg',     cssVar: '--color-primary-fg',     default: '#ffffff' },
-                { key: 'color-accent',         inputId: 'ssp-color-accent',         cssVar: '--color-accent',         default: '#10B981' },
-                { key: 'color-accent-fg',      inputId: 'ssp-color-accent-fg',      cssVar: '--color-accent-fg',      default: '#ffffff' },
+                { key: 'color-primary',        inputId: 'ssp-color-primary',        cssVar: '--bg-primary',        default: '#3B82F6' },
+                { key: 'color-primary-fg',     inputId: 'ssp-color-primary-fg',     cssVar: '--fg-primary',     default: '#ffffff' },
+                { key: 'color-accent',         inputId: 'ssp-color-accent',         cssVar: '--bg-accent',         default: '#10B981' },
+                { key: 'color-accent-fg',      inputId: 'ssp-color-accent-fg',      cssVar: '--fg-accent',      default: '#ffffff' },
 
                 { key: 'bg-section-primary',   inputId: 'ssp-bg-section-primary',   cssVar: '--bg-section-primary',   default: '#E0F2FE' },
                 { key: 'fg-section-primary',   inputId: 'ssp-fg-section-primary',   cssVar: '--fg-section-primary',   default: '#0369A1' },
                 { key: 'bg-section-accent',    inputId: 'ssp-bg-section-accent',    cssVar: '--bg-section-accent',    default: '#ECFDF5' },
                 { key: 'fg-section-accent',    inputId: 'ssp-fg-section-accent',    cssVar: '--fg-section-accent',    default: '#065F46' },
 
-                { key: 'text-muted',           inputId: 'ssp-text-muted',           cssVar: '--text-muted',           default: '#6B7280' },
+                { key: 'text-muted',           inputId: 'ssp-text-muted',           cssVar: '--fg-muted',           default: '#6B7280' },
                 { key: 'bg-muted',             inputId: 'ssp-bg-muted',             cssVar: '--bg-muted',             default: '#F3F4F6' },
 
 
-                { key: 'page-bg',              inputId: 'ssp-page-bg',              cssVar: '--background',     default: '#ffffff' },
+                { key: 'page-bg',              inputId: 'ssp-page-bg',              cssVar: '--bg',     default: '#ffffff' },
                 { key: 'page-fg',              inputId: 'ssp-page-fg',              cssVar: '--fg',     default: '#000000' },
 
                 { key: 'style-heading-font',   inputId: 'heading-font-select',      cssVar: '--font-header',       default: 'Inter, sans-serif' },
@@ -167,17 +167,17 @@
 
             const predefinedPalettes = {
                 "default": {
-                    "--color-primary": "#0f0f0f",
-                    "--color-primary-fg": "#ffffff",
-                    "--color-accent": "#dcdcdc",
-                    "--color-accent-fg": "#1a1a1a",
+                    "--bg-primary": "#0f0f0f",
+                    "--fg-primary": "#ffffff",
+                    "--bg-accent": "#dcdcdc",
+                    "--fg-accent": "#1a1a1a",
                     "--bg-section-primary": "#f7f7f7",
                     "--fg-section-primary": "#121212",
                     "--bg-section-accent": "#efefef",
                     "--fg-section-accent": "#1a1a1a",
-                    "--background": "#ffffff",
+                    "--bg": "#ffffff",
                     "--fg": "#111111",
-                    "--text-muted": "#777777",
+                    "--fg-muted": "#777777",
                     "--bg-muted": "#f3f3f3",
                     "--font-body": "'Poppins', sans-serif",
                     "--font-header": "'Poppins', sans-serif",
@@ -365,8 +365,8 @@
                     const keyColorsForPreview = [
                         palette['--bg-section-primary'],
                         palette['--fg-section-primary'],
-                        palette['--color-primary'],
-                        palette['--color-accent'],
+                        palette['--bg-primary'],
+                        palette['--bg-accent'],
                         palette['--bg-muted']
                     ].filter(Boolean).slice(0, 5);
                     keyColorsForPreview.forEach(color => { const swatch = document.createElement('div'); swatch.className = 'w-4 h-4 rounded-full border border-gray-200 shadow-sm'; swatch.style.backgroundColor = color; swatchesContainer.appendChild(swatch); });
